@@ -6,7 +6,7 @@ import SectionTitle from "@/components/ui/SectionTitle";
 
 export default function Featured() {
   return (
-    <section className="bg-white py-20 lg:py-30">
+    <section id="actu" className="bg-white py-20 lg:py-30">
       <div className="mx-auto max-w-[1360px] px-2 md:px-7">
         <SectionTitle
           label="À la une"

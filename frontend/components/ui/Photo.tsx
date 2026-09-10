@@ -11,7 +11,11 @@ type PhotoProps = {
   zoom?: boolean;
 };
 
-export default function Photo({ label = "photo", className = "", zoom = false }: PhotoProps) {
+export default function Photo({
+  label = "photo",
+  className = "",
+  zoom = false,
+}: PhotoProps) {
   return (
     <div
       className={[
@@ -22,10 +26,6 @@ export default function Photo({ label = "photo", className = "", zoom = false }:
       ].join(" ")}
       role="img"
       aria-label={label}
-    >
-      <span className="px-4 text-center font-mono text-[10px] tracking-[0.12em] text-[#4a5fa6] uppercase">
-        {label}
-      </span>
-    </div>
+    ></div>
   );
 }

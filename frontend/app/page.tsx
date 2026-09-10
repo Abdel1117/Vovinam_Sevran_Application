@@ -18,8 +18,8 @@ export default function Page() {
       <Header />
       <main>
         <Hero />
-        <Featured />
         <About />
+        <Featured />
         <Values />
         <Courses />
         <News />

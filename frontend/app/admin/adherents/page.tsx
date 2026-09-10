@@ -32,7 +32,11 @@ export default function Page() {
     return adherents
       .map((m, i) => ({ ...m, index: i }))
       .filter((m) => categorie === "Tous" || m.categorie === categorie)
-      .filter((m) => !q || (m.nom + " " + m.prenom + " " + m.licence).toLowerCase().includes(q));
+      .filter(
+        (m) =>
+          !q ||
+          (m.nom + " " + m.prenom + " " + m.licence).toLowerCase().includes(q),
+      );
   }, [query, categorie]);
 
   const sel = adherents[selection];
@@ -61,11 +65,19 @@ export default function Page() {
         }
       />
 
-      <div className="flex flex-col gap-5 p-5 lg:p-8">
+      <div className="flex flex-col gap-5 p-2 lg:p-8">
         <div className="flex flex-wrap gap-4.5">
           {kpis.map((k) => (
-            <div key={k.label} className={["flex min-w-[190px] flex-1 flex-col gap-2 p-5.5", carte].join(" ")}>
-              <span className="text-[11px] font-semibold tracking-[0.14em] text-encre-30 uppercase">{k.label}</span>
+            <div
+              key={k.label}
+              className={[
+                "flex min-w-[190px] flex-1 flex-col gap-2 p-5.5",
+                carte,
+              ].join(" ")}
+            >
+              <span className="text-[11px] font-semibold tracking-[0.14em] text-encre-30 uppercase">
+                {k.label}
+              </span>
               <span
                 className={[
                   "font-display text-4xl leading-none font-extrabold tracking-tight",
@@ -79,12 +91,34 @@ export default function Page() {
         </div>
 
         <div className="flex flex-wrap items-start gap-5">
-          <section className={["min-w-[320px] flex-[2.2_1_620px] overflow-hidden", carte].join(" ")}>
+          <section
+            className={[
+              "min-w-[320px] flex-[2.2_1_620px] overflow-hidden",
+              carte,
+            ].join(" ")}
+          >
             <div className="flex flex-wrap items-center gap-3 border-b border-[#f1f4fb] px-5.5 py-5">
               <label className="relative flex min-w-[240px] flex-1 items-center">
-                <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" className="absolute left-3.5 text-encre-30">
-                  <circle cx="11" cy="11" r="6.6" fill="none" stroke="currentColor" strokeWidth="1.9" />
-                  <path d="m16 16 4.4 4.4" stroke="currentColor" strokeWidth="1.9" />
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  className="absolute left-3.5 text-encre-30"
+                >
+                  <circle
+                    cx="11"
+                    cy="11"
+                    r="6.6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.9"
+                  />
+                  <path
+                    d="m16 16 4.4 4.4"
+                    stroke="currentColor"
+                    strokeWidth="1.9"
+                  />
                 </svg>
                 <input
                   type="search"
@@ -102,7 +136,9 @@ export default function Page() {
                     onClick={() => setCategorie(c)}
                     className={[
                       "cursor-pointer rounded-full border-[1.5px] px-4 py-3 text-[0.86rem] font-semibold transition-all",
-                      categorie === c ? "border-vovinam bg-vovinam text-white" : "border-[#e1e7f5] bg-white text-encre-70",
+                      categorie === c
+                        ? "border-vovinam bg-vovinam text-white"
+                        : "border-[#e1e7f5] bg-white text-encre-70",
                     ].join(" ")}
                   >
                     {c}
@@ -112,10 +148,18 @@ export default function Page() {
             </div>
 
             <div className="hidden items-center gap-3.5 border-b border-[#eff3fb] bg-[#fafbff] px-5.5 py-3.5 md:flex">
-              <span className="flex-[2_1_200px] text-[10px] font-bold tracking-[0.14em] text-encre-30 uppercase">Adhérent</span>
-              <span className="flex-[1_1_120px] text-[10px] font-bold tracking-[0.14em] text-encre-30 uppercase">N° licence</span>
-              <span className="flex-[1_1_130px] text-[10px] font-bold tracking-[0.14em] text-encre-30 uppercase">Grade</span>
-              <span className="w-27 flex-none text-[10px] font-bold tracking-[0.14em] text-encre-30 uppercase">Cotisation</span>
+              <span className="flex-[2_1_200px] text-[10px] font-bold tracking-[0.14em] text-encre-30 uppercase">
+                Adhérent
+              </span>
+              <span className="flex-[1_1_120px] text-[10px] font-bold tracking-[0.14em] text-encre-30 uppercase">
+                N° licence
+              </span>
+              <span className="flex-[1_1_130px] text-[10px] font-bold tracking-[0.14em] text-encre-30 uppercase">
+                Grade
+              </span>
+              <span className="w-27 flex-none text-[10px] font-bold tracking-[0.14em] text-encre-30 uppercase">
+                Cotisation
+              </span>
             </div>
 
             {lignes.map((m) => {
@@ -127,7 +171,9 @@ export default function Page() {
                   onClick={() => setSelection(m.index)}
                   className={[
                     "flex w-full flex-wrap items-center gap-3.5 border-b border-[#f5f7fc] px-5.5 py-4 text-left transition-colors last:border-0",
-                    m.index === selection ? "bg-vovinam-050" : "bg-white hover:bg-[#f8faff]",
+                    m.index === selection
+                      ? "bg-vovinam-050"
+                      : "bg-white hover:bg-[#f8faff]",
                   ].join(" ")}
                 >
                   <span className="flex min-w-0 flex-[2_1_200px] items-center gap-3">
@@ -143,19 +189,25 @@ export default function Page() {
                       </span>
                     </span>
                   </span>
-                  <span className="flex-[1_1_120px] font-mono text-[0.9rem] text-encre-70">{m.licence}</span>
+                  <span className="flex-[1_1_120px] font-mono text-[0.9rem] text-encre-70">
+                    {m.licence}
+                  </span>
                   <span className="flex flex-[1_1_130px] items-center gap-2.5">
                     <span
                       className="h-2 w-5.5 flex-none rounded-sm border border-encre/10"
                       style={{ background: m.couleur }}
                     />
-                    <span className="text-[0.88rem] font-semibold text-encre-70">{m.grade}</span>
+                    <span className="text-[0.88rem] font-semibold text-encre-70">
+                      {m.grade}
+                    </span>
                   </span>
                   <span className="w-27 flex-none">
                     <span
                       className={[
                         "inline-flex rounded-md px-3 py-2 text-[0.78rem] font-bold tracking-wide uppercase",
-                        attente ? "bg-[#fff6da] text-[#8a6a00]" : "bg-[#e9f8ee] text-[#0e7a3c]",
+                        attente
+                          ? "bg-[#fff6da] text-[#8a6a00]"
+                          : "bg-[#e9f8ee] text-[#0e7a3c]",
                       ].join(" ")}
                     >
                       {m.statut}
@@ -167,19 +219,30 @@ export default function Page() {
 
             <div className="flex flex-wrap items-center gap-3 px-5.5 py-4.5">
               <span className="mr-auto text-[0.88rem] text-encre-30">
-                {lignes.length} adhérent{lignes.length > 1 ? "s" : ""} affiché{lignes.length > 1 ? "s" : ""} sur{" "}
-                {adherents.length}
+                {lignes.length} adhérent{lignes.length > 1 ? "s" : ""} affiché
+                {lignes.length > 1 ? "s" : ""} sur {adherents.length}
               </span>
-              <button type="button" className="cursor-pointer rounded-lg border border-[#e7ecf7] bg-[#f6f8fe] px-4 py-2.5 text-[0.86rem] font-semibold text-encre-70">
+              <button
+                type="button"
+                className="cursor-pointer rounded-lg border border-[#e7ecf7] bg-[#f6f8fe] px-4 py-2.5 text-[0.86rem] font-semibold text-encre-70"
+              >
                 Précédent
               </button>
-              <button type="button" className="cursor-pointer rounded-lg border border-[#e7ecf7] bg-[#f6f8fe] px-4 py-2.5 text-[0.86rem] font-semibold text-encre-70">
+              <button
+                type="button"
+                className="cursor-pointer rounded-lg border border-[#e7ecf7] bg-[#f6f8fe] px-4 py-2.5 text-[0.86rem] font-semibold text-encre-70"
+              >
                 Suivant
               </button>
             </div>
           </section>
 
-          <aside className={["min-w-[300px] flex-1 overflow-hidden lg:sticky lg:top-24", carte].join(" ")}>
+          <aside
+            className={[
+              "min-w-[300px] flex-1 overflow-hidden lg:sticky lg:top-24",
+              carte,
+            ].join(" ")}
+          >
             <div className="flex items-center gap-3.5 bg-vovinam px-6 pt-6 pb-5 text-white">
               <span className="flex size-13 flex-none items-center justify-center rounded-2xl border border-white/25 bg-white/15 font-display text-base font-extrabold text-jaune">
                 {initiales(sel)}
@@ -188,7 +251,9 @@ export default function Page() {
                 <span className="font-display text-lg leading-tight font-extrabold tracking-tight">
                   {sel.nom.toUpperCase()} {sel.prenom}
                 </span>
-                <span className="text-[0.84rem] font-medium text-white/80">Licence {sel.licence}</span>
+                <span className="text-[0.84rem] font-medium text-white/80">
+                  Licence {sel.licence}
+                </span>
               </span>
             </div>
 
@@ -200,20 +265,31 @@ export default function Page() {
                   ["Date de naissance", sel.naissance],
                   ["Catégorie", sel.categorie],
                 ].map(([k, v]) => (
-                  <span key={k} className="flex min-w-[130px] flex-1 flex-col gap-1.5">
-                    <span className="text-[10px] font-bold tracking-[0.14em] text-encre-30 uppercase">{k}</span>
-                    <span className="text-[0.96rem] leading-snug font-semibold text-encre">{v}</span>
+                  <span
+                    key={k}
+                    className="flex min-w-[130px] flex-1 flex-col gap-1.5"
+                  >
+                    <span className="text-[10px] font-bold tracking-[0.14em] text-encre-30 uppercase">
+                      {k}
+                    </span>
+                    <span className="text-[0.96rem] leading-snug font-semibold text-encre">
+                      {v}
+                    </span>
                   </span>
                 ))}
               </div>
               <span className="flex flex-col gap-1.5">
-                <span className="text-[10px] font-bold tracking-[0.14em] text-encre-30 uppercase">Grade</span>
+                <span className="text-[10px] font-bold tracking-[0.14em] text-encre-30 uppercase">
+                  Grade
+                </span>
                 <span className="text-[0.96rem] leading-snug font-semibold text-encre">
                   {sel.grade} — obtenu le {sel.dateGrade}
                 </span>
               </span>
               <span className="flex flex-col gap-1.5">
-                <span className="text-[10px] font-bold tracking-[0.14em] text-encre-30 uppercase">Contact</span>
+                <span className="text-[10px] font-bold tracking-[0.14em] text-encre-30 uppercase">
+                  Contact
+                </span>
                 <span className="text-[0.94rem] leading-relaxed text-encre-70">
                   {sel.email}
                   <br />
@@ -221,8 +297,12 @@ export default function Page() {
                 </span>
               </span>
               <span className="flex flex-col gap-1.5">
-                <span className="text-[10px] font-bold tracking-[0.14em] text-encre-30 uppercase">Adresse</span>
-                <span className="text-[0.94rem] leading-relaxed text-encre-70">{sel.adresse}</span>
+                <span className="text-[10px] font-bold tracking-[0.14em] text-encre-30 uppercase">
+                  Adresse
+                </span>
+                <span className="text-[0.94rem] leading-relaxed text-encre-70">
+                  {sel.adresse}
+                </span>
               </span>
               <div className="flex flex-wrap gap-2.5 border-t border-[#f1f4fb] pt-3">
                 {[

@@ -69,6 +69,7 @@ export const navigation: NavItem[] = [
     href: "/",
     children: [
       { label: "Le Vovinam", href: "/#vovinam" },
+      { label: "Actualitées", href: "/#actu" },
       { label: "Association", href: "/#valeurs" },
       { label: "Cours", href: "/#cours" },
       { label: "Agenda", href: "/#agenda" },
