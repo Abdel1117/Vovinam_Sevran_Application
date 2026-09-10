@@ -55,11 +55,13 @@ Le layout \`app/admin/layout.jsx\` fournit la sidebar et le drawer mobile.
 
 ## Composants réutilisables
 
-- \`components/ui/Reveal.jsx\` — apparition au scroll (visible par défaut si l'observation échoue, respecte \`prefers-reduced-motion\`).
-- \`components/ui/Photo.jsx\` — emplacement photo. **À remplacer par \`next/image\`** dès que les photos du club sont disponibles.
-- \`components/ui/Badge.jsx\`, \`Button.jsx\`, \`SectionTitle.jsx\`, \`Social.jsx\`.
-- \`components/site/*\` — sections de la page d'accueil, header, footer, formulaires.
-- \`components/admin/*\` — coquille d'administration.
+Chaque composant vit dans son propre dossier sous \`app/components/\` (ex. \`app/components/About/About.tsx\`).
+
+- \`components/Reveal/Reveal.tsx\` — apparition au scroll (visible par défaut si l'observation échoue, respecte \`prefers-reduced-motion\`).
+- \`components/Photo/Photo.tsx\` — emplacement photo. **À remplacer par \`next/image\`** dès que les photos du club sont disponibles.
+- \`components/Badge\`, \`components/Button\`, \`components/SectionTitle\`, \`components/Social\` — briques UI génériques.
+- \`components/About\`, \`components/Agenda\`, \`components/Courses\`, \`components/Featured\`, \`components/Header\`, \`components/Footer\`, etc. — sections de la page d'accueil, header, footer, formulaires.
+- \`components/AdminShell\`, \`components/Sidebar\`, \`components/Topbar\` — coquille d'administration.
 
 ## Données
 
