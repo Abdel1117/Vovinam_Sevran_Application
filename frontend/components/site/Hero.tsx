@@ -1,16 +1,42 @@
 import Button from "@/components/ui/Button";
 import Reveal from "@/components/ui/Reveal";
 
-const infos: string[] = ["Cours enfants & adultes", "Débutants bienvenus", "Cours d'essai disponible"];
+const infos: string[] = [
+  "Cours enfants & adultes",
+  "Débutants bienvenus",
+  "Cours d'essai disponible",
+];
 
 export default function Hero() {
   return (
-    <section id="top" className="relative flex min-h-[min(94vh,900px)] items-end overflow-hidden bg-hero-vovinam">
-      <div className="absolute inset-0 flex items-center justify-center">
-        <span className="px-6 text-center font-mono text-xs tracking-[0.14em] text-white/30 uppercase">
-          photo hero — démonstration / entraînement en mouvement
-        </span>
+    <section
+      id="top"
+      className="relative flex min-h-[min(94vh,900px)] items-end overflow-hidden bg-hero-vovinam"
+    >
+      <svg aria-hidden className="absolute size-0">
+        <filter id="liquide-goo">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="16" result="flou" />
+          <feColorMatrix
+            in="flou"
+            mode="matrix"
+            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9"
+          />
+        </filter>
+      </svg>
+      <div
+        aria-hidden
+        className="absolute inset-0 overflow-hidden opacity-70 mix-blend-screen"
+      >
+        <div className="liquide-groupe absolute inset-0">
+          <span className="liquide-tache animate-liquide-1 absolute top-[6%] left-[4%] size-[62%] bg-[#2c6bf5]" />
+          <span className="liquide-tache animate-liquide-2 absolute right-[2%] bottom-[8%] size-[58%] bg-[#1851d9]" />
+          <span className="liquide-tache animate-liquide-3 absolute top-[32%] right-[20%] size-[44%] bg-[#5a96ff]" />
+        </div>
       </div>
+      <span
+        aria-hidden
+        className="animate-derive-halo absolute -right-[15%] -bottom-[25%] size-[55%] rounded-full bg-jaune/10 blur-[110px]"
+      />
       <div className="absolute inset-0 bg-linear-to-b from-transparent via-[#09183e]/55 to-[#071436]/90" />
       <div className="absolute inset-x-0 top-0 flex h-1">
         <span className="flex-1 bg-vovinam" />
@@ -35,8 +61,8 @@ export default function Hero() {
           </Reveal>
           <Reveal delay={140}>
             <p className="max-w-[620px] text-lg leading-relaxed text-pretty text-white/85 lg:text-xl">
-              Discipline, respect, maîtrise et dépassement de soi. Découvrez le Vovinam Viet Vo Dao au sein d'une association
-              ouverte à tous.
+              Discipline, respect, maîtrise et dépassement de soi. Découvrez le
+              Vovinam Viet Vo Dao au sein d'une association ouverte à tous.
             </p>
           </Reveal>
           <Reveal delay={200} className="mt-1.5 flex flex-wrap gap-3.5">

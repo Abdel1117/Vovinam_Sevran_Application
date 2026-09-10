@@ -12,7 +12,7 @@ const formes: string[] = [
 export default function Values() {
   return (
     <section id="valeurs" className="bg-white py-20 lg:py-30">
-      <div className="mx-auto max-w-[1360px] px-7">
+      <div className="mx-auto max-w-[1360px] px-2 md:px-7">
         <SectionTitle
           label="Nos valeurs"
           titre="Bien plus qu'un sport"
@@ -29,7 +29,9 @@ export default function Values() {
               <span className="flex size-11.5 items-center justify-center rounded-2xl bg-vovinam-100">
                 <span className={formes[i]} />
               </span>
-              <h3 className="font-display text-xl font-extrabold text-encre">{v.titre}</h3>
+              <h3 className="font-display text-xl font-extrabold text-encre">
+                {v.titre}
+              </h3>
               <p className="leading-relaxed text-encre-50">{v.texte}</p>
             </Reveal>
           ))}

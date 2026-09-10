@@ -8,7 +8,7 @@ import { cours } from "@/lib/data";
 export default function Courses() {
   return (
     <section id="cours" className="bg-vovinam-050 py-20 lg:py-30">
-      <div className="mx-auto max-w-[1360px] px-7">
+      <div className="mx-auto max-w-[1360px] px-2 md:px-7">
         <SectionTitle
           label="Nos cours"
           titre="Un cours pour chacun"
@@ -34,13 +34,22 @@ export default function Courses() {
                 <Badge variant={c.badge} className="self-start">
                   {c.niveau}
                 </Badge>
-                <h3 className="font-display text-2xl leading-tight font-extrabold tracking-tight text-encre">{c.titre}</h3>
-                <p className="text-[0.98rem] leading-relaxed text-encre-50">{c.texte}</p>
+                <h3 className="font-display text-2xl leading-tight font-extrabold tracking-tight text-encre">
+                  {c.titre}
+                </h3>
+                <p className="text-[0.98rem] leading-relaxed text-encre-50">
+                  {c.texte}
+                </p>
                 <div className="mt-1.5 flex flex-col gap-1.5 border-t border-[#f0f3fa] pt-3.5">
-                  <span className="text-[0.9rem] font-semibold text-encre-70">{c.horaires}</span>
+                  <span className="text-[0.9rem] font-semibold text-encre-70">
+                    {c.horaires}
+                  </span>
                   <span className="text-[0.88rem] text-encre-30">{c.lieu}</span>
                 </div>
-                <Link href="/#agenda" className="mt-auto pt-2 text-sm font-bold text-vovinam">
+                <Link
+                  href="/#agenda"
+                  className="mt-auto pt-2 text-sm font-bold text-vovinam"
+                >
                   Voir les cours →
                 </Link>
               </div>
@@ -55,9 +64,12 @@ export default function Courses() {
               <Badge variant="stage" className="self-start">
                 Tous niveaux
               </Badge>
-              <h3 className="font-display text-2xl leading-tight font-extrabold tracking-tight">Débutants</h3>
+              <h3 className="font-display text-2xl leading-tight font-extrabold tracking-tight">
+                Débutants
+              </h3>
               <p className="text-[0.98rem] leading-relaxed text-white/85">
-                Aucune expérience préalable nécessaire. Le premier cours est gratuit, il suffit d'une tenue de sport.
+                Aucune expérience préalable nécessaire. Le premier cours est
+                gratuit, il suffit d'une tenue de sport.
               </p>
             </div>
             <Link

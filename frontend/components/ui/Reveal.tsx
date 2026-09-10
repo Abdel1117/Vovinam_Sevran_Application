@@ -10,9 +10,8 @@ type RevealProps = {
 };
 
 /**
- * Apparition au scroll. La visibilité est l'état par défaut en cas
- * d'échec de l'IntersectionObserver : un balayage de position + un
- * délai de sécurité révèlent toujours le contenu.
+ * Apparition au scroll : révélée une seule fois, quand l'élément
+ * entre réellement dans le viewport (IntersectionObserver).
  */
 export default function Reveal({ children, delay = 0, className = "" }: RevealProps) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -21,23 +20,24 @@ export default function Reveal({ children, delay = 0, className = "" }: RevealPr
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      typeof IntersectionObserver === "undefined"
+    ) {
       setShown(true);
       return;
     }
-    const check = () => {
-      const r = el.getBoundingClientRect();
-      if (r.top < window.innerHeight * 0.94 && r.bottom > -80) setShown(true);
-    };
-    check();
-    window.addEventListener("scroll", check, { passive: true });
-    window.addEventListener("resize", check);
-    const secours = setTimeout(() => setShown(true), 1500);
-    return () => {
-      window.removeEventListener("scroll", check);
-      window.removeEventListener("resize", check);
-      clearTimeout(secours);
-    };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShown(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "0px 0px -100px 0px", threshold: 0 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   return (

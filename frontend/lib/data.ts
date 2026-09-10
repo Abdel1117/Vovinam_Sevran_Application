@@ -1,4 +1,4 @@
-export type NavItem = { label: string; href: string };
+export type NavItem = { label: string; href: string; children?: NavItem[] };
 
 export type BadgeVariant = "actualite" | "association" | "stage" | "competition" | "club";
 
@@ -64,12 +64,21 @@ export type Adherent = {
 };
 
 export const navigation: NavItem[] = [
-  { label: "Accueil", href: "/" },
-  { label: "Le Vovinam", href: "/#vovinam" },
-  { label: "Association", href: "/#valeurs" },
-  { label: "Cours", href: "/#cours" },
+  {
+    label: "Accueil",
+    href: "/",
+    children: [
+      { label: "Le Vovinam", href: "/#vovinam" },
+      { label: "Association", href: "/#valeurs" },
+      { label: "Cours", href: "/#cours" },
+      { label: "Agenda", href: "/#agenda" },
+      { label: "Vie du club", href: "/#galerie" },
+      { label: "Stats", href: "/#stats" },
+      { label: "Les enseignants", href: "/#enseignants" },
+      { label: "Envie d'essayer ?", href: "/#essai" },
+    ],
+  },
   { label: "Actualités", href: "/actualites" },
-  { label: "Agenda", href: "/#agenda" },
   { label: "Galerie", href: "/galerie" },
   { label: "Contact", href: "/contact" },
 ];

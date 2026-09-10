@@ -31,6 +31,7 @@
   --shadow-card-hover: 0 22px 44px rgb(16 24 40 / 0.13);
 
   --ease-doux: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --ease-flux: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 @layer base {
@@ -56,4 +57,116 @@
   background-image:
     radial-gradient(110% 80% at 80% 6%, rgb(90 150 255 / 0.45) 0%, rgb(90 150 255 / 0) 58%),
     linear-gradient(157deg, #2c6bf5 0%, #1851d9 36%, #123b9f 68%, #0a1f55 100%);
+}
+
+/*
+ * Halo du hero : une tache d'accent dérive lentement en arrière-plan
+ * (transform uniquement, aucune teinte n'est interpolée).
+ */
+@keyframes derive-halo {
+  0%,
+  100% {
+    transform: translate3d(-6%, -4%, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(6%, 5%, 0) scale(1.15);
+  }
+}
+
+.animate-derive-halo {
+  animation: derive-halo 30s var(--ease-flux) infinite alternate;
+}
+
+/*
+ * Liquide du hero : trois masses de la même famille de bleu se
+ * déforment et glissent l'une sur l'autre ; le filtre SVG « goo »
+ * (flou + contraste alpha) fusionne leurs bords pour un rendu
+ * fluide, comme un liquide en mouvement. Couleur fixe par tache,
+ * seules la forme et la position animent.
+ */
+.liquide-groupe {
+  filter: url(#liquide-goo);
+}
+
+.liquide-tache {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform, border-radius;
+}
+
+@keyframes derive-liquide-1 {
+  0% {
+    transform: translate(-8%, 4%) scale(1);
+    border-radius: 42% 58% 65% 35% / 45% 40% 60% 55%;
+  }
+  33% {
+    transform: translate(22%, -18%) scale(1.2);
+    border-radius: 60% 40% 30% 70% / 55% 65% 35% 45%;
+  }
+  66% {
+    transform: translate(6%, 22%) scale(0.9);
+    border-radius: 35% 65% 55% 45% / 40% 55% 45% 60%;
+  }
+  100% {
+    transform: translate(-8%, 4%) scale(1);
+    border-radius: 42% 58% 65% 35% / 45% 40% 60% 55%;
+  }
+}
+
+@keyframes derive-liquide-2 {
+  0% {
+    transform: translate(10%, -10%) scale(1);
+    border-radius: 55% 45% 40% 60% / 50% 35% 65% 50%;
+  }
+  40% {
+    transform: translate(-20%, 12%) scale(0.85);
+    border-radius: 40% 60% 55% 45% / 60% 50% 50% 40%;
+  }
+  70% {
+    transform: translate(-4%, -20%) scale(1.15);
+    border-radius: 65% 35% 45% 55% / 40% 60% 40% 60%;
+  }
+  100% {
+    transform: translate(10%, -10%) scale(1);
+    border-radius: 55% 45% 40% 60% / 50% 35% 65% 50%;
+  }
+}
+
+@keyframes derive-liquide-3 {
+  0% {
+    transform: translate(0%, 15%) scale(1);
+    border-radius: 50% 50% 35% 65% / 55% 45% 55% 45%;
+  }
+  50% {
+    transform: translate(18%, -8%) scale(1.25);
+    border-radius: 35% 65% 60% 40% / 45% 55% 45% 55%;
+  }
+  100% {
+    transform: translate(0%, 15%) scale(1);
+    border-radius: 50% 50% 35% 65% / 55% 45% 55% 45%;
+  }
+}
+
+.animate-liquide-1 {
+  animation: derive-liquide-1 19s var(--ease-flux) infinite;
+}
+.animate-liquide-2 {
+  animation: derive-liquide-2 24s var(--ease-flux) infinite;
+  animation-delay: -6s;
+}
+.animate-liquide-3 {
+  animation: derive-liquide-3 28s var(--ease-flux) infinite;
+  animation-delay: -14s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-derive-halo,
+  .animate-liquide-1,
+  .animate-liquide-2,
+  .animate-liquide-3 {
+    animation: none;
+  }
+  .liquide-groupe {
+    filter: none;
+  }
 }

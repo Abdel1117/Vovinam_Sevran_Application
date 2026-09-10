@@ -8,8 +8,12 @@ import { actualites } from "@/lib/data";
 export default function News() {
   return (
     <section id="actualites" className="bg-white py-20 lg:py-30">
-      <div className="mx-auto max-w-[1360px] px-7">
-        <SectionTitle label="Actualités du club" titre="Dernières actualités" accent="bg-vovinam" />
+      <div className="mx-auto max-w-[1360px] px-2 md:px-7">
+        <SectionTitle
+          label="Actualités du club"
+          titre="Dernières actualités"
+          accent="bg-vovinam"
+        />
         <div className="flex flex-wrap gap-6">
           {actualites.map((a, i) => (
             <Reveal
@@ -24,10 +28,19 @@ export default function News() {
                 </Badge>
               </div>
               <div className="flex flex-1 flex-col gap-2.5 px-6.5 pt-6 pb-7">
-                <span className="text-xs font-semibold tracking-[0.12em] text-encre-30 uppercase">{a.date}</span>
-                <h3 className="font-display text-xl leading-snug font-extrabold text-encre">{a.titre}</h3>
-                <p className="text-[0.96rem] leading-relaxed text-encre-50">{a.chapo}</p>
-                <Link href={"/actualites/" + a.slug} className="mt-auto pt-2.5 text-sm font-bold text-vovinam">
+                <span className="text-xs font-semibold tracking-[0.12em] text-encre-30 uppercase">
+                  {a.date}
+                </span>
+                <h3 className="font-display text-xl leading-snug font-extrabold text-encre">
+                  {a.titre}
+                </h3>
+                <p className="text-[0.96rem] leading-relaxed text-encre-50">
+                  {a.chapo}
+                </p>
+                <Link
+                  href={"/actualites/" + a.slug}
+                  className="mt-auto pt-2.5 text-sm font-bold text-vovinam"
+                >
                   Lire l'article →
                 </Link>
               </div>

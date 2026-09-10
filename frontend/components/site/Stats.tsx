@@ -36,7 +36,10 @@ function Compteur({ valeur, suffixe }: { valeur: number; suffixe: string }) {
   }, [valeur]);
 
   return (
-    <span ref={ref} className="block font-display text-5xl leading-none font-extrabold tracking-[-0.035em] text-white lg:text-7xl">
+    <span
+      ref={ref}
+      className="block font-display text-5xl leading-none font-extrabold tracking-[-0.035em] text-white lg:text-7xl"
+    >
       {n}
       {suffixe}
     </span>
@@ -45,10 +48,13 @@ function Compteur({ valeur, suffixe }: { valeur: number; suffixe: string }) {
 
 export default function Stats() {
   return (
-    <section className="relative overflow-hidden bg-vovinam py-20 lg:py-28">
+    <section
+      id="stats"
+      className="relative overflow-hidden bg-vovinam py-20 lg:py-28"
+    >
       <span className="absolute -top-15 -right-15 size-70 rounded-full border-2 border-white/10" />
       <span className="absolute -bottom-22 -left-10 size-55 rounded-full border-2 border-white/10" />
-      <div className="relative mx-auto max-w-[1360px] px-7">
+      <div className="relative mx-auto max-w-[1360px] px-2 md:px-7">
         <div className="mb-11 max-w-2xl">
           <span className="mb-4 inline-flex items-center gap-2.5 text-[11px] font-bold tracking-[0.2em] text-jaune uppercase">
             <span className="h-0.5 w-6 bg-jaune" />
@@ -66,7 +72,9 @@ export default function Stats() {
             >
               <Compteur valeur={s.valeur} suffixe={s.suffixe} />
               <span className="my-4 block h-[3px] w-9.5 bg-jaune" />
-              <span className="text-[1.02rem] font-semibold text-white/85">{s.label}</span>
+              <span className="text-[1.02rem] font-semibold text-white/85">
+                {s.label}
+              </span>
             </div>
           ))}
         </div>

@@ -1,4 +1,4 @@
-FROM python:3.11-alpine
+FROM python:3.11-alpine AS base
 
 WORKDIR /app
 
@@ -10,4 +10,10 @@ COPY . .
 
 EXPOSE 4000
 
+FROM base AS dev
+
 CMD ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "4000"]
+
+FROM base AS prod
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "4000"]
