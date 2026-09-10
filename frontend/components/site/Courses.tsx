@@ -13,14 +13,7 @@ export default function Courses() {
           label="Nos cours"
           titre="Un cours pour chacun"
           texte="Enfant, adolescent ou adulte, chacun peut découvrir et progresser dans la pratique du Vovinam."
-        >
-          <Link
-            href="/#agenda"
-            className="inline-flex items-center gap-2 rounded-full border-[1.5px] border-[#dce4f7] bg-white px-5 py-3.5 text-sm font-bold text-vovinam transition-colors hover:border-vovinam"
-          >
-            Voir les horaires →
-          </Link>
-        </SectionTitle>
+        ></SectionTitle>
 
         <div className="flex flex-wrap gap-5.5">
           {cours.map((c, i) => (

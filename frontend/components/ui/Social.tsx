@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 export type SocialName = "facebook" | "instagram" | "youtube";
@@ -11,28 +12,75 @@ const icons: Record<SocialName, ReactNode> = {
   ),
   instagram: (
     <>
-      <rect x="3.4" y="3.4" width="17.2" height="17.2" rx="5.2" fill="none" stroke="currentColor" strokeWidth="1.8" />
-      <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" strokeWidth="1.8" />
+      <rect
+        x="3.4"
+        y="3.4"
+        width="17.2"
+        height="17.2"
+        rx="5.2"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <circle
+        cx="12"
+        cy="12"
+        r="4"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
       <circle cx="17.1" cy="6.9" r="1.3" fill="currentColor" />
     </>
   ),
   youtube: (
     <>
-      <rect x="2.6" y="5.4" width="18.8" height="13.2" rx="4" fill="none" stroke="currentColor" strokeWidth="1.8" />
+      <rect
+        x="2.6"
+        y="5.4"
+        width="18.8"
+        height="13.2"
+        rx="4"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
       <path d="M10.4 9.3 15.8 12l-5.4 2.7V9.3Z" fill="currentColor" />
     </>
   ),
 };
 
-export function SocialIcon({ name, className = "" }: { name: SocialName; className?: string }) {
+export function SocialIcon({
+  name,
+  className = "",
+}: {
+  name: SocialName;
+  className?: string;
+}) {
   return (
-    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" className={className}>
+    <svg
+      width="19"
+      height="19"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className={className}
+    >
       {icons[name]}
     </svg>
   );
 }
 
-export default function SocialLinks({ tone = "sombre" }: { tone?: "sombre" | "clair" }) {
+const links: Record<SocialName, string> = {
+  facebook: "",
+  instagram: "",
+  youtube: "",
+};
+
+export default function SocialLinks({
+  tone = "sombre",
+}: {
+  tone?: "sombre" | "clair";
+}) {
   const base =
     tone === "sombre"
       ? "border-white/20 text-white hover:bg-white/15"
@@ -40,9 +88,9 @@ export default function SocialLinks({ tone = "sombre" }: { tone?: "sombre" | "cl
   return (
     <div className="flex gap-2.5">
       {(["facebook", "instagram", "youtube"] as SocialName[]).map((n) => (
-        <a
+        <Link
           key={n}
-          href="#"
+          href={links[n]}
           aria-label={n}
           className={[
             "flex size-[42px] items-center justify-center rounded-xl border transition-all duration-200 hover:-translate-y-0.5",
@@ -50,7 +98,7 @@ export default function SocialLinks({ tone = "sombre" }: { tone?: "sombre" | "cl
           ].join(" ")}
         >
           <SocialIcon name={n} />
-        </a>
+        </Link>
       ))}
     </div>
   );

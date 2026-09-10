@@ -1,16 +1,14 @@
 import Link from "next/link";
 import SocialLinks from "@/components/ui/Social";
 import type { NavItem } from "@/lib/data";
+import { getCurrentYear } from "../../utils/Date/Date";
 
 const liens: NavItem[] = [
-  { label: "Le Vovinam", href: "/#vovinam" },
-  { label: "L'association", href: "/#valeurs" },
-  { label: "Cours", href: "/#cours" },
+  { label: "Accueil", href: "/" },
   { label: "Actualités", href: "/actualites" },
-  { label: "Agenda", href: "/#agenda" },
   { label: "Galerie", href: "/galerie" },
   { label: "Contact", href: "/contact" },
-  { label: "Espace membre", href: "/connexion" },
+  { label: "Connexion", href: "/connexion" },
 ];
 
 export default function Footer() {
@@ -24,60 +22,79 @@ export default function Footer() {
                 VV
               </span>
               <span className="flex flex-col leading-tight">
-                <span className="font-display text-[15px] font-extrabold tracking-wide">VOVINAM VIET VO DAO</span>
-                <span className="text-xs text-white/60">Association sportive — Vitry-sur-Seine</span>
+                <span className="font-display text-[15px] font-extrabold tracking-wide">
+                  VOVINAM VIET VO DAO
+                </span>
+                <span className="text-xs text-white/60">
+                  Association sportive — Sevran
+                </span>
               </span>
             </div>
             <p className="max-w-[340px] text-[0.96rem] leading-relaxed text-white/65">
-              Association affiliée à la fédération, ouverte aux enfants, adolescents et adultes de tous niveaux.
+              Association affiliée à la fédération, ouverte aux enfants,
+              adolescents et adultes de tous niveaux.
             </p>
             <SocialLinks />
           </div>
 
           <div className="flex min-w-[160px] flex-1 flex-col gap-3.5">
-            <span className="text-[11px] font-bold tracking-[0.18em] text-jaune uppercase">Navigation</span>
+            <span className="text-[11px] font-bold tracking-[0.18em] text-jaune uppercase">
+              Navigation
+            </span>
             {liens.map((l) => (
-              <Link key={l.label} href={l.href} className="text-[0.96rem] text-white/75 hover:text-white">
+              <Link
+                key={l.label}
+                href={l.href}
+                className="text-[0.96rem] text-white/75 hover:text-white"
+              >
                 {l.label}
               </Link>
             ))}
           </div>
 
           <div className="flex min-w-[210px] flex-1 flex-col gap-3.5">
-            <span className="text-[11px] font-bold tracking-[0.18em] text-jaune uppercase">Contact</span>
-            <span className="text-[0.96rem] leading-relaxed text-white/75">
-              Gymnase Jean-Moulin
-              <br />
-              12 rue des Sports
-              <br />
-              94400 Vitry-sur-Seine
+            <span className="text-[11px] font-bold tracking-[0.18em] text-jaune uppercase">
+              Contact
             </span>
-            <a href="mailto:contact@vovinam-association.fr" className="text-[0.96rem] text-white/75 hover:text-white">
-              contact@vovinam-association.fr
+            <span className="text-[0.96rem] leading-relaxed text-white/75">
+              Gymnase Gaston bussière
+              <br />
+              34 Rue Gabriel Péri
+              <br />
+              93270 Sevran
+            </span>
+            <a
+              href="mailto:contact@vovinam-association.fr"
+              className="text-[0.96rem] text-white/75 hover:text-white"
+            >
+              contact@vovinam-sevran.fr
             </a>
-            <a href="tel:+33100000000" className="text-[0.96rem] text-white/75 hover:text-white">
+            <a
+              href="tel:+33100000000"
+              className="text-[0.96rem] text-white/75 hover:text-white"
+            >
               01 00 00 00 00
             </a>
           </div>
 
           <div className="flex min-w-[210px] flex-1 flex-col gap-3.5">
-            <span className="text-[11px] font-bold tracking-[0.18em] text-jaune uppercase">Horaires</span>
+            <span className="text-[11px] font-bold tracking-[0.18em] text-jaune uppercase">
+              Horaires
+            </span>
             <span className="text-[0.96rem] leading-[1.7] text-white/75">
-              Lundi 20:00 — 21:45
+              Lundi 19:00 — 22:25
               <br />
-              Mardi 18:00 — 19:30
+              Vendredi 19:00 — 22:25
               <br />
-              Mercredi 14:00 — 15:00
-              <br />
-              Jeudi 20:00 — 21:45
-              <br />
-              Vendredi 18:00 — 19:30
+              Samedi 14:30 — 16:00
             </span>
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-4 border-t border-white/10 py-6">
-          <span className="text-[11px] font-semibold tracking-[0.16em] text-white/50 uppercase">Partenaires &amp; fédération</span>
+          <span className="text-[11px] font-semibold tracking-[0.16em] text-white/50 uppercase">
+            Partenaires &amp; fédération
+          </span>
           {[0, 1, 2].map((i) => (
             <span
               key={i}
@@ -89,14 +106,23 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/10 py-6">
-          <span className="text-sm text-white/50">© 2026 Association Vovinam Viet Vo Dao. Tous droits réservés.</span>
+          <span className="text-sm text-white/50">
+            © {getCurrentYear()} Association Vovinam Viet Vo Dao. Tous droits
+            réservés.
+          </span>
           <div className="flex flex-wrap gap-6">
-            <a href="#" className="text-sm text-white/50 hover:text-white">
+            <Link
+              href="/mentions-legales"
+              className="text-sm text-white/50 hover:text-white"
+            >
               Mentions légales
-            </a>
-            <a href="#" className="text-sm text-white/50 hover:text-white">
+            </Link>
+            <Link
+              href="/politique-de-confidentialité"
+              className="text-sm text-white/50 hover:text-white"
+            >
               Politique de confidentialité
-            </a>
+            </Link>
           </div>
         </div>
       </div>

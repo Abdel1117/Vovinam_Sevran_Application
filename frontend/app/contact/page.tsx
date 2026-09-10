@@ -13,7 +13,7 @@ type Info = { label: string; valeur: string; note?: string; fond: string };
 const infos: Info[] = [
   {
     label: "Adresse",
-    valeur: "Gymnase Jean-Moulin\n12 rue des Sports\n94400 Vitry-sur-Seine",
+    valeur: "Gymnase Jean-Moulin\n12 rue des Sports\n94400 Sevran",
     fond: "bg-vovinam-100",
   },
   {
@@ -25,13 +25,11 @@ const infos: Info[] = [
   {
     label: "Téléphone",
     valeur: "01 00 00 00 00",
-    note: "Du lundi au vendredi, 18 h — 20 h.",
     fond: "bg-[#ffecec]",
   },
   {
     label: "Horaires des cours",
-    valeur:
-      "Lun. & jeu. 20:00 — 21:45\nMar. & ven. 18:00 — 19:30\nMer. 14:00 — 15:00",
+    valeur: "Lun. & ven. 19:00 — 22:25\nSam. 14:30 — 16:00\n",
     fond: "bg-vovinam-100",
   },
 ];

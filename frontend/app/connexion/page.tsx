@@ -66,7 +66,7 @@ export default function Page() {
         </div>
 
         <span className="relative text-[0.85rem] text-white/55">
-          Association Vovinam Viet Vo Dao — Vitry-sur-Seine
+          Association Vovinam Viet Vo Dao — Sevran
         </span>
       </div>
 

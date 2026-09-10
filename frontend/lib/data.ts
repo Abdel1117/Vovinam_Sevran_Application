@@ -70,11 +70,11 @@ export const navigation: NavItem[] = [
     children: [
       { label: "Le Vovinam", href: "/#vovinam" },
       { label: "Actualitées", href: "/#actu" },
-      { label: "Association", href: "/#valeurs" },
+      { label: "L'association", href: "/#valeurs" },
       { label: "Cours", href: "/#cours" },
       { label: "Agenda", href: "/#agenda" },
       { label: "Vie du club", href: "/#galerie" },
-      { label: "Stats", href: "/#stats" },
+      { label: "Statistiques", href: "/#stats" },
       { label: "Les enseignants", href: "/#enseignants" },
       { label: "Envie d'essayer ?", href: "/#essai" },
     ],
@@ -102,20 +102,20 @@ export const valeurs: Valeur[] = [
 export const cours: Cours[] = [
   {
     titre: "Enfants",
-    niveau: "6 – 11 ans",
+    niveau: "7 – 11 ans",
     badge: "stage",
     texte: "Découverte ludique, motricité, discipline et confiance.",
-    horaires: "Mercredi 14:00 — 15:00",
-    lieu: "Gymnase Jean-Moulin — Dojo 2",
+    horaires: "Lundi/Vendredi 19:00 — 20:00",
+    lieu: "Gymnase Gaston bussière - Salle Verte",
     photo: "cours enfants",
   },
   {
     titre: "Adolescents",
     niveau: "12 – 17 ans",
     badge: "actualite",
-    texte: "Technique, condition physique et progression personnelle.",
-    horaires: "Mardi & vendredi 18:00 — 19:30",
-    lieu: "Gymnase Jean-Moulin — Dojo 1",
+    texte: "Technique, condition physique et progression personnelle. Initiation Combat",
+    horaires: "Lundi/Vendredi 19:00 — 20:00",
+    lieu: "Gymnase Gaston bussière - Salle Verte",
     photo: "cours ados",
   },
   {
@@ -123,8 +123,8 @@ export const cours: Cours[] = [
     niveau: "18 ans et +",
     badge: "actualite",
     texte: "Art martial complet : défense, technique et condition physique.",
-    horaires: "Lundi & jeudi 20:00 — 21:45",
-    lieu: "Gymnase Jean-Moulin — Dojo 1",
+    horaires: "Lundi/Vendredi 20:00 — 22:15",
+    lieu: "Gymnase Gaston bussière - Salle Verte",
     photo: "cours adultes",
   },
 ];
@@ -139,7 +139,7 @@ export const actualites: Article[] = [
     auteur: "Claire Nguyen",
     lecture: "4 min",
     chapo:
-      "Trois jours de pratique intensive à Vitry-sur-Seine : quyen, travail aux armes, applications et un examen blanc pour les candidats au passage de grades.",
+      "Trois jours de pratique intensive à Sevran : quyen, travail aux armes, applications et un examen blanc pour les candidats au passage de grades.",
     photo: "stage régional",
     corps: [
       { type: "p", texte: "Le stage régional a réuni cette année soixante-douze pratiquants venus de six clubs. Trois jours structurés autour d'un fil conducteur simple : revenir aux fondamentaux avant d'aborder les enchaînements les plus techniques du programme." },
@@ -195,24 +195,23 @@ export const actualites: Article[] = [
 ];
 
 export const evenements: Evenement[] = [
-  { jour: "14", mois: "SEP", type: "Stage", badge: "stage", titre: "Stage régional", lieu: "Salle omnisports — Vitry-sur-Seine", horaire: "09:00 — 17:00" },
+  { jour: "14", mois: "SEP", type: "Stage", badge: "stage", titre: "Stage régional", lieu: "Salle omnisports — Sevran", horaire: "09:00 — 17:00" },
   { jour: "28", mois: "SEP", type: "Compétition", badge: "competition", titre: "Open de Paris", lieu: "Halle Georges-Carpentier — Paris 13e", horaire: "08:30 — 18:00" },
   { jour: "12", mois: "OCT", type: "Passage de grades", badge: "club", titre: "Examens de ceintures", lieu: "Gymnase Jean-Moulin — Dojo 1", horaire: "14:00 — 18:00" },
   { jour: "09", mois: "NOV", type: "Démonstration", badge: "club", titre: "Fête des associations", lieu: "Place de la Mairie", horaire: "11:00 — 12:00" },
 ];
 
 export const statistiques: Statistique[] = [
-  { valeur: 120, suffixe: "+", label: "Adhérents" },
-  { valeur: 15, suffixe: "", label: "Années d'expérience" },
-  { valeur: 8, suffixe: "", label: "Cours par semaine" },
-  { valeur: 20, suffixe: "+", label: "Événements par an" },
+  { valeur: 30, suffixe: "", label: "Années d'expérience" },
+  { valeur: 3, suffixe: "", label: "Cours par semaine" },
+  { valeur: 6, suffixe: "+", label: "Événements par an" },
 ];
 
 export const enseignants: Enseignant[] = [
-  { nom: "Minh Trân", grade: "Ceinture rouge 3e cấp", role: "Directeur technique", texte: "Pratique depuis 25 ans, il encadre les groupes adultes et les passages de grades." },
-  { nom: "Claire Nguyen", grade: "Ceinture rouge 1er cấp", role: "Responsable groupe enfants", texte: "Elle construit une pédagogie ludique autour de la motricité et du respect." },
-  { nom: "Karim Belhadj", grade: "Ceinture jaune 3e cấp", role: "Entraîneur compétition", texte: "Il prépare les compétiteurs sur les épreuves techniques et de combat." },
-  { nom: "Léa Fontaine", grade: "Ceinture jaune 2e cấp", role: "Encadrante ados", texte: "Elle accompagne les adolescents dans la technique et la confiance en soi." },
+  { nom: "Julien Saffou", grade: "Ceinture Noir 2e dan", role: "Enseignant Principal", texte: "Pratique depuis 20 ans." },
+  { nom: "Claire Nguyen", grade: "Ceinture Noir 1e dan", role: "Enseignant", texte: "Elle construit une pédagogie ludique autour de la motricité et du respect." },
+  { nom: "Karim Belhadj", grade: "Ceinture Noir 1e dan", role: "Enseignant", texte: "Il prépare les compétiteurs sur les épreuves techniques et de combat." },
+  { nom: "Léa Fontaine",  grade: "Ceinture Noir 1e dan", role: "Enseignant", texte: "Elle accompagne les adolescents dans la technique et la confiance en soi." },
 ];
 
 export const photos: PhotoGalerie[] = [
@@ -233,18 +232,18 @@ export const photos: PhotoGalerie[] = [
 export const categoriesGalerie: string[] = ["Tous", "Entraînement", "Stage", "Compétition", "Démonstration", "Enfants"];
 
 export const adherents: Adherent[] = [
-  { nom: "Mercier", prenom: "Lucas", licence: "VVD-2026-0142", grade: "Bleu 1er cấp", couleur: "#1851D9", naissance: "12/04/1998", categorie: "Adultes", statut: "À jour", email: "lucas.mercier@email.fr", telephone: "06 12 00 00 00", adresse: "18 rue Victor-Hugo, 94400 Vitry-sur-Seine", dateGrade: "15/06/2025", certificat: "Valide", assurance: "Incluse" },
-  { nom: "Benali", prenom: "Sarah", licence: "VVD-2026-0143", grade: "Bleu ciel", couleur: "#7FB2FF", naissance: "03/09/2017", categorie: "Enfants", statut: "En attente", email: "famille.benali@email.fr", telephone: "06 34 00 00 00", adresse: "5 allée des Lilas, 94400 Vitry-sur-Seine", dateGrade: "20/06/2026", certificat: "Manquant", assurance: "Incluse" },
+  { nom: "Mercier", prenom: "Lucas", licence: "VVD-2026-0142", grade: "Bleu 1er cấp", couleur: "#1851D9", naissance: "12/04/1998", categorie: "Adultes", statut: "À jour", email: "lucas.mercier@email.fr", telephone: "06 12 00 00 00", adresse: "18 rue Victor-Hugo, 94400 Sevran", dateGrade: "15/06/2025", certificat: "Valide", assurance: "Incluse" },
+  { nom: "Benali", prenom: "Sarah", licence: "VVD-2026-0143", grade: "Bleu ciel", couleur: "#7FB2FF", naissance: "03/09/2017", categorie: "Enfants", statut: "En attente", email: "famille.benali@email.fr", telephone: "06 34 00 00 00", adresse: "5 allée des Lilas, 94400 Sevran", dateGrade: "20/06/2026", certificat: "Manquant", assurance: "Incluse" },
   { nom: "Nguyen", prenom: "Thomas", licence: "VVD-2026-0118", grade: "Jaune 1er cấp", couleur: "#FFFF01", naissance: "27/01/2010", categorie: "Adolescents", statut: "À jour", email: "thomas.nguyen@email.fr", telephone: "07 55 00 00 00", adresse: "42 avenue de la République, 94200 Ivry-sur-Seine", dateGrade: "12/10/2025", certificat: "Valide", assurance: "Incluse" },
-  { nom: "Fontaine", prenom: "Léa", licence: "VVD-2026-0087", grade: "Jaune 2e cấp", couleur: "#FFFF01", naissance: "08/07/1996", categorie: "Adultes", statut: "À jour", email: "lea.fontaine@email.fr", telephone: "06 78 00 00 00", adresse: "9 rue des Écoles, 94400 Vitry-sur-Seine", dateGrade: "14/06/2024", certificat: "Valide", assurance: "Incluse" },
-  { nom: "Belhadj", prenom: "Karim", licence: "VVD-2026-0021", grade: "Jaune 3e cấp", couleur: "#FFFF01", naissance: "22/11/1989", categorie: "Adultes", statut: "À jour", email: "karim.belhadj@email.fr", telephone: "06 90 00 00 00", adresse: "77 boulevard Paul-Vaillant, 94400 Vitry-sur-Seine", dateGrade: "18/06/2023", certificat: "Valide", assurance: "Incluse" },
-  { nom: "Dubois", prenom: "Emma", licence: "VVD-2026-0155", grade: "Bleu ciel", couleur: "#7FB2FF", naissance: "16/05/2015", categorie: "Enfants", statut: "À jour", email: "famille.dubois@email.fr", telephone: "06 21 00 00 00", adresse: "3 impasse du Parc, 94400 Vitry-sur-Seine", dateGrade: "20/06/2026", certificat: "Valide", assurance: "Incluse" },
-  { nom: "Trân", prenom: "Minh", licence: "VVD-2026-0003", grade: "Rouge 3e cấp", couleur: "#FE0000", naissance: "02/03/1978", categorie: "Adultes", statut: "À jour", email: "minh.tran@email.fr", telephone: "06 11 00 00 00", adresse: "21 rue des Sports, 94400 Vitry-sur-Seine", dateGrade: "10/12/2021", certificat: "Valide", assurance: "Incluse" },
+  { nom: "Fontaine", prenom: "Léa", licence: "VVD-2026-0087", grade: "Jaune 2e cấp", couleur: "#FFFF01", naissance: "08/07/1996", categorie: "Adultes", statut: "À jour", email: "lea.fontaine@email.fr", telephone: "06 78 00 00 00", adresse: "9 rue des Écoles, 94400 Sevran", dateGrade: "14/06/2024", certificat: "Valide", assurance: "Incluse" },
+  { nom: "Belhadj", prenom: "Karim", licence: "VVD-2026-0021", grade: "Jaune 3e cấp", couleur: "#FFFF01", naissance: "22/11/1989", categorie: "Adultes", statut: "À jour", email: "karim.belhadj@email.fr", telephone: "06 90 00 00 00", adresse: "77 boulevard Paul-Vaillant, 94400 Sevran", dateGrade: "18/06/2023", certificat: "Valide", assurance: "Incluse" },
+  { nom: "Dubois", prenom: "Emma", licence: "VVD-2026-0155", grade: "Bleu ciel", couleur: "#7FB2FF", naissance: "16/05/2015", categorie: "Enfants", statut: "À jour", email: "famille.dubois@email.fr", telephone: "06 21 00 00 00", adresse: "3 impasse du Parc, 94400 Sevran", dateGrade: "20/06/2026", certificat: "Valide", assurance: "Incluse" },
+  { nom: "Trân", prenom: "Minh", licence: "VVD-2026-0003", grade: "Rouge 3e cấp", couleur: "#FE0000", naissance: "02/03/1978", categorie: "Adultes", statut: "À jour", email: "minh.tran@email.fr", telephone: "06 11 00 00 00", adresse: "21 rue des Sports, 94400 Sevran", dateGrade: "10/12/2021", certificat: "Valide", assurance: "Incluse" },
   { nom: "Rossi", prenom: "Matteo", licence: "VVD-2026-0129", grade: "Bleu 2e cấp", couleur: "#1851D9", naissance: "30/08/2009", categorie: "Adolescents", statut: "En attente", email: "famille.rossi@email.fr", telephone: "07 12 00 00 00", adresse: "14 rue Danielle-Casanova, 94200 Ivry-sur-Seine", dateGrade: "12/10/2025", certificat: "Valide", assurance: "Incluse" },
-  { nom: "Nguyen", prenom: "Claire", licence: "VVD-2026-0009", grade: "Rouge 1er cấp", couleur: "#FE0000", naissance: "19/02/1985", categorie: "Adultes", statut: "À jour", email: "claire.nguyen@email.fr", telephone: "06 45 00 00 00", adresse: "6 rue Camille-Groult, 94400 Vitry-sur-Seine", dateGrade: "11/12/2022", certificat: "Valide", assurance: "Incluse" },
-  { nom: "Lopes", prenom: "Hugo", licence: "VVD-2026-0161", grade: "Bleu ciel", couleur: "#7FB2FF", naissance: "04/12/2018", categorie: "Enfants", statut: "En attente", email: "famille.lopes@email.fr", telephone: "06 66 00 00 00", adresse: "31 rue Charles-Fourier, 94400 Vitry-sur-Seine", dateGrade: "—", certificat: "Manquant", assurance: "Incluse" },
-  { nom: "Haddad", prenom: "Nour", licence: "VVD-2026-0134", grade: "Bleu 1er cấp", couleur: "#1851D9", naissance: "25/06/2008", categorie: "Adolescents", statut: "À jour", email: "nour.haddad@email.fr", telephone: "07 88 00 00 00", adresse: "2 place du Marché, 94400 Vitry-sur-Seine", dateGrade: "12/10/2025", certificat: "Valide", assurance: "Incluse" },
-  { nom: "Girard", prenom: "Antoine", licence: "VVD-2026-0076", grade: "Jaune 1er cấp", couleur: "#FFFF01", naissance: "11/10/1992", categorie: "Adultes", statut: "À jour", email: "antoine.girard@email.fr", telephone: "06 30 00 00 00", adresse: "48 avenue Rouget-de-Lisle, 94400 Vitry-sur-Seine", dateGrade: "15/06/2025", certificat: "Valide", assurance: "Incluse" },
+  { nom: "Nguyen", prenom: "Claire", licence: "VVD-2026-0009", grade: "Rouge 1er cấp", couleur: "#FE0000", naissance: "19/02/1985", categorie: "Adultes", statut: "À jour", email: "claire.nguyen@email.fr", telephone: "06 45 00 00 00", adresse: "6 rue Camille-Groult, 94400 Sevran", dateGrade: "11/12/2022", certificat: "Valide", assurance: "Incluse" },
+  { nom: "Lopes", prenom: "Hugo", licence: "VVD-2026-0161", grade: "Bleu ciel", couleur: "#7FB2FF", naissance: "04/12/2018", categorie: "Enfants", statut: "En attente", email: "famille.lopes@email.fr", telephone: "06 66 00 00 00", adresse: "31 rue Charles-Fourier, 94400 Sevran", dateGrade: "—", certificat: "Manquant", assurance: "Incluse" },
+  { nom: "Haddad", prenom: "Nour", licence: "VVD-2026-0134", grade: "Bleu 1er cấp", couleur: "#1851D9", naissance: "25/06/2008", categorie: "Adolescents", statut: "À jour", email: "nour.haddad@email.fr", telephone: "07 88 00 00 00", adresse: "2 place du Marché, 94400 Sevran", dateGrade: "12/10/2025", certificat: "Valide", assurance: "Incluse" },
+  { nom: "Girard", prenom: "Antoine", licence: "VVD-2026-0076", grade: "Jaune 1er cấp", couleur: "#FFFF01", naissance: "11/10/1992", categorie: "Adultes", statut: "À jour", email: "antoine.girard@email.fr", telephone: "06 30 00 00 00", adresse: "48 avenue Rouget-de-Lisle, 94400 Sevran", dateGrade: "15/06/2025", certificat: "Valide", assurance: "Incluse" },
 ];
 
 export function getArticle(slug: string): Article | undefined {
