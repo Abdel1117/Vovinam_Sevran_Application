@@ -101,10 +101,15 @@ export default function Page() {
             <ContactForm />
             <div className="flex min-w-[300px] flex-1 flex-col gap-5">
               <Reveal className="relative min-h-75 overflow-hidden rounded-3xl border border-[#e1e7f5]">
-                <Photo
-                  label="carte — accès au gymnase"
-                  className="absolute inset-0"
-                />
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2494.4508342291647!2d2.5338027000000003!3d48.9399852!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e6156db8eb1bc9%3A0xaa5208c6dbc5c8a2!2sGymnase%20Gaston%20bussi%C3%A8re!5e1!3m2!1sfr!2sfr!4v1789073646477!5m2!1sfr!2sfr"
+                  width="600"
+                  height="450"
+                  style={{ border: 0 }}
+                  allowFullScreen={true}
+                  loading="lazy"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                ></iframe>
               </Reveal>
               <Reveal className="flex flex-col gap-3.5 rounded-3xl bg-vovinam p-8 text-white">
                 <span className="inline-flex items-center gap-2.5 text-[11px] font-bold tracking-[0.2em] text-jaune uppercase">

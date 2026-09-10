@@ -32,27 +32,52 @@ export default function ContactForm() {
       <div className="flex flex-col gap-4.5">
         <div className="flex flex-wrap gap-4.5">
           <label className="flex min-w-[200px] flex-1 flex-col gap-2">
-            <span className="text-[0.88rem] font-semibold text-encre-70">Prénom *</span>
-            <input required type="text" placeholder="Votre prénom" className={champ} />
+            <span className="text-[0.88rem] font-semibold text-encre-70">
+              Prénom *
+            </span>
+            <input
+              required
+              type="text"
+              placeholder="Votre prénom"
+              className={champ}
+            />
           </label>
           <label className="flex min-w-[200px] flex-1 flex-col gap-2">
-            <span className="text-[0.88rem] font-semibold text-encre-70">Nom *</span>
-            <input required type="text" placeholder="Votre nom" className={champ} />
+            <span className="text-[0.88rem] font-semibold text-encre-70">
+              Nom *
+            </span>
+            <input
+              required
+              type="text"
+              placeholder="Votre nom"
+              className={champ}
+            />
           </label>
         </div>
         <div className="flex flex-wrap gap-4.5">
           <label className="flex min-w-[200px] flex-1 flex-col gap-2">
-            <span className="text-[0.88rem] font-semibold text-encre-70">Email *</span>
-            <input required type="email" placeholder="vous@email.fr" className={champ} />
+            <span className="text-[0.88rem] font-semibold text-encre-70">
+              Email *
+            </span>
+            <input
+              required
+              type="email"
+              placeholder="vous@email.fr"
+              className={champ}
+            />
           </label>
           <label className="flex min-w-[200px] flex-1 flex-col gap-2">
-            <span className="text-[0.88rem] font-semibold text-encre-70">Téléphone</span>
+            <span className="text-[0.88rem] font-semibold text-encre-70">
+              Téléphone
+            </span>
             <input type="tel" placeholder="06 00 00 00 00" className={champ} />
           </label>
         </div>
 
         <div className="flex flex-col gap-2.5">
-          <span className="text-[0.88rem] font-semibold text-encre-70">Votre demande *</span>
+          <span className="text-[0.88rem] font-semibold text-encre-70">
+            Votre demande *
+          </span>
           <div className="flex flex-wrap gap-2.5">
             {motifs.map((m) => (
               <button
@@ -61,7 +86,9 @@ export default function ContactForm() {
                 onClick={() => setMotif(m)}
                 className={[
                   "cursor-pointer rounded-full border-[1.5px] px-4.5 py-3.5 text-[0.92rem] font-semibold transition-all duration-200",
-                  motif === m ? "border-vovinam bg-vovinam text-white" : "border-[#e1e7f5] bg-white text-encre-70",
+                  motif === m
+                    ? "border-vovinam bg-vovinam text-white"
+                    : "border-[#e1e7f5] bg-white text-encre-70",
                 ].join(" ")}
               >
                 {m}
@@ -71,7 +98,9 @@ export default function ContactForm() {
         </div>
 
         <label className="flex flex-col gap-2">
-          <span className="text-[0.88rem] font-semibold text-encre-70">Message *</span>
+          <span className="text-[0.88rem] font-semibold text-encre-70">
+            Message *
+          </span>
           <textarea
             required
             rows={6}
@@ -81,9 +110,14 @@ export default function ContactForm() {
         </label>
 
         <label className="flex cursor-pointer items-start gap-3">
-          <input required type="checkbox" className="mt-0.5 size-5 flex-none accent-vovinam" />
+          <input
+            required
+            type="checkbox"
+            className="mt-0.5 size-5 flex-none accent-vovinam"
+          />
           <span className="text-[0.92rem] leading-relaxed text-[#6a7392]">
-            J'accepte que mes données soient utilisées pour traiter ma demande, conformément à la politique de confidentialité.
+            J'accepte que mes données soient utilisées pour traiter ma demande,
+            conformément à la politique de confidentialité.
           </span>
         </label>
 

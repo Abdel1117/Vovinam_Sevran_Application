@@ -26,6 +26,10 @@ export default function Photo({
       ].join(" ")}
       role="img"
       aria-label={label}
-    ></div>
+    >
+      <span className="px-4 text-center font-mono text-[10px] tracking-[0.12em] text-[#4a5fa6] uppercase">
+        {label}
+      </span>
+    </div>
   );
 }

@@ -72,6 +72,7 @@ export const navigation: NavItem[] = [
       { label: "Actualitées", href: "/#actu" },
       { label: "L'association", href: "/#valeurs" },
       { label: "Cours", href: "/#cours" },
+      { label: "Articles", href: "/#articles" },
       { label: "Agenda", href: "/#agenda" },
       { label: "Vie du club", href: "/#galerie" },
       { label: "Statistiques", href: "/#stats" },
