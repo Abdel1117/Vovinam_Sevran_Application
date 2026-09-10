@@ -11,10 +11,29 @@ export const metadata: Metadata = { title: "Contact — Vovinam Viet Vo Dao" };
 type Info = { label: string; valeur: string; note?: string; fond: string };
 
 const infos: Info[] = [
-  { label: "Adresse", valeur: "Gymnase Jean-Moulin\n12 rue des Sports\n94400 Vitry-sur-Seine", fond: "bg-vovinam-100" },
-  { label: "Email", valeur: "contact@vovinam-association.fr", note: "Réponse sous 48 h ouvrées.", fond: "bg-[#fffde0]" },
-  { label: "Téléphone", valeur: "01 00 00 00 00", note: "Du lundi au vendredi, 18 h — 20 h.", fond: "bg-[#ffecec]" },
-  { label: "Horaires des cours", valeur: "Lun. & jeu. 20:00 — 21:45\nMar. & ven. 18:00 — 19:30\nMer. 14:00 — 15:00", fond: "bg-vovinam-100" },
+  {
+    label: "Adresse",
+    valeur: "Gymnase Jean-Moulin\n12 rue des Sports\n94400 Vitry-sur-Seine",
+    fond: "bg-vovinam-100",
+  },
+  {
+    label: "Email",
+    valeur: "contact@vovinam-association.fr",
+    note: "Réponse sous 48 h ouvrées.",
+    fond: "bg-[#fffde0]",
+  },
+  {
+    label: "Téléphone",
+    valeur: "01 00 00 00 00",
+    note: "Du lundi au vendredi, 18 h — 20 h.",
+    fond: "bg-[#ffecec]",
+  },
+  {
+    label: "Horaires des cours",
+    valeur:
+      "Lun. & jeu. 20:00 — 21:45\nMar. & ven. 18:00 — 19:30\nMer. 14:00 — 15:00",
+    fond: "bg-vovinam-100",
+  },
 ];
 
 export default function Page() {
@@ -39,47 +58,74 @@ export default function Page() {
               <span className="text-jaune">NOUS RENCONTRER.</span>
             </h1>
             <p className="max-w-[560px] text-lg leading-relaxed text-pretty text-white/85">
-              Une question sur les cours, les inscriptions ou un cours d'essai ? Écrivez-nous, nous répondons sous 48 heures.
+              Une question sur les cours, les inscriptions ou un cours d'essai ?
+              Écrivez-nous, nous répondons sous 48 heures.
             </p>
           </div>
         </section>
 
-        <section className="bg-white px-7 py-16">
+        <section className="bg-white px-2 md:px-7 py-16">
           <div className="mx-auto flex max-w-[1360px] flex-wrap gap-5">
             {infos.map((i) => (
               <Reveal
                 key={i.label}
                 className="flex min-w-[240px] flex-1 flex-col gap-2.5 rounded-3xl border border-trait bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
               >
-                <span className={["mb-1.5 flex size-10.5 items-center justify-center rounded-xl", i.fond].join(" ")}>
+                <span
+                  className={[
+                    "mb-1.5 flex size-10.5 items-center justify-center rounded-xl",
+                    i.fond,
+                  ].join(" ")}
+                >
                   <span className="size-4 rounded bg-vovinam" />
                 </span>
-                <span className="text-[11px] font-bold tracking-[0.16em] text-encre-30 uppercase">{i.label}</span>
-                <span className="text-[1.02rem] leading-relaxed font-semibold whitespace-pre-line text-encre">{i.valeur}</span>
-                {i.note ? <span className="text-[0.92rem] text-[#6a7392]">{i.note}</span> : null}
+                <span className="text-[11px] font-bold tracking-[0.16em] text-encre-30 uppercase">
+                  {i.label}
+                </span>
+                <span className="text-[1.02rem] leading-relaxed font-semibold whitespace-pre-line text-encre">
+                  {i.valeur}
+                </span>
+                {i.note ? (
+                  <span className="text-[0.92rem] text-[#6a7392]">
+                    {i.note}
+                  </span>
+                ) : null}
               </Reveal>
             ))}
           </div>
         </section>
 
-        <section id="formulaire" className="bg-vovinam-050 px-7 py-16 lg:py-28">
+        <section
+          id="formulaire"
+          className="bg-vovinam-050 px-2 md:px-7 py-16 lg:py-28"
+        >
           <div className="mx-auto flex max-w-[1360px] flex-wrap items-start gap-8 lg:gap-14">
             <ContactForm />
             <div className="flex min-w-[300px] flex-1 flex-col gap-5">
               <Reveal className="relative min-h-75 overflow-hidden rounded-3xl border border-[#e1e7f5]">
-                <Photo label="carte — accès au gymnase" className="absolute inset-0" />
+                <Photo
+                  label="carte — accès au gymnase"
+                  className="absolute inset-0"
+                />
               </Reveal>
               <Reveal className="flex flex-col gap-3.5 rounded-3xl bg-vovinam p-8 text-white">
                 <span className="inline-flex items-center gap-2.5 text-[11px] font-bold tracking-[0.2em] text-jaune uppercase">
                   <span className="h-0.5 w-6 bg-jaune" />
                   Premier contact
                 </span>
-                <h3 className="font-display text-2xl leading-tight font-extrabold tracking-tight">Venir voir un cours</h3>
+                <h3 className="font-display text-2xl leading-tight font-extrabold tracking-tight">
+                  Venir voir un cours
+                </h3>
                 <p className="leading-relaxed text-white/85">
-                  Vous pouvez aussi passer directement au gymnase pendant un créneau : une tenue de sport suffit, le premier
-                  cours est offert.
+                  Vous pouvez aussi passer directement au gymnase pendant un
+                  créneau : une tenue de sport suffit, le premier cours est
+                  offert.
                 </p>
-                <Button href="/#cours" variant="jaune" className="mt-1.5 self-start">
+                <Button
+                  href="/#cours"
+                  variant="jaune"
+                  className="mt-1.5 self-start"
+                >
                   Voir les horaires
                 </Button>
               </Reveal>

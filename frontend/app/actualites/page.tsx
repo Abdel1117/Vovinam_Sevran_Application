@@ -34,7 +34,7 @@ export default function Page() {
         </section>
 
         <section className="bg-white py-16 lg:py-24">
-          <div className="mx-auto flex max-w-[1360px] flex-wrap gap-6 px-7">
+          <div className="mx-auto flex max-w-[1360px] flex-wrap gap-6 px-2 md:px-7">
             {actualites.map((a, i) => (
               <Reveal
                 key={a.slug}
@@ -48,10 +48,19 @@ export default function Page() {
                   </Badge>
                 </div>
                 <div className="flex flex-1 flex-col gap-2.5 px-6.5 pt-6 pb-7">
-                  <span className="text-xs font-semibold tracking-[0.12em] text-encre-30 uppercase">{a.date}</span>
-                  <h2 className="font-display text-xl leading-snug font-extrabold text-encre">{a.titre}</h2>
-                  <p className="text-[0.96rem] leading-relaxed text-encre-50">{a.chapo}</p>
-                  <Link href={"/actualites/" + a.slug} className="mt-auto pt-2.5 text-sm font-bold text-vovinam">
+                  <span className="text-xs font-semibold tracking-[0.12em] text-encre-30 uppercase">
+                    {a.date}
+                  </span>
+                  <h2 className="font-display text-xl leading-snug font-extrabold text-encre">
+                    {a.titre}
+                  </h2>
+                  <p className="text-[0.96rem] leading-relaxed text-encre-50">
+                    {a.chapo}
+                  </p>
+                  <Link
+                    href={"/actualites/" + a.slug}
+                    className="mt-auto pt-2.5 text-sm font-bold text-vovinam"
+                  >
                     Lire l'article →
                   </Link>
                 </div>

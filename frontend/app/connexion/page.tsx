@@ -2,7 +2,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import LoginForm from "@/components/site/LoginForm";
 
-export const metadata: Metadata = { title: "Connexion — Espace membre Vovinam" };
+export const metadata: Metadata = {
+  title: "Connexion — Espace membre Vovinam",
+};
 
 const avantages: string[] = [
   "Vos documents et attestations",
@@ -27,8 +29,12 @@ export default function Page() {
             VV
           </span>
           <span className="flex flex-col leading-tight text-white">
-            <span className="font-display text-[15px] font-extrabold tracking-wide">VOVINAM</span>
-            <span className="text-[10px] font-medium tracking-[0.18em] opacity-70">VIET VO DAO</span>
+            <span className="font-display text-[15px] font-extrabold tracking-wide">
+              VOVINAM
+            </span>
+            <span className="text-[10px] font-medium tracking-[0.18em] opacity-70">
+              VIET VO DAO
+            </span>
           </span>
         </Link>
 
@@ -43,12 +49,15 @@ export default function Page() {
             <span className="text-jaune">ADHÉRENT.</span>
           </h1>
           <p className="text-lg leading-relaxed text-pretty text-white/85">
-            Documents d'inscription, convocations, inscriptions aux stages et suivi de vos passages de grades, réunis en un seul
-            endroit.
+            Documents d'inscription, convocations, inscriptions aux stages et
+            suivi de vos passages de grades, réunis en un seul endroit.
           </p>
           <div className="mt-2 flex flex-col gap-2.5">
             {avantages.map((a) => (
-              <span key={a} className="inline-flex items-center gap-3 text-[0.98rem] font-medium text-white/90">
+              <span
+                key={a}
+                className="inline-flex items-center gap-3 text-[0.98rem] font-medium text-white/90"
+              >
                 <span className="size-1.5 flex-none rounded-sm bg-jaune" />
                 {a}
               </span>
@@ -56,10 +65,12 @@ export default function Page() {
           </div>
         </div>
 
-        <span className="relative text-[0.85rem] text-white/55">Association Vovinam Viet Vo Dao — Vitry-sur-Seine</span>
+        <span className="relative text-[0.85rem] text-white/55">
+          Association Vovinam Viet Vo Dao — Vitry-sur-Seine
+        </span>
       </div>
 
-      <div className="flex min-w-[320px] flex-[1_1_460px] items-center justify-center px-6 py-12 lg:px-12 lg:py-18">
+      <div className="flex min-w-[320px] flex-[1_1_460px] items-center justify-center px-2 md:px-6 py-12 lg:px-12 lg:py-18">
         <LoginForm />
       </div>
     </div>
