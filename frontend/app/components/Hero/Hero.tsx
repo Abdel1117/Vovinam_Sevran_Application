@@ -37,12 +37,6 @@ export default function Hero() {
         aria-hidden
         className="animate-derive-halo absolute -right-[15%] -bottom-[25%] size-[55%] rounded-full bg-jaune/10 blur-[110px]"
       />
-      <div className="absolute inset-0 bg-linear-to-b from-transparent via-[#09183e]/55 to-[#071436]/90" />
-      <div className="absolute inset-x-0 top-0 flex h-1">
-        <span className="flex-1 bg-vovinam" />
-        <span className="w-30 bg-jaune" />
-        <span className="w-15 bg-rouge" />
-      </div>
 
       <div className="relative z-2 mx-auto w-full max-w-[1360px] px-7 pt-38 pb-15">
         <div className="flex max-w-[840px] flex-col gap-6">

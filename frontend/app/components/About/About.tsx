@@ -32,8 +32,6 @@ export default function About() {
               label="photo — travail technique à deux"
               className="h-[380px] lg:h-[520px]"
             />
-            <span className="absolute bottom-0 left-0 h-2 w-16 bg-jaune" />
-            <span className="absolute bottom-0 left-16 h-2 w-6.5 bg-rouge" />
           </div>
         </Reveal>
 

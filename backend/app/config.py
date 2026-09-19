@@ -17,8 +17,10 @@ class Settings(BaseSettings):
 
     jwt_secret_key: str
     jwt_algorithm: str = "HS256"
-    jwt_expiration_hours: int = 24
+    jwt_access_expiration_minutes: int = 30
     jwt_refresh_expiration_days: int = 3
+
+    frontend_origin: str = "*"
 
     smtp_host: str = "smtp.gmail.com"
     smtp_port: int = 587

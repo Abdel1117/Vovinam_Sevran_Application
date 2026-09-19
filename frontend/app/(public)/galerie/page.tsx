@@ -11,11 +11,6 @@ export default function Page() {
       <Header />
       <main>
         <section className="relative overflow-hidden bg-hero-vovinam px-7 pt-40 pb-16">
-          <div className="absolute inset-x-0 top-0 flex h-1">
-            <span className="flex-1 bg-vovinam" />
-            <span className="w-30 bg-jaune" />
-            <span className="w-15 bg-rouge" />
-          </div>
           <div className="mx-auto flex max-w-[1360px] flex-col gap-4">
             <span className="inline-flex self-start items-center gap-2.5 rounded-full border border-white/30 bg-white/15 px-4 py-2.5 text-xs font-semibold tracking-[0.16em] text-white uppercase">
               <span className="size-1.5 rounded-full bg-jaune" />

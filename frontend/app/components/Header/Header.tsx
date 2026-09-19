@@ -3,11 +3,15 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { navigation } from "@/lib/data";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Header({ solide = false }: { solide?: boolean }) {
+  const { user } = useAuth();
   const [scrolled, setScrolled] = useState(solide);
   const [open, setOpen] = useState(false);
   const [mobileGroupOpen, setMobileGroupOpen] = useState<string | null>(null);
+  const espaceHref = user ? (user.role === "admin" ? "/admin" : "/") : "/connexion";
+  const espaceLabel = user ? "Tableau de bord" : "Connexion";
 
   useEffect(() => {
     if (solide) return;
@@ -102,13 +106,13 @@ export default function Header({ solide = false }: { solide?: boolean }) {
             ),
           )}
           <Link
-            href="/connexion"
+            href={espaceHref}
             className={[
               "text-sm font-semibold transition-opacity hover:opacity-65",
               clair ? "text-white" : "text-encre-70",
             ].join(" ")}
           >
-            Connexion
+            {espaceLabel}
           </Link>
           <Link
             href="/contact"
@@ -205,11 +209,11 @@ export default function Header({ solide = false }: { solide?: boolean }) {
             ),
           )}
           <Link
-            href="/connexion"
+            href={espaceHref}
             onClick={() => setOpen(false)}
             className="px-2 py-4 text-[17px] font-semibold text-encre"
           >
-            Connexion
+            {espaceLabel}
           </Link>
           <Link
             href="/contact"

@@ -16,11 +16,6 @@ export default function Page() {
   return (
     <div className="flex min-h-screen flex-wrap bg-vovinam-050">
       <div className="relative flex min-h-80 min-w-[320px] flex-[1_1_480px] flex-col justify-between overflow-hidden bg-hero-vovinam p-9 lg:p-14">
-        <span className="absolute inset-x-0 top-0 flex h-1">
-          <span className="flex-1 bg-vovinam" />
-          <span className="w-27 bg-jaune" />
-          <span className="w-14 bg-rouge" />
-        </span>
         <span className="absolute -top-17 -right-17 size-75 rounded-full border-2 border-white/10" />
         <span className="absolute -bottom-25 -left-12 size-60 rounded-full border-2 border-white/10" />
 
