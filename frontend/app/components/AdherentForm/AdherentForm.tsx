@@ -1,9 +1,20 @@
 "use client";
 
+import DatePicker, { registerLocale } from "react-datepicker";
+import { fr } from "date-fns/locale";
 import Topbar from "@/components/Topbar/Topbar";
 import { useMenu } from "@/components/AdminShell/menu-context";
 import type { AdherentInput } from "@/lib/api/adherents";
 import type { ContactUrgence } from "@/lib/data";
+
+registerLocale("fr", fr);
+
+function toIsoDate(date: Date): string {
+  const annee = date.getFullYear();
+  const mois = String(date.getMonth() + 1).padStart(2, "0");
+  const jour = String(date.getDate()).padStart(2, "0");
+  return `${annee}-${mois}-${jour}`;
+}
 
 const carte = "rounded-card border border-trait bg-white shadow-card";
 const champ =
@@ -17,6 +28,23 @@ const categories: AdherentInput["categorie"][] = [
 ];
 const statuts: AdherentInput["statut"][] = ["À jour", "En attente"];
 const certificats: AdherentInput["certificat"][] = ["Valide", "Manquant"];
+
+type GradeInfo = {
+  nom: string;
+  icone: string;
+};
+
+// Ajoutez / modifiez les grades ici : clé technique -> { nom affiché, icône }.
+const grades: Record<string, GradeInfo> = {
+  bleu1erCap: { nom: "Bleu 1er Cap", icone: "🔵" },
+  bleu2emeCap: { nom: "Bleu 2eme Cap", icone: "🔵" },
+  bleu3emeCap: { nom: "Bleu 3eme Cap", icone: "🔵" },
+  jaune1erDang: { nom: "Ceinture Jaune 1er Dang", icone: "🟡" },
+  deuxiemeDang: { nom: "Deuxieme Dang", icone: "🟡" },
+  troisiemeDang: { nom: "Troisieme Dang", icone: "🟡" },
+  quatriemeDang: { nom: "Quatrieme Dang", icone: "⚫" },
+  cinquiemeDang: { nom: "Cinquieme Dang", icone: "⚫" },
+};
 
 function withError(base: string, enError: boolean): string {
   return enError ? `${base} border-rouge` : base;
@@ -41,16 +69,16 @@ type AdherentFormProps = {
   error: string | null;
   fieldErrors: Partial<Record<keyof AdherentInput, string>>;
   contactErrors: Partial<Record<keyof ContactUrgence, string>>[];
-  ajouterContactUrgence: () => void;
-  modifierContactUrgence: (
+  addContactUrgence: () => void;
+  EditContactUrgence: (
     index: number,
     champ: keyof ContactUrgence,
     valeur: string,
   ) => void;
-  supprimerContactUrgence: (index: number) => void;
+  deleteContactUrgence: (index: number) => void;
 };
 
-function Choix<T extends string>({
+function Chosed<T extends string>({
   options,
   valeur,
   onChange,
@@ -89,9 +117,9 @@ export default function AdherentForm({
   error,
   fieldErrors,
   contactErrors,
-  ajouterContactUrgence,
-  modifierContactUrgence,
-  supprimerContactUrgence,
+  addContactUrgence,
+  EditContactUrgence,
+  deleteContactUrgence,
 }: AdherentFormProps) {
   const { ouvrir } = useMenu();
 
@@ -156,18 +184,33 @@ export default function AdherentForm({
             </div>
             <label className="flex min-w-[220px] flex-col gap-2">
               <span className={label}>Date de naissance</span>
-              <input
-                type="date"
-                value={values.naissance}
-                onChange={(e) => setField("naissance", e.target.value)}
-                placeholder="12/04/1998"
-                className={withError(champ, Boolean(fieldErrors.naissance))}
+              <DatePicker
+                selected={
+                  values.naissance
+                    ? new Date(`${values.naissance}T00:00:00`)
+                    : null
+                }
+                onChange={(date: Date | null) =>
+                  setField("naissance", date ? toIsoDate(date) : "")
+                }
+                locale="fr"
+                dateFormat="dd/MM/yyyy"
+                placeholderText="JJ/MM/AAAA"
+                showYearDropdown
+                yearDropdownItemNumber={80}
+                scrollableYearDropdown
+                maxDate={new Date()}
+                wrapperClassName="w-full"
+                className={withError(
+                  champ + " w-full",
+                  Boolean(fieldErrors.naissance),
+                )}
               />
               <Error message={fieldErrors.naissance} />
             </label>
             <div className="flex flex-col gap-2.5">
               <span className={label}>Catégorie</span>
-              <Choix
+              <Chosed
                 options={categories}
                 valeur={values.categorie}
                 onChange={(v) => setField("categorie", v)}
@@ -195,25 +238,24 @@ export default function AdherentForm({
               </label>
               <label className="flex min-w-[220px] flex-1 flex-col gap-2">
                 <span className={label}>Grade</span>
-                <input
-                  type="text"
+
+                <select
                   value={values.grade}
                   onChange={(e) => setField("grade", e.target.value)}
-                  placeholder="Bleu 1er cấp"
                   className={withError(champ, Boolean(fieldErrors.grade))}
-                />
+                >
+                  <option value="">Sélectionner un grade</option>
+                  {Object.entries(grades).map(([cle, { nom, icone }]) => (
+                    <option
+                      className="hover:cursor-pointer"
+                      key={cle}
+                      value={nom}
+                    >
+                      {icone} {nom}
+                    </option>
+                  ))}
+                </select>
                 <Error message={fieldErrors.grade} />
-              </label>
-            </div>
-            <div className="flex flex-wrap gap-4">
-              <label className="flex min-w-[160px] flex-1 flex-col gap-2">
-                <span className={label}>Couleur de ceinture</span>
-                <input
-                  type="color"
-                  value={values.couleur}
-                  onChange={(e) => setField("couleur", e.target.value)}
-                  className="h-12.5 w-full cursor-pointer rounded-field border-[1.5px] border-[#e1e7f5] bg-[#fbfcff] px-2"
-                />
               </label>
             </div>
           </section>
@@ -268,7 +310,7 @@ export default function AdherentForm({
                 </h2>
                 <button
                   type="button"
-                  onClick={ajouterContactUrgence}
+                  onClick={addContactUrgence}
                   className="inline-flex h-10.5 cursor-pointer items-center gap-2 rounded-xl border-[1.5px] border-[#e1e7f5] bg-white px-4 text-[0.86rem] font-bold text-vovinam hover:border-vovinam"
                 >
                   + Ajouter un contact
@@ -291,7 +333,7 @@ export default function AdherentForm({
                         type="text"
                         value={contact.nom}
                         onChange={(e) =>
-                          modifierContactUrgence(index, "nom", e.target.value)
+                          EditContactUrgence(index, "nom", e.target.value)
                         }
                         placeholder="Jeanne Mercier"
                         className={withError(
@@ -307,11 +349,7 @@ export default function AdherentForm({
                         type="tel"
                         value={contact.telephone}
                         onChange={(e) =>
-                          modifierContactUrgence(
-                            index,
-                            "telephone",
-                            e.target.value,
-                          )
+                          EditContactUrgence(index, "telephone", e.target.value)
                         }
                         className={withError(
                           champ,
@@ -326,7 +364,7 @@ export default function AdherentForm({
                         type="text"
                         value={contact.lien}
                         onChange={(e) =>
-                          modifierContactUrgence(index, "lien", e.target.value)
+                          EditContactUrgence(index, "lien", e.target.value)
                         }
                         placeholder="Conjoint, parent…"
                         className={champ}
@@ -334,7 +372,7 @@ export default function AdherentForm({
                     </label>
                     <button
                       type="button"
-                      onClick={() => supprimerContactUrgence(index)}
+                      onClick={() => deleteContactUrgence(index)}
                       className="mt-7.5 h-12.5 flex-none cursor-pointer rounded-xl border-[1.5px] border-[#f3d9d9] bg-white px-4 text-[0.86rem] font-bold text-rouge hover:border-rouge"
                     >
                       Retirer
@@ -356,7 +394,7 @@ export default function AdherentForm({
             </h2>
             <div className="flex flex-col gap-2.5">
               <span className={label}>Cotisation</span>
-              <Choix
+              <Chosed
                 options={statuts}
                 valeur={values.statut}
                 onChange={(v) => setField("statut", v)}
@@ -364,7 +402,7 @@ export default function AdherentForm({
             </div>
             <div className="flex flex-col gap-2.5">
               <span className={label}>Certificat médical</span>
-              <Choix
+              <Chosed
                 options={certificats}
                 valeur={values.certificat}
                 onChange={(v) => setField("certificat", v)}

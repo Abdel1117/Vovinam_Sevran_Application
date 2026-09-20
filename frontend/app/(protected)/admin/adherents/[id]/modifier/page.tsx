@@ -17,9 +17,9 @@ export default function Page({ params }: { params: Promise<Params> }) {
     error,
     fieldErrors,
     contactErrors,
-    ajouterContactUrgence,
-    modifierContactUrgence,
-    supprimerContactUrgence,
+    addContactUrgence,
+    EditContactUrgence,
+    deleteContactUrgence,
   } = useAdherentForm(id);
 
   if (isLoadingInitial) {
@@ -36,9 +36,9 @@ export default function Page({ params }: { params: Promise<Params> }) {
       error={error}
       fieldErrors={fieldErrors}
       contactErrors={contactErrors}
-      ajouterContactUrgence={ajouterContactUrgence}
-      modifierContactUrgence={modifierContactUrgence}
-      supprimerContactUrgence={supprimerContactUrgence}
+      addContactUrgence={addContactUrgence}
+      EditContactUrgence={EditContactUrgence}
+      deleteContactUrgence={deleteContactUrgence}
     />
   );
 }

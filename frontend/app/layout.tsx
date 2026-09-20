@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Archivo, Source_Sans_3 } from "next/font/google";
 import { AuthProvider } from "@/context/AuthContext";
+import "react-datepicker/dist/react-datepicker.css";
 import "./globals.css";
 
 const archivo = Archivo({

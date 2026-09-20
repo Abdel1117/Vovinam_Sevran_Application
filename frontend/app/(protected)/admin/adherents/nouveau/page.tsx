@@ -12,9 +12,9 @@ export default function Page() {
     error,
     fieldErrors,
     contactErrors,
-    ajouterContactUrgence,
-    modifierContactUrgence,
-    supprimerContactUrgence,
+    addContactUrgence,
+    EditContactUrgence,
+    deleteContactUrgence,
   } = useAdherentForm();
 
   return (
@@ -27,9 +27,9 @@ export default function Page() {
       error={error}
       fieldErrors={fieldErrors}
       contactErrors={contactErrors}
-      ajouterContactUrgence={ajouterContactUrgence}
-      modifierContactUrgence={modifierContactUrgence}
-      supprimerContactUrgence={supprimerContactUrgence}
+      addContactUrgence={addContactUrgence}
+      EditContactUrgence={EditContactUrgence}
+      deleteContactUrgence={deleteContactUrgence}
     />
   );
 }

@@ -10,7 +10,7 @@ import {
   type AdherentInput,
 } from "@/lib/api/adherents";
 import type { ContactUrgence } from "@/lib/data";
-import { estDateFrValide, estEmailValide, estTelephoneValide, requis } from "@/lib/validation";
+import { estDateIsoValide, estEmailValide, estTelephoneValide, requis } from "@/lib/validation";
 
 const valeursVides: AdherentInput = {
   nom: "",
@@ -46,7 +46,7 @@ function validate(values: AdherentInput): { erreurs: AdherentFieldErrors; erreur
   erreurs.prenom = requis(values.prenom);
   erreurs.licence = requis(values.licence);
   erreurs.grade = requis(values.grade);
-  erreurs.naissance = requis(values.naissance) ?? estDateFrValide(values.naissance);
+  erreurs.naissance = requis(values.naissance) ?? estDateIsoValide(values.naissance);
   erreurs.telephone = requis(values.telephone) ?? estTelephoneValide(values.telephone);
   erreurs.email = requis(values.email) ?? estEmailValide(values.email);
   erreurs.adresse = requis(values.adresse);
@@ -120,7 +120,7 @@ export function useAdherentForm(id?: string) {
     [],
   );
 
-  const ajouterContactUrgence = useCallback(() => {
+  const addContactUrgence = useCallback(() => {
     setValues((prev) => ({
       ...prev,
       contactsUrgence: [...prev.contactsUrgence, { nom: "", telephone: "", lien: "" }],
@@ -128,7 +128,7 @@ export function useAdherentForm(id?: string) {
     setContactErrors((prev) => [...prev, {}]);
   }, []);
 
-  const modifierContactUrgence = useCallback((index: number, champ: keyof ContactUrgence, valeur: string) => {
+  const EditContactUrgence = useCallback((index: number, champ: keyof ContactUrgence, valeur: string) => {
     setValues((prev) => ({
       ...prev,
       contactsUrgence: prev.contactsUrgence.map((c, i) => (i === index ? { ...c, [champ]: valeur } : c)),
@@ -139,7 +139,7 @@ export function useAdherentForm(id?: string) {
     setFieldErrors((prev) => (prev.contactsUrgence ? { ...prev, contactsUrgence: undefined } : prev));
   }, []);
 
-  const supprimerContactUrgence = useCallback((index: number) => {
+  const deleteContactUrgence = useCallback((index: number) => {
     setValues((prev) => ({
       ...prev,
       contactsUrgence: prev.contactsUrgence.filter((_, i) => i !== index),
@@ -180,8 +180,8 @@ export function useAdherentForm(id?: string) {
     error,
     fieldErrors,
     contactErrors,
-    ajouterContactUrgence,
-    modifierContactUrgence,
-    supprimerContactUrgence,
+    addContactUrgence,
+    EditContactUrgence,
+    deleteContactUrgence,
   };
 }

@@ -10,12 +10,12 @@ export function estEmailValide(valeur: string): string | undefined {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valeur.trim()) ? undefined : "Adresse email invalide.";
 }
 
-export function estDateFrValide(valeur: string): string | undefined {
-  const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(valeur.trim());
-  if (!m) return "Format attendu : JJ/MM/AAAA.";
-  const jour = Number(m[1]);
+export function estDateIsoValide(valeur: string): string | undefined {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(valeur.trim());
+  if (!m) return "Date invalide.";
+  const annee = Number(m[1]);
   const mois = Number(m[2]);
-  const annee = Number(m[3]);
+  const jour = Number(m[3]);
   const date = new Date(annee, mois - 1, jour);
   const valide = date.getFullYear() === annee && date.getMonth() === mois - 1 && date.getDate() === jour;
   return valide ? undefined : "Cette date n'existe pas.";
