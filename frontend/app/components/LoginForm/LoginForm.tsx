@@ -12,7 +12,7 @@ export default function LoginForm() {
   const [visible, setVisible] = useState(false);
   const [connecte, setConnecte] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [erreur, setErreur] = useState<string | null>(null);
+  const [erreur, setError] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [motDePasse, setMotDePasse] = useState("");
 
@@ -24,7 +24,7 @@ export default function LoginForm() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setErreur(null);
+    setError(null);
     setLoading(true);
 
     try {
@@ -33,7 +33,7 @@ export default function LoginForm() {
       router.push(user.role === "admin" ? "/admin" : "/");
       router.refresh();
     } catch (err) {
-      setErreur(
+      setError(
         err instanceof AuthError
           ? err.message
           : "Une erreur est survenue. Réessayez.",
@@ -48,7 +48,9 @@ export default function LoginForm() {
       <div className="flex w-full max-w-[440px] flex-col items-center gap-3 rounded-3xl border border-[#e8edf8] bg-white p-8 text-center shadow-[0_18px_50px_rgb(16_24_40/0.09)] lg:p-11">
         <span className="size-8 animate-spin rounded-full border-2 border-vovinam-100 border-t-vovinam" />
         <p className="text-[0.93rem] font-semibold text-encre-50">
-          {user ? "Vous êtes déjà connecté — redirection…" : "Vérification de la session…"}
+          {user
+            ? "Vous êtes déjà connecté — redirection…"
+            : "Vérification de la session…"}
         </p>
       </div>
     );

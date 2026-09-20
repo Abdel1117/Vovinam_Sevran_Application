@@ -12,15 +12,15 @@ const carte = "rounded-card border border-trait bg-white shadow-card";
 export default function Page() {
   const { ouvrir } = useMenu();
   const { articles, isLoading, error, removeArticle } = useArticles();
-  const [aSupprimer, setASupprimer] = useState<string | null>(null);
+  const [toDelete, setToDelete] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   async function confirmerSuppression() {
-    if (!aSupprimer) return;
+    if (!toDelete) return;
     setIsDeleting(true);
     try {
-      await removeArticle(aSupprimer);
-      setASupprimer(null);
+      await removeArticle(toDelete);
+      setToDelete(null);
     } finally {
       setIsDeleting(false);
     }
@@ -37,7 +37,7 @@ export default function Page() {
             href="/admin/articles/nouveau"
             className="inline-flex h-11.5 cursor-pointer items-center gap-2 rounded-xl bg-vovinam px-5 text-[0.92rem] font-bold text-white transition-all hover:-translate-y-0.5"
           >
-            + Nouvel article
+            Nouvel article
           </Link>
         }
       />
@@ -49,7 +49,9 @@ export default function Page() {
           ) : error ? (
             <div className="p-8 text-rouge">{error}</div>
           ) : articles.length === 0 ? (
-            <div className="p-8 text-encre-30">Aucun article pour le moment.</div>
+            <div className="p-8 text-encre-30">
+              Aucun article pour le moment.
+            </div>
           ) : (
             articles.map((a) => (
               <div
@@ -57,7 +59,9 @@ export default function Page() {
                 className="flex flex-wrap items-center gap-3.5 border-b border-[#f5f7fc] px-5.5 py-4 last:border-0"
               >
                 <span className="flex min-w-0 flex-[2_1_260px] flex-col gap-1">
-                  <span className="truncate text-[0.96rem] font-bold text-encre">{a.titre}</span>
+                  <span className="truncate text-[0.96rem] font-bold text-encre">
+                    {a.titre}
+                  </span>
                   <span className="text-[0.82rem] text-encre-30">
                     {a.categorie} · {a.date}
                   </span>
@@ -71,7 +75,7 @@ export default function Page() {
                   </Link>
                   <button
                     type="button"
-                    onClick={() => setASupprimer(a.slug)}
+                    onClick={() => setToDelete(a.slug)}
                     className="inline-flex h-10.5 cursor-pointer items-center rounded-xl border-[1.5px] border-[#f3d9d9] bg-white px-4 text-[0.86rem] font-bold text-rouge hover:border-rouge"
                   >
                     Supprimer
@@ -84,12 +88,12 @@ export default function Page() {
       </div>
 
       <ConfirmDialog
-        open={aSupprimer !== null}
+        open={toDelete !== null}
         title="Supprimer cet article ?"
         description="Cette action est irréversible."
         isConfirming={isDeleting}
         onConfirm={confirmerSuppression}
-        onCancel={() => setASupprimer(null)}
+        onCancel={() => setToDelete(null)}
       />
     </>
   );

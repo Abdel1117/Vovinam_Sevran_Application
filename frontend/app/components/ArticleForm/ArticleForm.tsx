@@ -11,11 +11,11 @@ const carte = "rounded-card border border-trait bg-white shadow-card";
 const champ =
   "h-12.5 rounded-field border-[1.5px] border-[#e1e7f5] bg-[#fbfcff] px-4 text-[0.98rem] text-encre outline-none focus:border-vovinam focus:ring-4 focus:ring-vovinam/10";
 
-function withError(base: string, enErreur: boolean): string {
-  return enErreur ? `${base} border-rouge` : base;
+function withError(base: string, enError: boolean): string {
+  return enError ? `${base} border-rouge` : base;
 }
 
-function Erreur({ message }: { message?: string }) {
+function Error({ message }: { message?: string }) {
   if (!message) return null;
   return (
     <span className="text-[0.82rem] font-semibold text-rouge">{message}</span>
@@ -202,7 +202,7 @@ export default function ArticleForm({
                   Boolean(fieldErrors.titre),
                 )}
               />
-              <Erreur message={fieldErrors.titre} />
+              <Error message={fieldErrors.titre} />
             </label>
 
             <div className="flex flex-wrap gap-4">
@@ -229,7 +229,7 @@ export default function ArticleForm({
                   onChange={(e) => setField("date", e.target.value)}
                   className={withError(champ, Boolean(fieldErrors.date))}
                 />
-                <Erreur message={fieldErrors.date} />
+                <Error message={fieldErrors.date} />
               </label>
             </div>
 
@@ -244,7 +244,7 @@ export default function ArticleForm({
                 placeholder="Claire Nguyen"
                 className={withError(champ, Boolean(fieldErrors.auteur))}
               />
-              <Erreur message={fieldErrors.auteur} />
+              <Error message={fieldErrors.auteur} />
             </label>
 
             <label className="flex flex-col gap-2">
@@ -264,7 +264,7 @@ export default function ArticleForm({
               <span className="text-[0.82rem] text-encre-30">
                 {values.chapo.length} / 220 caractères
               </span>
-              <Erreur message={fieldErrors.chapo} />
+              <Error message={fieldErrors.chapo} />
             </label>
           </section>
 
@@ -346,7 +346,7 @@ export default function ArticleForm({
               {mots} mots · temps de lecture estimé{" "}
               {Math.max(1, Math.round(mots / 200))} min
             </span>
-            <Erreur message={fieldErrors.corpsText} />
+            <Error message={fieldErrors.corpsText} />
           </section>
         </div>
 

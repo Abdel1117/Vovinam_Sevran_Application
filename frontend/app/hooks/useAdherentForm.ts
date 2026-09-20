@@ -149,8 +149,8 @@ export function useAdherentForm(id?: string) {
 
   const submit = useCallback(async () => {
     const { erreurs, erreursContacts } = validate(values);
-    const contientErreursContacts = erreursContacts.some((e) => Object.keys(e).length > 0);
-    if (Object.keys(erreurs).length > 0 || contientErreursContacts) {
+    const getErrorsInFormContact = erreursContacts.some((e) => Object.keys(e).length > 0);
+    if (Object.keys(erreurs).length > 0 || getErrorsInFormContact) {
       setFieldErrors(erreurs);
       setContactErrors(erreursContacts);
       return null;

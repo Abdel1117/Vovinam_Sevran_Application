@@ -18,11 +18,11 @@ const categories: AdherentInput["categorie"][] = [
 const statuts: AdherentInput["statut"][] = ["À jour", "En attente"];
 const certificats: AdherentInput["certificat"][] = ["Valide", "Manquant"];
 
-function withError(base: string, enErreur: boolean): string {
-  return enErreur ? `${base} border-rouge` : base;
+function withError(base: string, enError: boolean): string {
+  return enError ? `${base} border-rouge` : base;
 }
 
-function Erreur({ message }: { message?: string }) {
+function Error({ message }: { message?: string }) {
   if (!message) return null;
   return (
     <span className="text-[0.82rem] font-semibold text-rouge">{message}</span>
@@ -141,7 +141,7 @@ export default function AdherentForm({
                   onChange={(e) => setField("nom", e.target.value)}
                   className={withError(champ, Boolean(fieldErrors.nom))}
                 />
-                <Erreur message={fieldErrors.nom} />
+                <Error message={fieldErrors.nom} />
               </label>
               <label className="flex min-w-[220px] flex-1 flex-col gap-2">
                 <span className={label}>Prénom</span>
@@ -151,7 +151,7 @@ export default function AdherentForm({
                   onChange={(e) => setField("prenom", e.target.value)}
                   className={withError(champ, Boolean(fieldErrors.prenom))}
                 />
-                <Erreur message={fieldErrors.prenom} />
+                <Error message={fieldErrors.prenom} />
               </label>
             </div>
             <label className="flex min-w-[220px] flex-col gap-2">
@@ -163,7 +163,7 @@ export default function AdherentForm({
                 placeholder="12/04/1998"
                 className={withError(champ, Boolean(fieldErrors.naissance))}
               />
-              <Erreur message={fieldErrors.naissance} />
+              <Error message={fieldErrors.naissance} />
             </label>
             <div className="flex flex-col gap-2.5">
               <span className={label}>Catégorie</span>
@@ -191,7 +191,7 @@ export default function AdherentForm({
                   placeholder="VVD-2026-0001"
                   className={withError(champ, Boolean(fieldErrors.licence))}
                 />
-                <Erreur message={fieldErrors.licence} />
+                <Error message={fieldErrors.licence} />
               </label>
               <label className="flex min-w-[220px] flex-1 flex-col gap-2">
                 <span className={label}>Grade</span>
@@ -202,7 +202,7 @@ export default function AdherentForm({
                   placeholder="Bleu 1er cấp"
                   className={withError(champ, Boolean(fieldErrors.grade))}
                 />
-                <Erreur message={fieldErrors.grade} />
+                <Error message={fieldErrors.grade} />
               </label>
             </div>
             <div className="flex flex-wrap gap-4">
@@ -233,7 +233,7 @@ export default function AdherentForm({
                   onChange={(e) => setField("email", e.target.value)}
                   className={withError(champ, Boolean(fieldErrors.email))}
                 />
-                <Erreur message={fieldErrors.email} />
+                <Error message={fieldErrors.email} />
               </label>
               <label className="flex min-w-[220px] flex-1 flex-col gap-2">
                 <span className={label}>Téléphone</span>
@@ -243,7 +243,7 @@ export default function AdherentForm({
                   onChange={(e) => setField("telephone", e.target.value)}
                   className={withError(champ, Boolean(fieldErrors.telephone))}
                 />
-                <Erreur message={fieldErrors.telephone} />
+                <Error message={fieldErrors.telephone} />
               </label>
             </div>
             <label className="flex flex-col gap-2">
@@ -254,7 +254,7 @@ export default function AdherentForm({
                 onChange={(e) => setField("adresse", e.target.value)}
                 className={withError(champ, Boolean(fieldErrors.adresse))}
               />
-              <Erreur message={fieldErrors.adresse} />
+              <Error message={fieldErrors.adresse} />
             </label>
           </section>
           {values.categorie === "Adultes" && (
@@ -299,7 +299,7 @@ export default function AdherentForm({
                           Boolean(contactErrors[index]?.nom),
                         )}
                       />
-                      <Erreur message={contactErrors[index]?.nom} />
+                      <Error message={contactErrors[index]?.nom} />
                     </label>
                     <label className="flex min-w-[160px] flex-1 flex-col gap-2">
                       <span className={label}>Téléphone</span>
@@ -318,7 +318,7 @@ export default function AdherentForm({
                           Boolean(contactErrors[index]?.telephone),
                         )}
                       />
-                      <Erreur message={contactErrors[index]?.telephone} />
+                      <Error message={contactErrors[index]?.telephone} />
                     </label>
                     <label className="flex min-w-[140px] flex-1 flex-col gap-2">
                       <span className={label}>Lien de parenté</span>
@@ -342,7 +342,7 @@ export default function AdherentForm({
                   </div>
                 ))
               )}
-              <Erreur message={fieldErrors.contactsUrgence} />
+              <Error message={fieldErrors.contactsUrgence} />
             </section>
           )}
         </div>
@@ -379,7 +379,7 @@ export default function AdherentForm({
                 placeholder="Incluse"
                 className={withError(champ, Boolean(fieldErrors.assurance))}
               />
-              <Erreur message={fieldErrors.assurance} />
+              <Error message={fieldErrors.assurance} />
             </label>
           </section>
         </div>

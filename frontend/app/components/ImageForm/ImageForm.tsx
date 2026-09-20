@@ -13,11 +13,11 @@ const label = "text-[0.88rem] font-semibold text-encre-70";
 
 const categories = categoriesGalerie.filter((c) => c !== "Tous");
 
-function withError(base: string, enErreur: boolean): string {
-  return enErreur ? `${base} border-rouge` : base;
+function withError(base: string, onError: boolean): string {
+  return onError ? `${base} border-rouge` : base;
 }
 
-function Erreur({ message }: { message?: string }) {
+function Error({ message }: { message?: string }) {
   if (!message) return null;
   return (
     <span className="text-[0.82rem] font-semibold text-rouge">{message}</span>
@@ -119,7 +119,7 @@ export default function ImageForm({
                 </>
               )}
             </label>
-            <Erreur message={fieldErrors.url} />
+            <Error message={fieldErrors.url} />
 
             <label className="flex flex-col gap-2">
               <span className={label}>Titre</span>
@@ -130,7 +130,7 @@ export default function ImageForm({
                 placeholder="Stage régional de printemps"
                 className={withError(champ, Boolean(fieldErrors.titre))}
               />
-              <Erreur message={fieldErrors.titre} />
+              <Error message={fieldErrors.titre} />
             </label>
 
             <div className="flex flex-wrap gap-4">
@@ -143,7 +143,7 @@ export default function ImageForm({
                   placeholder="Avril 2026"
                   className={withError(champ, Boolean(fieldErrors.date))}
                 />
-                <Erreur message={fieldErrors.date} />
+                <Error message={fieldErrors.date} />
               </label>
               <label className="flex min-w-[220px] flex-1 flex-col gap-2">
                 <span className={label}>Catégorie</span>
