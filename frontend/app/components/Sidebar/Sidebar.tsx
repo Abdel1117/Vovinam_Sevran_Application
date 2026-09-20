@@ -10,7 +10,7 @@ const groupes: Groupe[] = [
     titre: "Pilotage",
     liens: [
       { label: "Tableau de bord", href: "/admin" },
-      { label: "Actualités", href: "/admin/articles/nouveau" },
+      { label: "Actualités", href: "/admin/articles" },
       { label: "Agenda", href: "/admin" },
     ],
   },
@@ -19,7 +19,7 @@ const groupes: Groupe[] = [
     liens: [
       { label: "Adhérents", href: "/admin/adherents" },
       { label: "Enseignants", href: "/admin" },
-      { label: "Galerie", href: "/galerie" },
+      { label: "Galerie", href: "/admin/galerie" },
     ],
   },
 ];

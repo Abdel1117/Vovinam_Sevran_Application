@@ -1,13 +1,13 @@
 "use client";
 
-import ArticleForm from "@/components/ArticleForm/ArticleForm";
-import { useArticleForm } from "@/hooks/useArticleForm";
+import ImageForm from "@/components/ImageForm/ImageForm";
+import { useImageForm } from "@/hooks/useImageForm";
 
 export default function Page() {
-  const { values, setField, submit, isSubmitting, error } = useArticleForm();
+  const { values, setField, submit, isSubmitting, error } = useImageForm();
 
   return (
-    <ArticleForm
+    <ImageForm
       mode="create"
       values={values}
       setField={setField}
