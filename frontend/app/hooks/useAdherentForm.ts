@@ -9,6 +9,8 @@ import {
   updateAdherent,
   type AdherentInput,
 } from "@/lib/api/adherents";
+import type { ContactUrgence } from "@/lib/data";
+import { estDateFrValide, estEmailValide, estTelephoneValide, requis } from "@/lib/validation";
 
 const valeursVides: AdherentInput = {
   nom: "",
@@ -22,10 +24,51 @@ const valeursVides: AdherentInput = {
   email: "",
   telephone: "",
   adresse: "",
-  dateGrade: "",
   certificat: "Manquant",
   assurance: "Incluse",
+  contactsUrgence: [],
 };
+
+type AdherentFieldErrors = Partial<Record<keyof AdherentInput, string>>;
+type ContactFieldErrors = Partial<Record<keyof ContactUrgence, string>>;
+
+function sansVide<T extends Record<string, string | undefined>>(obj: T): T {
+  const copie = { ...obj };
+  (Object.keys(copie) as (keyof T)[]).forEach((cle) => {
+    if (copie[cle] === undefined) delete copie[cle];
+  });
+  return copie;
+}
+
+function validate(values: AdherentInput): { erreurs: AdherentFieldErrors; erreursContacts: ContactFieldErrors[] } {
+  const erreurs: AdherentFieldErrors = {};
+  erreurs.nom = requis(values.nom);
+  erreurs.prenom = requis(values.prenom);
+  erreurs.licence = requis(values.licence);
+  erreurs.grade = requis(values.grade);
+  erreurs.naissance = requis(values.naissance) ?? estDateFrValide(values.naissance);
+  erreurs.telephone = requis(values.telephone) ?? estTelephoneValide(values.telephone);
+  erreurs.email = requis(values.email) ?? estEmailValide(values.email);
+  erreurs.adresse = requis(values.adresse);
+  erreurs.assurance = requis(values.assurance);
+
+  const erreursContacts = values.contactsUrgence.map((contact) => {
+    if (!contact.nom.trim() && !contact.telephone.trim()) return {};
+    return sansVide<ContactFieldErrors>({
+      nom: requis(contact.nom),
+      telephone: requis(contact.telephone) ?? estTelephoneValide(contact.telephone),
+    });
+  });
+
+  const auMoinsUnContactValide = values.contactsUrgence.some(
+    (contact, i) => contact.nom.trim() && contact.telephone.trim() && Object.keys(erreursContacts[i]).length === 0,
+  );
+  if (values.categorie === "Adultes" && !auMoinsUnContactValide) {
+    erreurs.contactsUrgence = "Au moins un contact d'urgence est requis pour un adulte.";
+  }
+
+  return { erreurs: sansVide(erreurs), erreursContacts };
+}
 
 export function useAdherentForm(id?: string) {
   const router = useRouter();
@@ -33,6 +76,8 @@ export function useAdherentForm(id?: string) {
   const [isLoadingInitial, setIsLoadingInitial] = useState(Boolean(id));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<AdherentFieldErrors>({});
+  const [contactErrors, setContactErrors] = useState<ContactFieldErrors[]>([]);
 
   useEffect(() => {
     if (!id) return;
@@ -53,9 +98,9 @@ export function useAdherentForm(id?: string) {
           email: adherent.email,
           telephone: adherent.telephone,
           adresse: adherent.adresse,
-          dateGrade: adherent.dateGrade,
           certificat: adherent.certificat,
           assurance: adherent.assurance,
+          contactsUrgence: adherent.contactsUrgence ?? [],
         });
       } else {
         setError("Adhérent introuvable.");
@@ -70,11 +115,48 @@ export function useAdherentForm(id?: string) {
   const setField = useCallback(
     <K extends keyof AdherentInput>(field: K, value: AdherentInput[K]) => {
       setValues((prev) => ({ ...prev, [field]: value }));
+      setFieldErrors((prev) => (prev[field] ? { ...prev, [field]: undefined } : prev));
     },
     [],
   );
 
+  const ajouterContactUrgence = useCallback(() => {
+    setValues((prev) => ({
+      ...prev,
+      contactsUrgence: [...prev.contactsUrgence, { nom: "", telephone: "", lien: "" }],
+    }));
+    setContactErrors((prev) => [...prev, {}]);
+  }, []);
+
+  const modifierContactUrgence = useCallback((index: number, champ: keyof ContactUrgence, valeur: string) => {
+    setValues((prev) => ({
+      ...prev,
+      contactsUrgence: prev.contactsUrgence.map((c, i) => (i === index ? { ...c, [champ]: valeur } : c)),
+    }));
+    setContactErrors((prev) =>
+      prev.map((e, i) => (i === index && e[champ] ? { ...e, [champ]: undefined } : e)),
+    );
+    setFieldErrors((prev) => (prev.contactsUrgence ? { ...prev, contactsUrgence: undefined } : prev));
+  }, []);
+
+  const supprimerContactUrgence = useCallback((index: number) => {
+    setValues((prev) => ({
+      ...prev,
+      contactsUrgence: prev.contactsUrgence.filter((_, i) => i !== index),
+    }));
+    setContactErrors((prev) => prev.filter((_, i) => i !== index));
+  }, []);
+
   const submit = useCallback(async () => {
+    const { erreurs, erreursContacts } = validate(values);
+    const contientErreursContacts = erreursContacts.some((e) => Object.keys(e).length > 0);
+    if (Object.keys(erreurs).length > 0 || contientErreursContacts) {
+      setFieldErrors(erreurs);
+      setContactErrors(erreursContacts);
+      return null;
+    }
+    setFieldErrors({});
+    setContactErrors([]);
     setIsSubmitting(true);
     setError(null);
     try {
@@ -89,5 +171,17 @@ export function useAdherentForm(id?: string) {
     }
   }, [id, values, router]);
 
-  return { values, setField, submit, isSubmitting, isLoadingInitial, error };
+  return {
+    values,
+    setField,
+    submit,
+    isSubmitting,
+    isLoadingInitial,
+    error,
+    fieldErrors,
+    contactErrors,
+    ajouterContactUrgence,
+    modifierContactUrgence,
+    supprimerContactUrgence,
+  };
 }

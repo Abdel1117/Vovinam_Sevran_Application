@@ -8,7 +8,19 @@ type Params = { id: string };
 
 export default function Page({ params }: { params: Promise<Params> }) {
   const { id } = use(params);
-  const { values, setField, submit, isSubmitting, isLoadingInitial, error } = useAdherentForm(id);
+  const {
+    values,
+    setField,
+    submit,
+    isSubmitting,
+    isLoadingInitial,
+    error,
+    fieldErrors,
+    contactErrors,
+    ajouterContactUrgence,
+    modifierContactUrgence,
+    supprimerContactUrgence,
+  } = useAdherentForm(id);
 
   if (isLoadingInitial) {
     return <div className="p-8 text-encre-30">Chargement…</div>;
@@ -22,6 +34,11 @@ export default function Page({ params }: { params: Promise<Params> }) {
       onSubmit={submit}
       isSubmitting={isSubmitting}
       error={error}
+      fieldErrors={fieldErrors}
+      contactErrors={contactErrors}
+      ajouterContactUrgence={ajouterContactUrgence}
+      modifierContactUrgence={modifierContactUrgence}
+      supprimerContactUrgence={supprimerContactUrgence}
     />
   );
 }

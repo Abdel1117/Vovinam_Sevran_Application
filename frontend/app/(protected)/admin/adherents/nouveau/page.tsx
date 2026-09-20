@@ -4,7 +4,18 @@ import AdherentForm from "@/components/AdherentForm/AdherentForm";
 import { useAdherentForm } from "@/hooks/useAdherentForm";
 
 export default function Page() {
-  const { values, setField, submit, isSubmitting, error } = useAdherentForm();
+  const {
+    values,
+    setField,
+    submit,
+    isSubmitting,
+    error,
+    fieldErrors,
+    contactErrors,
+    ajouterContactUrgence,
+    modifierContactUrgence,
+    supprimerContactUrgence,
+  } = useAdherentForm();
 
   return (
     <AdherentForm
@@ -14,6 +25,11 @@ export default function Page() {
       onSubmit={submit}
       isSubmitting={isSubmitting}
       error={error}
+      fieldErrors={fieldErrors}
+      contactErrors={contactErrors}
+      ajouterContactUrgence={ajouterContactUrgence}
+      modifierContactUrgence={modifierContactUrgence}
+      supprimerContactUrgence={supprimerContactUrgence}
     />
   );
 }

@@ -3,6 +3,7 @@
 import Topbar from "@/components/Topbar/Topbar";
 import { useMenu } from "@/components/AdminShell/menu-context";
 import type { AdherentInput } from "@/lib/api/adherents";
+import type { ContactUrgence } from "@/lib/data";
 
 const carte = "rounded-card border border-trait bg-white shadow-card";
 const champ =
@@ -17,6 +18,17 @@ const categories: AdherentInput["categorie"][] = [
 const statuts: AdherentInput["statut"][] = ["À jour", "En attente"];
 const certificats: AdherentInput["certificat"][] = ["Valide", "Manquant"];
 
+function withError(base: string, enErreur: boolean): string {
+  return enErreur ? `${base} border-rouge` : base;
+}
+
+function Erreur({ message }: { message?: string }) {
+  if (!message) return null;
+  return (
+    <span className="text-[0.82rem] font-semibold text-rouge">{message}</span>
+  );
+}
+
 type AdherentFormProps = {
   mode: "create" | "edit";
   values: AdherentInput;
@@ -27,6 +39,15 @@ type AdherentFormProps = {
   onSubmit: () => void;
   isSubmitting: boolean;
   error: string | null;
+  fieldErrors: Partial<Record<keyof AdherentInput, string>>;
+  contactErrors: Partial<Record<keyof ContactUrgence, string>>[];
+  ajouterContactUrgence: () => void;
+  modifierContactUrgence: (
+    index: number,
+    champ: keyof ContactUrgence,
+    valeur: string,
+  ) => void;
+  supprimerContactUrgence: (index: number) => void;
 };
 
 function Choix<T extends string>({
@@ -66,6 +87,11 @@ export default function AdherentForm({
   onSubmit,
   isSubmitting,
   error,
+  fieldErrors,
+  contactErrors,
+  ajouterContactUrgence,
+  modifierContactUrgence,
+  supprimerContactUrgence,
 }: AdherentFormProps) {
   const { ouvrir } = useMenu();
 
@@ -113,8 +139,9 @@ export default function AdherentForm({
                   type="text"
                   value={values.nom}
                   onChange={(e) => setField("nom", e.target.value)}
-                  className={champ}
+                  className={withError(champ, Boolean(fieldErrors.nom))}
                 />
+                <Erreur message={fieldErrors.nom} />
               </label>
               <label className="flex min-w-[220px] flex-1 flex-col gap-2">
                 <span className={label}>Prénom</span>
@@ -122,19 +149,21 @@ export default function AdherentForm({
                   type="text"
                   value={values.prenom}
                   onChange={(e) => setField("prenom", e.target.value)}
-                  className={champ}
+                  className={withError(champ, Boolean(fieldErrors.prenom))}
                 />
+                <Erreur message={fieldErrors.prenom} />
               </label>
             </div>
             <label className="flex min-w-[220px] flex-col gap-2">
               <span className={label}>Date de naissance</span>
               <input
-                type="text"
+                type="date"
                 value={values.naissance}
                 onChange={(e) => setField("naissance", e.target.value)}
                 placeholder="12/04/1998"
-                className={champ}
+                className={withError(champ, Boolean(fieldErrors.naissance))}
               />
+              <Erreur message={fieldErrors.naissance} />
             </label>
             <div className="flex flex-col gap-2.5">
               <span className={label}>Catégorie</span>
@@ -160,8 +189,9 @@ export default function AdherentForm({
                   value={values.licence}
                   onChange={(e) => setField("licence", e.target.value)}
                   placeholder="VVD-2026-0001"
-                  className={champ}
+                  className={withError(champ, Boolean(fieldErrors.licence))}
                 />
+                <Erreur message={fieldErrors.licence} />
               </label>
               <label className="flex min-w-[220px] flex-1 flex-col gap-2">
                 <span className={label}>Grade</span>
@@ -170,8 +200,9 @@ export default function AdherentForm({
                   value={values.grade}
                   onChange={(e) => setField("grade", e.target.value)}
                   placeholder="Bleu 1er cấp"
-                  className={champ}
+                  className={withError(champ, Boolean(fieldErrors.grade))}
                 />
+                <Erreur message={fieldErrors.grade} />
               </label>
             </div>
             <div className="flex flex-wrap gap-4">
@@ -182,16 +213,6 @@ export default function AdherentForm({
                   value={values.couleur}
                   onChange={(e) => setField("couleur", e.target.value)}
                   className="h-12.5 w-full cursor-pointer rounded-field border-[1.5px] border-[#e1e7f5] bg-[#fbfcff] px-2"
-                />
-              </label>
-              <label className="flex min-w-[220px] flex-1 flex-col gap-2">
-                <span className={label}>Date d'obtention du grade</span>
-                <input
-                  type="text"
-                  value={values.dateGrade}
-                  onChange={(e) => setField("dateGrade", e.target.value)}
-                  placeholder="15/06/2025"
-                  className={champ}
                 />
               </label>
             </div>
@@ -210,8 +231,9 @@ export default function AdherentForm({
                   type="email"
                   value={values.email}
                   onChange={(e) => setField("email", e.target.value)}
-                  className={champ}
+                  className={withError(champ, Boolean(fieldErrors.email))}
                 />
+                <Erreur message={fieldErrors.email} />
               </label>
               <label className="flex min-w-[220px] flex-1 flex-col gap-2">
                 <span className={label}>Téléphone</span>
@@ -219,8 +241,9 @@ export default function AdherentForm({
                   type="tel"
                   value={values.telephone}
                   onChange={(e) => setField("telephone", e.target.value)}
-                  className={champ}
+                  className={withError(champ, Boolean(fieldErrors.telephone))}
                 />
+                <Erreur message={fieldErrors.telephone} />
               </label>
             </div>
             <label className="flex flex-col gap-2">
@@ -229,37 +252,97 @@ export default function AdherentForm({
                 type="text"
                 value={values.adresse}
                 onChange={(e) => setField("adresse", e.target.value)}
-                className={champ}
+                className={withError(champ, Boolean(fieldErrors.adresse))}
               />
+              <Erreur message={fieldErrors.adresse} />
             </label>
           </section>
-          {values.categorie == "Adultes" && (
+          {values.categorie === "Adultes" && (
             <section
               className={["flex flex-col gap-4.5 p-3 lg:p-8", carte].join(" ")}
             >
-              <h2 className="font-display text-lg font-extrabold text-encre">
-                Contact d'urgence
-              </h2>
-              <div className="flex flex-wrap gap-4">
-                <label className="flex min-w-[220px] flex-1 flex-col gap-2">
-                  <span className={label}>Email</span>
-                  <input
-                    type="email"
-                    value={values.email}
-                    onChange={(e) => setField("email", e.target.value)}
-                    className={champ}
-                  />
-                </label>
-                <label className="flex min-w-[220px] flex-1 flex-col gap-2">
-                  <span className={label}>Téléphone</span>
-                  <input
-                    type="tel"
-                    value={values.telephone}
-                    onChange={(e) => setField("telephone", e.target.value)}
-                    className={champ}
-                  />
-                </label>
+              <div className="flex flex-wrap items-center gap-3">
+                <h2 className="mr-auto font-display text-lg font-extrabold text-encre">
+                  Contact{values.contactsUrgence.length > 1 ? "s" : ""}{" "}
+                  d'urgence
+                </h2>
+                <button
+                  type="button"
+                  onClick={ajouterContactUrgence}
+                  className="inline-flex h-10.5 cursor-pointer items-center gap-2 rounded-xl border-[1.5px] border-[#e1e7f5] bg-white px-4 text-[0.86rem] font-bold text-vovinam hover:border-vovinam"
+                >
+                  + Ajouter un contact
+                </button>
               </div>
+
+              {values.contactsUrgence.length === 0 ? (
+                <span className="text-[0.9rem] text-encre-30">
+                  Aucun contact d'urgence ajouté.
+                </span>
+              ) : (
+                values.contactsUrgence.map((contact, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-wrap items-start gap-4 rounded-field border border-[#eff3fb] bg-[#fafbff] p-4"
+                  >
+                    <label className="flex min-w-[180px] flex-1 flex-col gap-2">
+                      <span className={label}>Nom complet</span>
+                      <input
+                        type="text"
+                        value={contact.nom}
+                        onChange={(e) =>
+                          modifierContactUrgence(index, "nom", e.target.value)
+                        }
+                        placeholder="Jeanne Mercier"
+                        className={withError(
+                          champ,
+                          Boolean(contactErrors[index]?.nom),
+                        )}
+                      />
+                      <Erreur message={contactErrors[index]?.nom} />
+                    </label>
+                    <label className="flex min-w-[160px] flex-1 flex-col gap-2">
+                      <span className={label}>Téléphone</span>
+                      <input
+                        type="tel"
+                        value={contact.telephone}
+                        onChange={(e) =>
+                          modifierContactUrgence(
+                            index,
+                            "telephone",
+                            e.target.value,
+                          )
+                        }
+                        className={withError(
+                          champ,
+                          Boolean(contactErrors[index]?.telephone),
+                        )}
+                      />
+                      <Erreur message={contactErrors[index]?.telephone} />
+                    </label>
+                    <label className="flex min-w-[140px] flex-1 flex-col gap-2">
+                      <span className={label}>Lien de parenté</span>
+                      <input
+                        type="text"
+                        value={contact.lien}
+                        onChange={(e) =>
+                          modifierContactUrgence(index, "lien", e.target.value)
+                        }
+                        placeholder="Conjoint, parent…"
+                        className={champ}
+                      />
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => supprimerContactUrgence(index)}
+                      className="mt-7.5 h-12.5 flex-none cursor-pointer rounded-xl border-[1.5px] border-[#f3d9d9] bg-white px-4 text-[0.86rem] font-bold text-rouge hover:border-rouge"
+                    >
+                      Retirer
+                    </button>
+                  </div>
+                ))
+              )}
+              <Erreur message={fieldErrors.contactsUrgence} />
             </section>
           )}
         </div>
@@ -294,8 +377,9 @@ export default function AdherentForm({
                 value={values.assurance}
                 onChange={(e) => setField("assurance", e.target.value)}
                 placeholder="Incluse"
-                className={champ}
+                className={withError(champ, Boolean(fieldErrors.assurance))}
               />
+              <Erreur message={fieldErrors.assurance} />
             </label>
           </section>
         </div>

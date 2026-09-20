@@ -8,7 +8,7 @@ type Params = { id: string };
 
 export default function Page({ params }: { params: Promise<Params> }) {
   const { id } = use(params);
-  const { values, setField, submit, isSubmitting, isLoadingInitial, error } = useImageForm(id);
+  const { values, setField, submit, isSubmitting, isLoadingInitial, error, fieldErrors } = useImageForm(id);
 
   if (isLoadingInitial) {
     return <div className="p-8 text-encre-30">Chargement…</div>;
@@ -22,6 +22,7 @@ export default function Page({ params }: { params: Promise<Params> }) {
       onSubmit={submit}
       isSubmitting={isSubmitting}
       error={error}
+      fieldErrors={fieldErrors}
     />
   );
 }

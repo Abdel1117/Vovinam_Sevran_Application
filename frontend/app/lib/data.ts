@@ -46,6 +46,8 @@ export type Enseignant = { nom: string; grade: string; role: string; texte: stri
 
 export type PhotoGalerie = { id: string; titre: string; categorie: string; date: string; url: string };
 
+export type ContactUrgence = { nom: string; telephone: string; lien: string };
+
 export type Adherent = {
   id: string;
   nom: string;
@@ -59,9 +61,9 @@ export type Adherent = {
   email: string;
   telephone: string;
   adresse: string;
-  dateGrade: string;
   certificat: "Valide" | "Manquant";
   assurance: string;
+  contactsUrgence: ContactUrgence[];
 };
 
 export const navigation: NavItem[] = [
@@ -234,18 +236,18 @@ export const photos: PhotoGalerie[] = [
 export const categoriesGalerie: string[] = ["Tous", "Entraînement", "Stage", "Compétition", "Démonstration", "Enfants"];
 
 export const adherents: Adherent[] = [
-  { id: "adh-0142", nom: "Mercier", prenom: "Lucas", licence: "VVD-2026-0142", grade: "Bleu 1er cấp", couleur: "#1851D9", naissance: "12/04/1998", categorie: "Adultes", statut: "À jour", email: "lucas.mercier@email.fr", telephone: "06 12 00 00 00", adresse: "18 rue Victor-Hugo, 94400 Sevran", dateGrade: "15/06/2025", certificat: "Valide", assurance: "Incluse" },
-  { id: "adh-0143", nom: "Benali", prenom: "Sarah", licence: "VVD-2026-0143", grade: "Bleu ciel", couleur: "#7FB2FF", naissance: "03/09/2017", categorie: "Enfants", statut: "En attente", email: "famille.benali@email.fr", telephone: "06 34 00 00 00", adresse: "5 allée des Lilas, 94400 Sevran", dateGrade: "20/06/2026", certificat: "Manquant", assurance: "Incluse" },
-  { id: "adh-0118", nom: "Nguyen", prenom: "Thomas", licence: "VVD-2026-0118", grade: "Jaune 1er cấp", couleur: "#FFFF01", naissance: "27/01/2010", categorie: "Adolescents", statut: "À jour", email: "thomas.nguyen@email.fr", telephone: "07 55 00 00 00", adresse: "42 avenue de la République, 94200 Ivry-sur-Seine", dateGrade: "12/10/2025", certificat: "Valide", assurance: "Incluse" },
-  { id: "adh-0087", nom: "Fontaine", prenom: "Léa", licence: "VVD-2026-0087", grade: "Jaune 2e cấp", couleur: "#FFFF01", naissance: "08/07/1996", categorie: "Adultes", statut: "À jour", email: "lea.fontaine@email.fr", telephone: "06 78 00 00 00", adresse: "9 rue des Écoles, 94400 Sevran", dateGrade: "14/06/2024", certificat: "Valide", assurance: "Incluse" },
-  { id: "adh-0021", nom: "Belhadj", prenom: "Karim", licence: "VVD-2026-0021", grade: "Jaune 3e cấp", couleur: "#FFFF01", naissance: "22/11/1989", categorie: "Adultes", statut: "À jour", email: "karim.belhadj@email.fr", telephone: "06 90 00 00 00", adresse: "77 boulevard Paul-Vaillant, 94400 Sevran", dateGrade: "18/06/2023", certificat: "Valide", assurance: "Incluse" },
-  { id: "adh-0155", nom: "Dubois", prenom: "Emma", licence: "VVD-2026-0155", grade: "Bleu ciel", couleur: "#7FB2FF", naissance: "16/05/2015", categorie: "Enfants", statut: "À jour", email: "famille.dubois@email.fr", telephone: "06 21 00 00 00", adresse: "3 impasse du Parc, 94400 Sevran", dateGrade: "20/06/2026", certificat: "Valide", assurance: "Incluse" },
-  { id: "adh-0003", nom: "Trân", prenom: "Minh", licence: "VVD-2026-0003", grade: "Rouge 3e cấp", couleur: "#FE0000", naissance: "02/03/1978", categorie: "Adultes", statut: "À jour", email: "minh.tran@email.fr", telephone: "06 11 00 00 00", adresse: "21 rue des Sports, 94400 Sevran", dateGrade: "10/12/2021", certificat: "Valide", assurance: "Incluse" },
-  { id: "adh-0129", nom: "Rossi", prenom: "Matteo", licence: "VVD-2026-0129", grade: "Bleu 2e cấp", couleur: "#1851D9", naissance: "30/08/2009", categorie: "Adolescents", statut: "En attente", email: "famille.rossi@email.fr", telephone: "07 12 00 00 00", adresse: "14 rue Danielle-Casanova, 94200 Ivry-sur-Seine", dateGrade: "12/10/2025", certificat: "Valide", assurance: "Incluse" },
-  { id: "adh-0009", nom: "Nguyen", prenom: "Claire", licence: "VVD-2026-0009", grade: "Rouge 1er cấp", couleur: "#FE0000", naissance: "19/02/1985", categorie: "Adultes", statut: "À jour", email: "claire.nguyen@email.fr", telephone: "06 45 00 00 00", adresse: "6 rue Camille-Groult, 94400 Sevran", dateGrade: "11/12/2022", certificat: "Valide", assurance: "Incluse" },
-  { id: "adh-0161", nom: "Lopes", prenom: "Hugo", licence: "VVD-2026-0161", grade: "Bleu ciel", couleur: "#7FB2FF", naissance: "04/12/2018", categorie: "Enfants", statut: "En attente", email: "famille.lopes@email.fr", telephone: "06 66 00 00 00", adresse: "31 rue Charles-Fourier, 94400 Sevran", dateGrade: "—", certificat: "Manquant", assurance: "Incluse" },
-  { id: "adh-0134", nom: "Haddad", prenom: "Nour", licence: "VVD-2026-0134", grade: "Bleu 1er cấp", couleur: "#1851D9", naissance: "25/06/2008", categorie: "Adolescents", statut: "À jour", email: "nour.haddad@email.fr", telephone: "07 88 00 00 00", adresse: "2 place du Marché, 94400 Sevran", dateGrade: "12/10/2025", certificat: "Valide", assurance: "Incluse" },
-  { id: "adh-0076", nom: "Girard", prenom: "Antoine", licence: "VVD-2026-0076", grade: "Jaune 1er cấp", couleur: "#FFFF01", naissance: "11/10/1992", categorie: "Adultes", statut: "À jour", email: "antoine.girard@email.fr", telephone: "06 30 00 00 00", adresse: "48 avenue Rouget-de-Lisle, 94400 Sevran", dateGrade: "15/06/2025", certificat: "Valide", assurance: "Incluse" },
+  { id: "adh-0142", nom: "Mercier", prenom: "Lucas", licence: "VVD-2026-0142", grade: "Bleu 1er cấp", couleur: "#1851D9", naissance: "12/04/1998", categorie: "Adultes", statut: "À jour", email: "lucas.mercier@email.fr", telephone: "06 12 00 00 00", adresse: "18 rue Victor-Hugo, 94400 Sevran", certificat: "Valide", assurance: "Incluse", contactsUrgence: [] },
+  { id: "adh-0143", nom: "Benali", prenom: "Sarah", licence: "VVD-2026-0143", grade: "Bleu ciel", couleur: "#7FB2FF", naissance: "03/09/2017", categorie: "Enfants", statut: "En attente", email: "famille.benali@email.fr", telephone: "06 34 00 00 00", adresse: "5 allée des Lilas, 94400 Sevran", certificat: "Manquant", assurance: "Incluse", contactsUrgence: [] },
+  { id: "adh-0118", nom: "Nguyen", prenom: "Thomas", licence: "VVD-2026-0118", grade: "Jaune 1er cấp", couleur: "#FFFF01", naissance: "27/01/2010", categorie: "Adolescents", statut: "À jour", email: "thomas.nguyen@email.fr", telephone: "07 55 00 00 00", adresse: "42 avenue de la République, 94200 Ivry-sur-Seine", certificat: "Valide", assurance: "Incluse", contactsUrgence: [] },
+  { id: "adh-0087", nom: "Fontaine", prenom: "Léa", licence: "VVD-2026-0087", grade: "Jaune 2e cấp", couleur: "#FFFF01", naissance: "08/07/1996", categorie: "Adultes", statut: "À jour", email: "lea.fontaine@email.fr", telephone: "06 78 00 00 00", adresse: "9 rue des Écoles, 94400 Sevran", certificat: "Valide", assurance: "Incluse", contactsUrgence: [] },
+  { id: "adh-0021", nom: "Belhadj", prenom: "Karim", licence: "VVD-2026-0021", grade: "Jaune 3e cấp", couleur: "#FFFF01", naissance: "22/11/1989", categorie: "Adultes", statut: "À jour", email: "karim.belhadj@email.fr", telephone: "06 90 00 00 00", adresse: "77 boulevard Paul-Vaillant, 94400 Sevran", certificat: "Valide", assurance: "Incluse", contactsUrgence: [] },
+  { id: "adh-0155", nom: "Dubois", prenom: "Emma", licence: "VVD-2026-0155", grade: "Bleu ciel", couleur: "#7FB2FF", naissance: "16/05/2015", categorie: "Enfants", statut: "À jour", email: "famille.dubois@email.fr", telephone: "06 21 00 00 00", adresse: "3 impasse du Parc, 94400 Sevran", certificat: "Valide", assurance: "Incluse", contactsUrgence: [] },
+  { id: "adh-0003", nom: "Trân", prenom: "Minh", licence: "VVD-2026-0003", grade: "Rouge 3e cấp", couleur: "#FE0000", naissance: "02/03/1978", categorie: "Adultes", statut: "À jour", email: "minh.tran@email.fr", telephone: "06 11 00 00 00", adresse: "21 rue des Sports, 94400 Sevran", certificat: "Valide", assurance: "Incluse", contactsUrgence: [] },
+  { id: "adh-0129", nom: "Rossi", prenom: "Matteo", licence: "VVD-2026-0129", grade: "Bleu 2e cấp", couleur: "#1851D9", naissance: "30/08/2009", categorie: "Adolescents", statut: "En attente", email: "famille.rossi@email.fr", telephone: "07 12 00 00 00", adresse: "14 rue Danielle-Casanova, 94200 Ivry-sur-Seine", certificat: "Valide", assurance: "Incluse", contactsUrgence: [] },
+  { id: "adh-0009", nom: "Nguyen", prenom: "Claire", licence: "VVD-2026-0009", grade: "Rouge 1er cấp", couleur: "#FE0000", naissance: "19/02/1985", categorie: "Adultes", statut: "À jour", email: "claire.nguyen@email.fr", telephone: "06 45 00 00 00", adresse: "6 rue Camille-Groult, 94400 Sevran", certificat: "Valide", assurance: "Incluse", contactsUrgence: [] },
+  { id: "adh-0161", nom: "Lopes", prenom: "Hugo", licence: "VVD-2026-0161", grade: "Bleu ciel", couleur: "#7FB2FF", naissance: "04/12/2018", categorie: "Enfants", statut: "En attente", email: "famille.lopes@email.fr", telephone: "06 66 00 00 00", adresse: "31 rue Charles-Fourier, 94400 Sevran", certificat: "Manquant", assurance: "Incluse", contactsUrgence: [] },
+  { id: "adh-0134", nom: "Haddad", prenom: "Nour", licence: "VVD-2026-0134", grade: "Bleu 1er cấp", couleur: "#1851D9", naissance: "25/06/2008", categorie: "Adolescents", statut: "À jour", email: "nour.haddad@email.fr", telephone: "07 88 00 00 00", adresse: "2 place du Marché, 94400 Sevran", certificat: "Valide", assurance: "Incluse", contactsUrgence: [] },
+  { id: "adh-0076", nom: "Girard", prenom: "Antoine", licence: "VVD-2026-0076", grade: "Jaune 1er cấp", couleur: "#FFFF01", naissance: "11/10/1992", categorie: "Adultes", statut: "À jour", email: "antoine.girard@email.fr", telephone: "06 30 00 00 00", adresse: "48 avenue Rouget-de-Lisle, 94400 Sevran", certificat: "Valide", assurance: "Incluse", contactsUrgence: [] },
 ];
 
 export function getArticle(slug: string): Article | undefined {

@@ -224,7 +224,7 @@ export default function Page() {
                 </div>
                 <span className="flex flex-col gap-1.5">
                   <span className="text-[10px] font-bold tracking-[0.14em] text-encre-30 uppercase">Grade</span>
-                  <span className="text-[0.96rem] leading-snug font-semibold text-encre">{sel.grade} — obtenu le {sel.dateGrade}</span>
+                  <span className="text-[0.96rem] leading-snug font-semibold text-encre">{sel.grade}</span>
                 </span>
                 <span className="flex flex-col gap-1.5">
                   <span className="text-[10px] font-bold tracking-[0.14em] text-encre-30 uppercase">Contact</span>

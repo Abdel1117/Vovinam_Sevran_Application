@@ -12,6 +12,7 @@ import {
   type ArticleInput,
 } from "@/lib/api/articles";
 import type { BadgeVariant } from "@/lib/data";
+import { longueurMax, requis } from "@/lib/validation";
 
 export type ArticleFormValues = {
   titre: string;
@@ -39,12 +40,28 @@ const valeursVides: ArticleFormValues = {
   tags: "",
 };
 
+type ArticleFieldErrors = Partial<Record<keyof ArticleFormValues, string>>;
+
+function validate(values: ArticleFormValues): ArticleFieldErrors {
+  const errors: ArticleFieldErrors = {};
+  errors.titre = requis(values.titre);
+  errors.date = requis(values.date);
+  errors.auteur = requis(values.auteur);
+  errors.chapo = requis(values.chapo) ?? longueurMax(values.chapo, 220);
+  errors.corpsText = requis(values.corpsText, "Le contenu de l'article est requis.");
+  Object.keys(errors).forEach((key) => {
+    if (errors[key as keyof ArticleFieldErrors] === undefined) delete errors[key as keyof ArticleFieldErrors];
+  });
+  return errors;
+}
+
 export function useArticleForm(slug?: string) {
   const router = useRouter();
   const [values, setValues] = useState<ArticleFormValues>(valeursVides);
   const [isLoadingInitial, setIsLoadingInitial] = useState(Boolean(slug));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<ArticleFieldErrors>({});
 
   useEffect(() => {
     if (!slug) return;
@@ -78,11 +95,18 @@ export function useArticleForm(slug?: string) {
   const setField = useCallback(
     <K extends keyof ArticleFormValues>(field: K, value: ArticleFormValues[K]) => {
       setValues((prev) => ({ ...prev, [field]: value }));
+      setFieldErrors((prev) => (prev[field] ? { ...prev, [field]: undefined } : prev));
     },
     [],
   );
 
   const submit = useCallback(async () => {
+    const errors = validate(values);
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return null;
+    }
+    setFieldErrors({});
     setIsSubmitting(true);
     setError(null);
     try {
@@ -112,5 +136,5 @@ export function useArticleForm(slug?: string) {
     }
   }, [slug, values, router]);
 
-  return { values, setField, submit, isSubmitting, isLoadingInitial, error };
+  return { values, setField, submit, isSubmitting, isLoadingInitial, error, fieldErrors };
 }
