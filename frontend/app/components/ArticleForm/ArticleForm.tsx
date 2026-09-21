@@ -116,7 +116,7 @@ export default function ArticleForm({
   error,
   fieldErrors,
 }: ArticleFormProps) {
-  const { ouvrir } = useMenu();
+  const { open } = useMenu();
   const editeur = useRef<HTMLTextAreaElement | null>(null);
 
   const mots = values.corpsText.trim()
@@ -159,7 +159,7 @@ export default function ArticleForm({
       <Topbar
         surtitre="Actualités"
         titre={mode === "create" ? "Créer un article" : "Modifier l'article"}
-        onMenu={ouvrir}
+        onMenu={open}
         actions={
           <>
             {error ? (

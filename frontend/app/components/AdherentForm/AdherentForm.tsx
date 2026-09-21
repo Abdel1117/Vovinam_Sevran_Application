@@ -16,6 +16,12 @@ function toIsoDate(date: Date): string {
   return `${annee}-${mois}-${jour}`;
 }
 
+function ilYaAns(annees: number): Date {
+  const date = new Date();
+  date.setFullYear(date.getFullYear() - annees);
+  return date;
+}
+
 const carte = "rounded-card border border-trait bg-white shadow-card";
 const champ =
   "h-12.5 rounded-field border-[1.5px] border-[#e1e7f5] bg-[#fbfcff] px-4 text-[0.98rem] text-encre outline-none focus:border-vovinam focus:ring-4 focus:ring-vovinam/10";
@@ -28,7 +34,7 @@ const categories: AdherentInput["categorie"][] = [
 ];
 const statuts: AdherentInput["statut"][] = ["À jour", "En attente"];
 const certificats: AdherentInput["certificat"][] = ["Valide", "Manquant"];
-
+const assured: AdherentInput["assurance"][] = ["Assuré", "Pas assuré"];
 type GradeInfo = {
   nom: string;
   icone: string;
@@ -42,8 +48,8 @@ const grades: Record<string, GradeInfo> = {
   jaune1erDang: { nom: "Ceinture Jaune 1er Dang", icone: "🟡" },
   deuxiemeDang: { nom: "Deuxieme Dang", icone: "🟡" },
   troisiemeDang: { nom: "Troisieme Dang", icone: "🟡" },
-  quatriemeDang: { nom: "Quatrieme Dang", icone: "⚫" },
-  cinquiemeDang: { nom: "Cinquieme Dang", icone: "⚫" },
+  quatriemeDang: { nom: "Quatrieme Dang", icone: "🔴" },
+  cinquiemeDang: { nom: "Cinquieme Dang", icone: "🔴" },
 };
 
 function withError(base: string, enError: boolean): string {
@@ -121,14 +127,14 @@ export default function AdherentForm({
   EditContactUrgence,
   deleteContactUrgence,
 }: AdherentFormProps) {
-  const { ouvrir } = useMenu();
+  const { open } = useMenu();
 
   return (
     <>
       <Topbar
         surtitre="Adhérents"
         titre={mode === "create" ? "Nouvel adhérent" : "Modifier l'adhérent"}
-        onMenu={ouvrir}
+        onMenu={open}
         actions={
           <>
             {error ? (
@@ -199,7 +205,7 @@ export default function AdherentForm({
                 showYearDropdown
                 yearDropdownItemNumber={80}
                 scrollableYearDropdown
-                maxDate={new Date()}
+                maxDate={ilYaAns(6)}
                 wrapperClassName="w-full"
                 className={withError(
                   champ + " w-full",
@@ -208,6 +214,29 @@ export default function AdherentForm({
               />
               <Error message={fieldErrors.naissance} />
             </label>
+            <div className="flex flex-row flex-wrap md:flex-nowrap gap-4 ">
+              <label className="flex flex-col gap-2 w-full  md:w-1/2">
+                <span className={label}>Adresse</span>
+                <input
+                  type="text"
+                  value={values.adresse}
+                  onChange={(e) => setField("adresse", e.target.value)}
+                  className={withError(champ, Boolean(fieldErrors.adresse))}
+                />
+                <Error message={fieldErrors.adresse} />
+              </label>
+
+              <label className="flex flex-col gap-2 w-full md:w-1/2">
+                <span className={label}>Code Postal</span>
+                <input
+                  type="text"
+                  value={values.code_postal}
+                  onChange={(e) => setField("code_postal", e.target.value)}
+                  className={withError(champ, Boolean(fieldErrors.code_postal))}
+                />
+                <Error message={fieldErrors.adresse} />
+              </label>
+            </div>
             <div className="flex flex-col gap-2.5">
               <span className={label}>Catégorie</span>
               <Chosed
@@ -288,16 +317,6 @@ export default function AdherentForm({
                 <Error message={fieldErrors.telephone} />
               </label>
             </div>
-            <label className="flex flex-col gap-2">
-              <span className={label}>Adresse</span>
-              <input
-                type="text"
-                value={values.adresse}
-                onChange={(e) => setField("adresse", e.target.value)}
-                className={withError(champ, Boolean(fieldErrors.adresse))}
-              />
-              <Error message={fieldErrors.adresse} />
-            </label>
           </section>
           {values.categorie === "Adultes" && (
             <section
@@ -408,17 +427,14 @@ export default function AdherentForm({
                 onChange={(v) => setField("certificat", v)}
               />
             </div>
-            <label className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2.5">
               <span className={label}>Assurance</span>
-              <input
-                type="text"
-                value={values.assurance}
-                onChange={(e) => setField("assurance", e.target.value)}
-                placeholder="Incluse"
-                className={withError(champ, Boolean(fieldErrors.assurance))}
+              <Chosed
+                options={assured}
+                valeur={values.assurance}
+                onChange={(v) => setField("assurance", v)}
               />
-              <Error message={fieldErrors.assurance} />
-            </label>
+            </div>
           </section>
         </div>
       </div>

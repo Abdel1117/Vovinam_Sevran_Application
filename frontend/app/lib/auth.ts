@@ -1,3 +1,5 @@
+import { extractErrorMessage } from "@/lib/apiError";
+
 export const API_URL = process.env.NEXT_PUBLIC_API_BACK_END;
 
 export type UserRole = "admin" | "adherent";
@@ -18,11 +20,6 @@ export type TokenResponse = {
 };
 
 export class AuthError extends Error {}
-
-async function extractErrorMessage(response: Response, fallback: string): Promise<string> {
-  const data = await response.json().catch(() => null);
-  return typeof data?.detail === "string" ? data.detail : fallback;
-}
 
 export async function login(email: string, password: string): Promise<TokenResponse> {
   const response = await fetch(`${API_URL}/auth/login`, {

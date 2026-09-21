@@ -46,7 +46,7 @@ export default function ImageForm({
   error,
   fieldErrors,
 }: ImageFormProps) {
-  const { ouvrir } = useMenu();
+  const { open } = useMenu();
 
   async function surFichier(e: React.ChangeEvent<HTMLInputElement>) {
     const fichier = e.target.files?.[0];
@@ -59,7 +59,7 @@ export default function ImageForm({
       <Topbar
         surtitre="Galerie"
         titre={mode === "create" ? "Ajouter une image" : "Modifier l'image"}
-        onMenu={ouvrir}
+        onMenu={open}
         actions={
           <>
             {error ? (

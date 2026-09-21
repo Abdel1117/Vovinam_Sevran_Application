@@ -46,6 +46,7 @@ class Adherent(SQLModel, table=True):
     telephone: str = Field(nullable=False)
     email: str | None = Field(default=None)
     adresse: str | None = Field(default=None)
+    code_postal: str | None = Field(default=None)
     statut_cotisation: StatutCotisation = Field(
         default=StatutCotisation.EN_ATTENTE,
         sa_column=Column(
@@ -61,9 +62,6 @@ class Adherent(SQLModel, table=True):
         ),
     )
     assurance_incluse: bool = Field(default=False, nullable=False)
-    nom_secours: str = Field(nullable=False)
-    prenom_secours: str = Field(nullable=False)
-    telephone_secours: str = Field(nullable=False)
     created_at: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc),
         sa_column=Column(DateTime(timezone=True), nullable=False),

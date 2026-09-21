@@ -10,7 +10,7 @@ import { useArticles } from "@/hooks/useArticles";
 const carte = "rounded-card border border-trait bg-white shadow-card";
 
 export default function Page() {
-  const { ouvrir } = useMenu();
+  const { open } = useMenu();
   const { articles, isLoading, error, removeArticle } = useArticles();
   const [toDelete, setToDelete] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -31,7 +31,7 @@ export default function Page() {
       <Topbar
         surtitre="Actualités"
         titre="Articles"
-        onMenu={ouvrir}
+        onMenu={open}
         actions={
           <Link
             href="/admin/articles/nouveau"

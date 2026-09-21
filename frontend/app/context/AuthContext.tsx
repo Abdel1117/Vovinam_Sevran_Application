@@ -29,6 +29,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const refreshTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const accessTokenRef = useRef<string | null>(null);
+  const refreshInFlightRef = useRef<Promise<TokenResponse | null> | null>(null);
+
+  const runRefresh = useCallback((): Promise<TokenResponse | null> => {
+    if (!refreshInFlightRef.current) {
+      refreshInFlightRef.current = apiRefresh().finally(() => {
+        refreshInFlightRef.current = null;
+      });
+    }
+    return refreshInFlightRef.current;
+  }, []);
 
   const clearRefreshTimer = useCallback(() => {
     if (refreshTimerRef.current) {
@@ -53,7 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const silentRefresh = useCallback(async (): Promise<TokenResponse | null> => {
-    const data = await apiRefresh();
+    const data = await runRefresh();
     if (data) {
       applyTokenResponse(data);
     } else {
@@ -63,13 +73,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       clearRefreshTimer();
     }
     return data;
-  }, [applyTokenResponse, clearRefreshTimer]);
+  }, [runRefresh, applyTokenResponse, clearRefreshTimer]);
 
   useEffect(() => {
     let cancelled = false;
 
     (async () => {
-      const data = await apiRefresh();
+      const data = await runRefresh();
       if (!cancelled && data) applyTokenResponse(data);
       if (!cancelled) setIsLoading(false);
     })();

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import {
   AdherentApiError,
   createAdherent,
@@ -10,7 +11,7 @@ import {
   type AdherentInput,
 } from "@/lib/api/adherents";
 import type { ContactUrgence } from "@/lib/data";
-import { estDateIsoValide, estEmailValide, estTelephoneValide, requis } from "@/lib/validation";
+import { estAgeMinimum, estCodePostalValide, estDateIsoValide, estEmailValide, estTelephoneValide, requis } from "@/lib/validation";
 
 const valeursVides: AdherentInput = {
   nom: "",
@@ -24,8 +25,9 @@ const valeursVides: AdherentInput = {
   email: "",
   telephone: "",
   adresse: "",
+  code_postal: "",
   certificat: "Manquant",
-  assurance: "Incluse",
+  assurance: "Pas assuré",
   contactsUrgence: [],
 };
 
@@ -46,10 +48,11 @@ function validate(values: AdherentInput): { erreurs: AdherentFieldErrors; erreur
   erreurs.prenom = requis(values.prenom);
   erreurs.licence = requis(values.licence);
   erreurs.grade = requis(values.grade);
-  erreurs.naissance = requis(values.naissance) ?? estDateIsoValide(values.naissance);
+  erreurs.naissance = requis(values.naissance) ?? estDateIsoValide(values.naissance) ?? estAgeMinimum(values.naissance, 6);
   erreurs.telephone = requis(values.telephone) ?? estTelephoneValide(values.telephone);
   erreurs.email = requis(values.email) ?? estEmailValide(values.email);
   erreurs.adresse = requis(values.adresse);
+  erreurs.code_postal = requis(values.code_postal) ?? estCodePostalValide(values.code_postal);
   erreurs.assurance = requis(values.assurance);
 
   const erreursContacts = values.contactsUrgence.map((contact) => {
@@ -72,6 +75,7 @@ function validate(values: AdherentInput): { erreurs: AdherentFieldErrors; erreur
 
 export function useAdherentForm(id?: string) {
   const router = useRouter();
+  const { authorizedFetch } = useAuth();
   const [values, setValues] = useState<AdherentInput>(valeursVides);
   const [isLoadingInitial, setIsLoadingInitial] = useState(Boolean(id));
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -83,7 +87,7 @@ export function useAdherentForm(id?: string) {
     if (!id) return;
     let cancelled = false;
     (async () => {
-      const adherent = await getAdherent(id);
+      const adherent = await getAdherent(authorizedFetch, id);
       if (cancelled) return;
       if (adherent) {
         setValues({
@@ -98,6 +102,7 @@ export function useAdherentForm(id?: string) {
           email: adherent.email,
           telephone: adherent.telephone,
           adresse: adherent.adresse,
+          code_postal: adherent.code_postal,
           certificat: adherent.certificat,
           assurance: adherent.assurance,
           contactsUrgence: adherent.contactsUrgence ?? [],
@@ -110,7 +115,7 @@ export function useAdherentForm(id?: string) {
     return () => {
       cancelled = true;
     };
-  }, [id]);
+  }, [id, authorizedFetch]);
 
   const setField = useCallback(
     <K extends keyof AdherentInput>(field: K, value: AdherentInput[K]) => {
@@ -160,7 +165,9 @@ export function useAdherentForm(id?: string) {
     setIsSubmitting(true);
     setError(null);
     try {
-      const record = id ? await updateAdherent(id, values) : await createAdherent(values);
+      const record = id
+        ? await updateAdherent(authorizedFetch, id, values)
+        : await createAdherent(authorizedFetch, values);
       router.push("/admin/adherents");
       return record;
     } catch (err) {
@@ -169,7 +176,7 @@ export function useAdherentForm(id?: string) {
     } finally {
       setIsSubmitting(false);
     }
-  }, [id, values, router]);
+  }, [id, values, router, authorizedFetch]);
 
   return {
     values,

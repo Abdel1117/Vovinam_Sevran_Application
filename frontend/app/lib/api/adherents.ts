@@ -1,38 +1,61 @@
-import { adherents, type Adherent } from "@/lib/data";
-import { createMockRepository } from "@/lib/mockRepository";
+import type { Adherent } from "@/lib/data";
+import { extractErrorMessage } from "@/lib/apiError";
 
 export type AdherentInput = Omit<Adherent, "id">;
+export type AuthorizedFetch = (path: string, init?: RequestInit) => Promise<Response>;
 
 export class AdherentApiError extends Error {}
 
-const repository = createMockRepository<Adherent>("vovinam_adherents", adherents);
+const JSON_HEADERS = { "Content-Type": "application/json" };
 
-function genererId(): string {
-  return typeof crypto !== "undefined" && "randomUUID" in crypto
-    ? crypto.randomUUID()
-    : `adh-${Date.now()}`;
-}
-
-export async function listAdherents(): Promise<Adherent[]> {
-  return repository.list();
-}
-
-export async function getAdherent(id: string): Promise<Adherent | undefined> {
-  return repository.get(id);
-}
-
-export async function createAdherent(input: AdherentInput): Promise<Adherent> {
-  const items = await repository.list();
-  if (items.some((a) => a.licence === input.licence)) {
-    throw new AdherentApiError(`Un adhérent avec le n° de licence "${input.licence}" existe déjà.`);
+export async function listAdherents(fetcher: AuthorizedFetch): Promise<Adherent[]> {
+  const response = await fetcher("/adherents");
+  if (!response.ok) {
+    throw new AdherentApiError(await extractErrorMessage(response, "Impossible de charger les adhérents."));
   }
-  return repository.create({ ...input, id: genererId() });
+  return response.json();
 }
 
-export async function updateAdherent(id: string, input: AdherentInput): Promise<Adherent> {
-  return repository.update(id, input);
+export async function getAdherent(fetcher: AuthorizedFetch, id: string): Promise<Adherent | undefined> {
+  const response = await fetcher(`/adherents/${id}`);
+  if (response.status === 404) return undefined;
+  if (!response.ok) {
+    throw new AdherentApiError(await extractErrorMessage(response, "Impossible de charger l'adhérent."));
+  }
+  return response.json();
 }
 
-export async function deleteAdherent(id: string): Promise<void> {
-  return repository.remove(id);
+export async function createAdherent(fetcher: AuthorizedFetch, input: AdherentInput): Promise<Adherent> {
+  const response = await fetcher("/adherents", {
+    method: "POST",
+    headers: JSON_HEADERS,
+    body: JSON.stringify(input),
+  });
+  if (!response.ok) {
+    throw new AdherentApiError(await extractErrorMessage(response, "Impossible de créer l'adhérent."));
+  }
+  return response.json();
+}
+
+export async function updateAdherent(
+  fetcher: AuthorizedFetch,
+  id: string,
+  input: AdherentInput,
+): Promise<Adherent> {
+  const response = await fetcher(`/adherents/${id}`, {
+    method: "PUT",
+    headers: JSON_HEADERS,
+    body: JSON.stringify(input),
+  });
+  if (!response.ok) {
+    throw new AdherentApiError(await extractErrorMessage(response, "Impossible d'enregistrer l'adhérent."));
+  }
+  return response.json();
+}
+
+export async function deleteAdherent(fetcher: AuthorizedFetch, id: string): Promise<void> {
+  const response = await fetcher(`/adherents/${id}`, { method: "DELETE" });
+  if (!response.ok) {
+    throw new AdherentApiError(await extractErrorMessage(response, "Impossible de supprimer l'adhérent."));
+  }
 }

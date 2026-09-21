@@ -17,8 +17,10 @@ export default function AdminShell({ children }: { children: ReactNode }) {
           className="fixed inset-0 z-40 bg-encre/40 lg:hidden"
         />
       ) : null}
-      <MenuContext.Provider value={{ ouvrir: () => setOuvert(true) }}>
-        <main className="flex min-w-0 flex-1 flex-col">{children}</main>
+      <MenuContext.Provider value={{ open: () => setOuvert(true) }}>
+        <main className="flex min-w-0 flex-1 flex-col page-transition">
+          {children}
+        </main>
       </MenuContext.Provider>
     </div>
   );

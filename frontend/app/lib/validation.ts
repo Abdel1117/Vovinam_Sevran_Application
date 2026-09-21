@@ -24,3 +24,16 @@ export function estDateIsoValide(valeur: string): string | undefined {
 export function estTelephoneValide(valeur: string): string | undefined {
   return /^0\d([\s.-]?\d{2}){4}$/.test(valeur.trim()) ? undefined : "Numéro invalide (ex : 06 12 34 56 78).";
 }
+
+export function estCodePostalValide(valeur: string): string | undefined {
+  return /^\d{5}$/.test(valeur.trim()) ? undefined : "Code postal invalide (5 chiffres).";
+}
+
+export function estAgeMinimum(valeur: string, anneesMin: number): string | undefined {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(valeur.trim());
+  if (!m) return undefined;
+  const date = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  const limite = new Date();
+  limite.setFullYear(limite.getFullYear() - anneesMin);
+  return date <= limite ? undefined : `L'adhérent doit avoir au moins ${anneesMin} ans.`;
+}

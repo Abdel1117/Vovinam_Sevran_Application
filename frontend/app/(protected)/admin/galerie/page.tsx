@@ -11,7 +11,7 @@ import type { PhotoGalerie } from "@/lib/data";
 const carte = "rounded-card border border-trait bg-white shadow-card";
 
 export default function Page() {
-  const { ouvrir } = useMenu();
+  const { open } = useMenu();
   const { images, isLoading, error, removeImage } = useImages();
   const [aSupprimer, setASupprimer] = useState<PhotoGalerie | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -32,7 +32,7 @@ export default function Page() {
       <Topbar
         surtitre="Galerie"
         titre="Images"
-        onMenu={ouvrir}
+        onMenu={open}
         actions={
           <Link
             href="/admin/galerie/nouveau"
@@ -44,23 +44,43 @@ export default function Page() {
       />
 
       <div className="flex flex-col gap-5 p-2 lg:p-8">
-        {error ? <div className="rounded-card border border-[#f3d9d9] bg-white p-5 text-rouge">{error}</div> : null}
+        {error ? (
+          <div className="rounded-card border border-[#f3d9d9] bg-white p-5 text-rouge">
+            {error}
+          </div>
+        ) : null}
         {isLoading ? (
-          <div className={["p-8 text-encre-30", carte].join(" ")}>Chargement…</div>
+          <div className={["p-8 text-encre-30", carte].join(" ")}>
+            Chargement…
+          </div>
         ) : images.length === 0 ? (
-          <div className={["p-8 text-encre-30", carte].join(" ")}>Aucune image pour le moment.</div>
+          <div className={["p-8 text-encre-30", carte].join(" ")}>
+            Aucune image pour le moment.
+          </div>
         ) : (
           <div className="flex flex-wrap gap-5">
             {images.map((img) => (
-              <div key={img.id} className={["flex min-w-[260px] flex-1 flex-col overflow-hidden", carte].join(" ")}>
+              <div
+                key={img.id}
+                className={[
+                  "flex min-w-[260px] flex-1 flex-col overflow-hidden",
+                  carte,
+                ].join(" ")}
+              >
                 <div className="relative h-45 bg-[repeating-linear-gradient(135deg,#e9eeff_0_12px,#dce5ff_12px_24px)]">
                   {img.url ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={img.url} alt={img.titre} className="absolute inset-0 size-full object-cover" />
+                    <img
+                      src={img.url}
+                      alt={img.titre}
+                      className="absolute inset-0 size-full object-cover"
+                    />
                   ) : null}
                 </div>
                 <div className="flex flex-col gap-2 p-4.5">
-                  <span className="truncate text-[0.96rem] font-bold text-encre">{img.titre}</span>
+                  <span className="truncate text-[0.96rem] font-bold text-encre">
+                    {img.titre}
+                  </span>
                   <span className="text-[0.82rem] text-encre-30">
                     {img.categorie} · {img.date}
                   </span>

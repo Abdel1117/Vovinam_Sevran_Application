@@ -1,13 +1,18 @@
-from fastapi import Depends, Header
+from fastapi import Depends, Header, HTTPException, status
 from jose import JWTError
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.db.session import get_session
+from app.interface.adherent_repository import IAdherentRepository
+from app.interface.contact_urgence_repository import IContactUrgenceRepository
 from app.interface.refresh_token_repository import IRefreshTokenRepository
 from app.interface.user_repository import IUserRepository
-from app.models.user import User
+from app.models.user import User, UserRole
+from app.repositories.adherent_repository import AdherentRepository
+from app.repositories.contact_urgence_repository import ContactUrgenceRepository
 from app.repositories.refresh_token_repository import RefreshTokenRepository
 from app.repositories.user_repository import UserRepository
+from app.services.adherent_service import AdherentService
 from app.services.auth_service import AuthService
 from app.utils.exceptions import InvalidSessionError
 from app.utils.security import decode_access_token
@@ -49,3 +54,24 @@ async def get_current_user(
         raise InvalidSessionError("Session invalide ou expirée.")
 
     return user
+
+
+async def require_admin(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.role != UserRole.ADMIN:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Accès réservé aux administrateurs.")
+    return current_user
+
+
+def get_adherent_repository(session: AsyncSession = Depends(get_session)) -> IAdherentRepository:
+    return AdherentRepository(session)
+
+
+def get_contact_urgence_repository(session: AsyncSession = Depends(get_session)) -> IContactUrgenceRepository:
+    return ContactUrgenceRepository(session)
+
+
+def get_adherent_service(
+    adherent_repository: IAdherentRepository = Depends(get_adherent_repository),
+    contact_urgence_repository: IContactUrgenceRepository = Depends(get_contact_urgence_repository),
+) -> AdherentService:
+    return AdherentService(adherent_repository, contact_urgence_repository)

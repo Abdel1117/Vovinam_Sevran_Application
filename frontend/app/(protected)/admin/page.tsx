@@ -117,14 +117,14 @@ const demandes: { nom: string; meta: string; tel: string }[] = [
 const carte = "rounded-card border border-trait bg-white shadow-card";
 
 export default function Page() {
-  const { ouvrir } = useMenu();
+  const { open } = useMenu();
 
   return (
     <>
       <Topbar
         surtitre="Administration"
         titre="Tableau de bord"
-        onMenu={ouvrir}
+        onMenu={open}
         actions={
           <Link
             href="/admin/articles/nouveau"
