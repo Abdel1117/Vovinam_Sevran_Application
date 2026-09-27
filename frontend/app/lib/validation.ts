@@ -37,3 +37,21 @@ export function estAgeMinimum(valeur: string, anneesMin: number): string | undef
   limite.setFullYear(limite.getFullYear() - anneesMin);
   return date <= limite ? undefined : `L'adhérent doit avoir au moins ${anneesMin} ans.`;
 }
+
+export function isDateInTheFutur(valeur: string): string | undefined {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(valeur.trim());
+  if (!m) return undefined;
+
+  const year = Number(m[1]);
+  const month = Number(m[2]);
+  const day = Number(m[3]);
+  const date = new Date(year, month - 1, day);
+  const isValid = date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day;
+  if (!isValid) return undefined;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return date <= today ? undefined : "La date ne peut pas être dans le futur.";
+}
+
+

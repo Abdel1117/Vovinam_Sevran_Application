@@ -11,7 +11,7 @@ export default function Page() {
     editFile,
     submit,
     isSubmitting,
-    progression,
+    progress,
     error,
     errorByFile,
   } = useImageBatchForm();
@@ -24,7 +24,7 @@ export default function Page() {
       editFile={editFile}
       onSubmit={submit}
       isSubmitting={isSubmitting}
-      progression={progression}
+      progress={progress}
       error={error}
       errorByFile={errorByFile}
     />

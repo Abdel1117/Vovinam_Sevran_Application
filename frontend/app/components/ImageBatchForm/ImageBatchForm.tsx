@@ -11,7 +11,7 @@ import {
   formatMonthYear,
   parseMonthYear,
 } from "@/lib/api/images";
-import type { FichierEnAttente } from "@/hooks/useImageBatchForm";
+import type { FileWaiting } from "@/hooks/useImageBatchForm";
 
 registerLocale("fr", fr);
 
@@ -22,7 +22,7 @@ const champPetit =
 const categories = categoriesGalerie.filter((c) => c !== "Tous");
 
 type ImageBatchFormProps = {
-  files: FichierEnAttente[];
+  files: FileWaiting[];
   addFiles: (fichiers: FileList | File[]) => void;
   deleteFile: (id: string) => void;
   editFile: (
@@ -32,7 +32,7 @@ type ImageBatchFormProps = {
   ) => void;
   onSubmit: () => void;
   isSubmitting: boolean;
-  progression: { envoyees: number; total: number };
+  progress: { send: number; total: number };
   error: string | null;
   errorByFile: Record<string, string>;
 };
@@ -44,7 +44,7 @@ export default function ImageBatchForm({
   editFile,
   onSubmit,
   isSubmitting,
-  progression,
+  progress,
   error,
   errorByFile,
 }: ImageBatchFormProps) {
@@ -78,7 +78,7 @@ export default function ImageBatchForm({
               className="inline-flex h-11.5 cursor-pointer items-center rounded-xl bg-vovinam px-5.5 text-[0.92rem] font-bold text-white transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSubmitting
-                ? `Envoi ${progression.envoyees}/${progression.total}…`
+                ? `Envoi ${progress.send}/${progress.total}…`
                 : `Ajouter ${files.length || ""} photo${files.length > 1 ? "s" : ""}`}
             </button>
           </>

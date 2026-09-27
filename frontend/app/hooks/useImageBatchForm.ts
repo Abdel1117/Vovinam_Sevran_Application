@@ -9,9 +9,10 @@ import {
   MAX_IMAGES_PAR_ENVOI,
   createImage,
   formatMonthYear,
+  parseMonthYear,
 } from "@/lib/api/images";
 
-export type FichierEnAttente = {
+export type FileWaiting = {
   id: string;
   fichier: File;
   titre: string;
@@ -27,12 +28,12 @@ function nameWithoutExtention(fichier: File): string {
 export function useImageBatchForm() {
   const router = useRouter();
   const { authorizedFetch } = useAuth();
-  const [files, setFiles] = useState<FichierEnAttente[]>([]);
+  const [files, setFiles] = useState<FileWaiting[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [progression, setProgression] = useState({ envoyees: 0, total: 0 });
+  const [progress, setProgress] = useState({ send: 0, total: 0 });
   const [error, setError] = useState<string | null>(null);
-  const [errorByFile, setErrorsByFile] = useState<Record<string, string>>({});
-  const idSuivant = useRef(0);
+  const [errorByFile, setErrorByFile] = useState<Record<string, string>>({});
+  const nextId = useRef(0);
 
   useEffect(() => {
     return () => {
@@ -55,10 +56,10 @@ setFiles((prev) => {
       if (valides.length > place) {
     setError(`Maximum ${MAX_IMAGES_PAR_ENVOI} photos par envoi — ${place} de plus accepté(s) ici.`);
       }
-      const ajoutes: FichierEnAttente[] = valides.slice(0, place).map((fichier) => ({
-        id: `f${idSuivant.current++}`,
+      const ajoutes: FileWaiting[] = valides.slice(0, place).map((fichier) => ({
+        id: `f${nextId.current++}`,
         fichier,
-        titre: nameWithoutExtention(fichier),
+        titre: "",
         categorie: "Entraînement",
         date: formatMonthYear(new Date()),
         previewUrl: URL.createObjectURL(fichier),
@@ -73,7 +74,7 @@ setFiles((prev) => {
       if (cible) URL.revokeObjectURL(cible.previewUrl);
       return prev.filter((f) => f.id !== id);
     });
-    setErrorsByFile((prev) => {
+    setErrorByFile((prev) => {
       if (!(id in prev)) return prev;
       const copie = { ...prev };
       delete copie[id];
@@ -90,22 +91,41 @@ setFiles((prev) => {
 
   const submit = useCallback(async () => {
     if (files.length === 0) {
-  setError("Sélectionnez au moins une photo.");
+      setError("Sélectionnez au moins une photo.");
       return;
     }
 
     setIsSubmitting(true);
-setError(null);
-    setProgression({ envoyees: 0, total: files.length });
+    setError(null);
+    setProgress({ send: 0, total: files.length });
 
-    const restants: FichierEnAttente[] = [];
-    const nouvellesErreurs: Record<string, string> = {};
+    const waiting: FileWaiting[] = [];
+    const newErrors: Record<string, string> = {};
 
     for (const item of files) {
-      if (!item.date.trim()) {
-        nouvellesErreurs[item.id] = "Date requise.";
-        restants.push(item);
-        setProgression((prev) => ({ ...prev, envoyees: prev.envoyees + 1 }));
+      const date = parseMonthYear(item.date);
+      const today = new Date();
+      const dateFuture =
+        date !== null &&
+        (date.getFullYear() > today.getFullYear() ||
+          (date.getFullYear() === today.getFullYear() &&
+            date.getMonth() > today.getMonth()));
+
+      if (!item.date.trim() || !date || dateFuture) {
+        newErrors[item.id] = !item.date.trim()
+          ? "Date requise."
+          : !date
+            ? "Date invalide."
+            : "La date ne peut pas être dans le futur.";
+        waiting.push(item);
+        setProgress((prev) => ({ ...prev, send: prev.send + 1 }));
+        continue;
+      }
+
+      if(item?.titre.trim().length === 0){
+        newErrors[item.id] =  "Titre Requis"  
+          waiting.push(item);
+        setProgress((prev) => ({ ...prev, send: prev.send + 1 }));
         continue;
       }
       try {
@@ -116,20 +136,20 @@ setError(null);
           fichier: item.fichier,
         });
       } catch (err) {
-        nouvellesErreurs[item.id] = err instanceof ImageApiError ? err.message : "Échec de l'envoi.";
-        restants.push(item);
+        newErrors[item.id] = err instanceof ImageApiError ? err.message : "Échec de l'envoi.";
+        waiting.push(item);
       }
-      setProgression((prev) => ({ ...prev, envoyees: prev.envoyees + 1 }));
+      setProgress((prev) => ({ ...prev, send: prev.send + 1 }));
     }
 
-setFiles(restants);
-    setErrorsByFile(nouvellesErreurs);
+setFiles(waiting);
+    setErrorByFile(newErrors);
     setIsSubmitting(false);
 
-    if (restants.length === 0) {
+    if (waiting.length === 0) {
       router.push("/admin/galerie");
     } else {
-  setError(`${restants.length} photo(s) sur ${files.length} n'ont pas pu être envoyées.`);
+  setError(`${waiting.length} photo(s) sur ${files.length} n'ont pas pu être envoyées.`);
     }
   }, [files, authorizedFetch, router]);
 
@@ -140,7 +160,7 @@ files,
     editFile,
     submit,
     isSubmitting,
-    progression,
+    progress,
 error,
     errorByFile,
   };
