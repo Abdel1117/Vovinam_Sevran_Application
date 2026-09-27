@@ -1,20 +1,32 @@
 "use client";
 
-import ImageForm from "@/components/ImageForm/ImageForm";
-import { useImageForm } from "@/hooks/useImageForm";
+import ImageBatchForm from "@/components/ImageBatchForm/ImageBatchForm";
+import { useImageBatchForm } from "@/hooks/useImageBatchForm";
 
 export default function Page() {
-  const { values, setField, submit, isSubmitting, error, fieldErrors } = useImageForm();
+  const {
+    files,
+    addFiles,
+    deleteFile,
+    editFile,
+    submit,
+    isSubmitting,
+    progression,
+    error,
+    errorByFile,
+  } = useImageBatchForm();
 
   return (
-    <ImageForm
-      mode="create"
-      values={values}
-      setField={setField}
+    <ImageBatchForm
+      files={files}
+      addFiles={addFiles}
+      deleteFile={deleteFile}
+      editFile={editFile}
       onSubmit={submit}
       isSubmitting={isSubmitting}
+      progression={progression}
       error={error}
-      fieldErrors={fieldErrors}
+      errorByFile={errorByFile}
     />
   );
 }

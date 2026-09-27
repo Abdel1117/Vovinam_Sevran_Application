@@ -10,18 +10,18 @@ export default function CtaFinal() {
           <div className="flex min-w-[320px] flex-[1_1_420px] flex-col justify-center gap-5 p-10 lg:p-16">
             <span className="inline-flex items-center gap-2.5 text-[11px] font-bold tracking-[0.2em] text-jaune uppercase">
               <span className="h-0.5 w-6 bg-jaune" />
-              Cours d'essai
+              Cours d&apos;essai
             </span>
             <h2 className="font-display text-4xl leading-[1.03] font-extrabold tracking-[-0.03em] text-white lg:text-6xl">
-              Envie d'essayer ?
+              Envie d&apos;essayer ?
             </h2>
             <p className="max-w-[480px] text-lg leading-relaxed text-pretty text-white/85">
-              Venez découvrir le Vovinam lors d'un premier cours et rencontrez
+              Venez découvrir le Vovinam lors d&apos;un premier cours et rencontrez
               notre équipe.
             </p>
             <div className="mt-2 flex flex-wrap gap-3.5">
               <Button href="/contact" variant="jaune">
-                Réserver mon cours d'essai
+                Réserver mon cours d&apos;essai
               </Button>
               <Button href="/contact" variant="blanc">
                 Nous contacter

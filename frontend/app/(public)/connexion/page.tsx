@@ -44,7 +44,7 @@ export default function Page() {
             <span className="text-jaune">ADHÉRENT.</span>
           </h1>
           <p className="text-lg leading-relaxed text-pretty text-white/85">
-            Documents d'inscription, convocations, inscriptions aux stages et
+            Documents d&apos;inscription, convocations, inscriptions aux stages et
             suivi de vos passages de grades, réunis en un seul endroit.
           </p>
           <div className="mt-2 flex flex-col gap-2.5">

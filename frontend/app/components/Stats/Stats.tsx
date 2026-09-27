@@ -58,7 +58,7 @@ export default function Stats() {
         <div className="mb-11 max-w-2xl">
           <span className="mb-4 inline-flex items-center gap-2.5 text-[11px] font-bold tracking-[0.2em] text-jaune uppercase">
             <span className="h-0.5 w-6 bg-jaune" />
-            L'association en chiffres
+            L&apos;association en chiffres
           </span>
           <h2 className="font-display text-3xl leading-[1.05] font-extrabold tracking-[-0.025em] text-white sm:text-4xl lg:text-5xl">
             Une communauté qui grandit

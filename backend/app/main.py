@@ -1,6 +1,9 @@
+from pathlib import Path
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.config import get_settings
 from app.controllers import api_router
@@ -18,6 +21,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+Path(settings.uploads_dir).mkdir(parents=True, exist_ok=True)
+app.mount(settings.uploads_public_path, StaticFiles(directory=settings.uploads_dir), name="uploads")
 
 
 @app.exception_handler(InvalidSessionError)

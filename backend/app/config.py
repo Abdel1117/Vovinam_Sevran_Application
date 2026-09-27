@@ -22,6 +22,9 @@ class Settings(BaseSettings):
 
     frontend_origin: str = "*"
 
+    uploads_dir: str = "uploads"
+    uploads_public_path: str = "/uploads"
+
     smtp_host: str = "smtp.gmail.com"
     smtp_port: int = 587
     smtp_user: str | None = None

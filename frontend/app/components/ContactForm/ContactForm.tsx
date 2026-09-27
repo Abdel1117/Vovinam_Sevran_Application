@@ -26,7 +26,7 @@ export default function ContactForm() {
         Envoyer un message
       </h2>
       <p className="mb-7 text-[1.02rem] leading-relaxed text-encre-50">
-        Tous les champs marqués d'un astérisque sont obligatoires.
+        Tous les champs marqués d&apos;un astérisque sont obligatoires.
       </p>
 
       <div className="flex flex-col gap-4.5">
@@ -116,7 +116,7 @@ export default function ContactForm() {
             className="mt-0.5 size-5 flex-none accent-vovinam"
           />
           <span className="text-[0.92rem] leading-relaxed text-[#6a7392]">
-            J'accepte que mes données soient utilisées pour traiter ma demande,
+            J&apos;accepte que mes données soient utilisées pour traiter ma demande,
             conformément à la politique de confidentialité.
           </span>
         </label>

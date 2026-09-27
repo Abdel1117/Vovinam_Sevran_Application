@@ -202,6 +202,9 @@ export default function AdherentForm({
                 locale="fr"
                 dateFormat="dd/MM/yyyy"
                 placeholderText="JJ/MM/AAAA"
+                onKeyDown={(e) => {
+                  if (e.key.length === 1) e.preventDefault();
+                }}
                 showYearDropdown
                 yearDropdownItemNumber={80}
                 scrollableYearDropdown
@@ -325,7 +328,7 @@ export default function AdherentForm({
               <div className="flex flex-wrap items-center gap-3">
                 <h2 className="mr-auto font-display text-lg font-extrabold text-encre">
                   Contact{values.contactsUrgence.length > 1 ? "s" : ""}{" "}
-                  d'urgence
+                  d&apos;urgence
                 </h2>
                 <button
                   type="button"
@@ -338,7 +341,7 @@ export default function AdherentForm({
 
               {values.contactsUrgence.length === 0 ? (
                 <span className="text-[0.9rem] text-encre-30">
-                  Aucun contact d'urgence ajouté.
+                  Aucun contact d&apos;urgence ajouté.
                 </span>
               ) : (
                 values.contactsUrgence.map((contact, index) => (

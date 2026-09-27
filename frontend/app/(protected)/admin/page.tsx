@@ -299,7 +299,7 @@ export default function Page() {
         <section className={["overflow-hidden", carte].join(" ")}>
           <div className="flex flex-wrap items-center gap-3 border-b border-[#f1f4fb] px-6 py-5.5">
             <h2 className="mr-auto font-display text-lg font-extrabold text-encre">
-              Demandes de cours d'essai
+              Demandes de cours d&apos;essai
             </h2>
             <span className="rounded-md bg-jaune px-3 py-1.5 text-[10px] font-bold tracking-[0.14em] text-encre uppercase">
               7 en attente

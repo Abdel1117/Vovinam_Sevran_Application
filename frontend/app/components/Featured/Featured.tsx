@@ -75,7 +75,7 @@ export default function Featured() {
                 href="/actualites/nouvelle-saison"
                 className="mt-auto text-sm font-bold text-vovinam"
               >
-                Lire l'article →
+                Lire l&apos;article →
               </Link>
             </Reveal>
 

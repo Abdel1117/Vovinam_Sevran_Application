@@ -49,7 +49,7 @@ export default function About() {
           <p className="text-lg leading-[1.7] text-pretty text-[#4c5674]">
             Né au Vietnam, le Vovinam Viet Vo Dao réunit dans une même
             discipline le travail des techniques à mains nues, des armes
-            traditionnelles et du combat. La pratique associe l'exigence du
+            traditionnelles et du combat. La pratique associe l&apos;exigence du
             geste, la souplesse du corps et le respect du partenaire.
           </p>
           <p className="text-lg leading-[1.7] text-pretty text-[#4c5674]">

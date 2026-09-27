@@ -69,7 +69,7 @@ export default function LoginForm() {
         Bon retour au dojo
       </h2>
       <p className="mb-7 leading-relaxed text-encre-50">
-        Connectez-vous avec l'email transmis lors de votre inscription.
+        Connectez-vous avec l&apos;email transmis lors de votre inscription.
       </p>
 
       <div className="flex flex-col gap-4.5">
@@ -168,7 +168,7 @@ export default function LoginForm() {
         <p className="mt-2 text-center text-[0.93rem] leading-relaxed text-[#6a7392]">
           Pas encore adhérent ?{" "}
           <Link href="/contact" className="font-semibold">
-            Faites un cours d'essai
+            Faites un cours d&apos;essai
           </Link>
         </p>
       </div>

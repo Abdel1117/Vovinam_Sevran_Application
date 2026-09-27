@@ -1,19 +1,27 @@
+from functools import lru_cache
+
 from fastapi import Depends, Header, HTTPException, status
 from jose import JWTError
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+from app.config import get_settings
 from app.db.session import get_session
 from app.interface.adherent_repository import IAdherentRepository
 from app.interface.contact_urgence_repository import IContactUrgenceRepository
+from app.interface.file_storage_repository import IFileStorageRepository
+from app.interface.photo_galerie_repository import IPhotoGalerieRepository
 from app.interface.refresh_token_repository import IRefreshTokenRepository
 from app.interface.user_repository import IUserRepository
 from app.models.user import User, UserRole
 from app.repositories.adherent_repository import AdherentRepository
 from app.repositories.contact_urgence_repository import ContactUrgenceRepository
+from app.repositories.local_file_storage_repository import LocalFileStorageRepository
+from app.repositories.photo_galerie_repository import PhotoGalerieRepository
 from app.repositories.refresh_token_repository import RefreshTokenRepository
 from app.repositories.user_repository import UserRepository
 from app.services.adherent_service import AdherentService
 from app.services.auth_service import AuthService
+from app.services.photo_galerie_service import PhotoGalerieService
 from app.utils.exceptions import InvalidSessionError
 from app.utils.security import decode_access_token
 
@@ -75,3 +83,20 @@ def get_adherent_service(
     contact_urgence_repository: IContactUrgenceRepository = Depends(get_contact_urgence_repository),
 ) -> AdherentService:
     return AdherentService(adherent_repository, contact_urgence_repository)
+
+
+@lru_cache
+def get_file_storage_repository() -> IFileStorageRepository:
+    settings = get_settings()
+    return LocalFileStorageRepository(settings.uploads_dir, settings.uploads_public_path)
+
+
+def get_photo_galerie_repository(session: AsyncSession = Depends(get_session)) -> IPhotoGalerieRepository:
+    return PhotoGalerieRepository(session)
+
+
+def get_photo_galerie_service(
+    photo_repository: IPhotoGalerieRepository = Depends(get_photo_galerie_repository),
+    file_storage: IFileStorageRepository = Depends(get_file_storage_repository),
+) -> PhotoGalerieService:
+    return PhotoGalerieService(photo_repository, file_storage)

@@ -1,4 +1,6 @@
 fastapi
+Pillow
+python-multipart
 uvicorn[standard]
 pydantic-settings
 pydantic[email]

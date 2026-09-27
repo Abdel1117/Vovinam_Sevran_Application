@@ -58,21 +58,19 @@ export default function Page() {
             Aucune image pour le moment.
           </div>
         ) : (
-          <div className="flex flex-wrap gap-5">
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,260px))] gap-5">
             {images.map((img) => (
               <div
                 key={img.id}
-                className={[
-                  "flex min-w-[260px] flex-1 flex-col overflow-hidden",
-                  carte,
-                ].join(" ")}
+                className={["flex flex-col overflow-hidden", carte].join(" ")}
               >
                 <div className="relative h-45 bg-[repeating-linear-gradient(135deg,#e9eeff_0_12px,#dce5ff_12px_24px)]">
-                  {img.url ? (
+                  {img.vignette ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      src={img.url}
+                      src={img.vignette}
                       alt={img.titre}
+                      loading="lazy"
                       className="absolute inset-0 size-full object-cover"
                     />
                   ) : null}

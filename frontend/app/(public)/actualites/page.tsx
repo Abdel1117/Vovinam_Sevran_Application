@@ -56,7 +56,7 @@ export default function Page() {
                     href={"/actualites/" + a.slug}
                     className="mt-auto pt-2.5 text-sm font-bold text-vovinam"
                   >
-                    Lire l'article →
+                    Lire l&apos;article →
                   </Link>
                 </div>
               </Reveal>

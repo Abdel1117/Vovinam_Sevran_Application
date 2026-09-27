@@ -62,7 +62,7 @@ export default function Courses() {
               </h3>
               <p className="text-[0.98rem] leading-relaxed text-white/85">
                 Aucune expérience préalable nécessaire. Le premier cours est
-                gratuit, il suffit d'une tenue de sport.
+                gratuit, il suffit d&apos;une tenue de sport.
               </p>
             </div>
             <Link

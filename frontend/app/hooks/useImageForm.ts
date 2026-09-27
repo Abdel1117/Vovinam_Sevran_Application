@@ -1,8 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import {
+  ACCEPTED_IMAGE_TYPES,
   ImageApiError,
   createImage,
   getImage,
@@ -15,16 +17,18 @@ const valeursVides: ImageInput = {
   titre: "",
   categorie: "Entraînement",
   date: "",
-  url: "",
+  fichier: null,
 };
 
 type ImageFieldErrors = Partial<Record<keyof ImageInput, string>>;
 
-function validate(values: ImageInput): ImageFieldErrors {
+function validate(values: ImageInput, aUneImageExistante: boolean): ImageFieldErrors {
   const errors: ImageFieldErrors = {};
   errors.titre = requis(values.titre);
   errors.date = requis(values.date);
-  errors.url = requis(values.url, "Une image doit être sélectionnée.");
+  if (!values.fichier && !aUneImageExistante) {
+    errors.fichier = "Une image doit être sélectionnée.";
+  }
   Object.keys(errors).forEach((key) => {
     if (errors[key as keyof ImageFieldErrors] === undefined) delete errors[key as keyof ImageFieldErrors];
   });
@@ -33,25 +37,31 @@ function validate(values: ImageInput): ImageFieldErrors {
 
 export function useImageForm(id?: string) {
   const router = useRouter();
+  const { authorizedFetch } = useAuth();
   const [values, setValues] = useState<ImageInput>(valeursVides);
+  const [existingUrl, setExistingUrl] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isLoadingInitial, setIsLoadingInitial] = useState(Boolean(id));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<ImageFieldErrors>({});
+  const objectUrlRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (!id) return;
     let cancelled = false;
     (async () => {
-      const image = await getImage(id);
+      const image = await getImage(authorizedFetch, id);
       if (cancelled) return;
       if (image) {
         setValues({
           titre: image.titre,
           categorie: image.categorie,
           date: image.date,
-          url: image.url,
+          fichier: null,
         });
+        setExistingUrl(image.url);
+        setPreviewUrl(image.url);
       } else {
         setError("Image introuvable.");
       }
@@ -60,7 +70,13 @@ export function useImageForm(id?: string) {
     return () => {
       cancelled = true;
     };
-  }, [id]);
+  }, [id, authorizedFetch]);
+
+  useEffect(() => {
+    return () => {
+      if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
+    };
+  }, []);
 
   const setField = useCallback(
     <K extends keyof ImageInput>(field: K, value: ImageInput[K]) => {
@@ -70,8 +86,21 @@ export function useImageForm(id?: string) {
     [],
   );
 
+  const setFichier = useCallback((fichier: File) => {
+    if (!ACCEPTED_IMAGE_TYPES.includes(fichier.type as (typeof ACCEPTED_IMAGE_TYPES)[number])) {
+      setFieldErrors((prev) => ({ ...prev, fichier: "Formats acceptés : JPEG, PNG, WebP." }));
+      return;
+    }
+    if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
+    const url = URL.createObjectURL(fichier);
+    objectUrlRef.current = url;
+    setValues((prev) => ({ ...prev, fichier }));
+    setPreviewUrl(url);
+    setFieldErrors((prev) => (prev.fichier ? { ...prev, fichier: undefined } : prev));
+  }, []);
+
   const submit = useCallback(async () => {
-    const errors = validate(values);
+    const errors = validate(values, Boolean(existingUrl));
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       return null;
@@ -80,7 +109,9 @@ export function useImageForm(id?: string) {
     setIsSubmitting(true);
     setError(null);
     try {
-      const record = id ? await updateImage(id, values) : await createImage(values);
+      const record = id
+        ? await updateImage(authorizedFetch, id, values)
+        : await createImage(authorizedFetch, values);
       router.push("/admin/galerie");
       return record;
     } catch (err) {
@@ -89,7 +120,17 @@ export function useImageForm(id?: string) {
     } finally {
       setIsSubmitting(false);
     }
-  }, [id, values, router]);
+  }, [id, values, existingUrl, router, authorizedFetch]);
 
-  return { values, setField, submit, isSubmitting, isLoadingInitial, error, fieldErrors };
+  return {
+    values,
+    previewUrl,
+    setField,
+    setFichier,
+    submit,
+    isSubmitting,
+    isLoadingInitial,
+    error,
+    fieldErrors,
+  };
 }

@@ -48,7 +48,7 @@ export default function Hero() {
           </Reveal>
           <Reveal delay={80}>
             <h1 className="font-display text-5xl leading-[0.98] font-extrabold tracking-[-0.025em] text-balance text-white sm:text-6xl lg:text-[5.4rem]">
-              PLUS QU'UN ART MARTIAL.
+              PLUS QU&apos;UN ART MARTIAL.
               <br />
               <span className="text-jaune">UNE VOIE.</span>
             </h1>
@@ -56,12 +56,12 @@ export default function Hero() {
           <Reveal delay={140}>
             <p className="max-w-[620px] text-lg leading-relaxed text-pretty text-white/85 lg:text-xl">
               Discipline, respect, maîtrise et dépassement de soi. Découvrez le
-              Vovinam Viet Vo Dao au sein d'une association ouverte à tous.
+              Vovinam Viet Vo Dao au sein d&apos;une association ouverte à tous.
             </p>
           </Reveal>
           <Reveal delay={200} className="mt-1.5 flex flex-wrap gap-3.5">
             <Button href="/contact" variant="jaune">
-              Faire un cours d'essai
+              Faire un cours d&apos;essai
             </Button>
             <Button href="#vovinam" variant="contourClair">
               Découvrir le Vovinam

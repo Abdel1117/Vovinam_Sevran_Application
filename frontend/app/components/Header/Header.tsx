@@ -118,7 +118,7 @@ export default function Header({ solide = false }: { solide?: boolean }) {
             href="/contact"
             className="rounded-full bg-jaune px-5 py-3.5 text-sm font-bold text-encre shadow-[0_6px_18px_rgb(16_24_40/0.14)] transition-transform duration-200 hover:-translate-y-0.5"
           >
-            Faire un cours d'essai
+            Faire un cours d&apos;essai
           </Link>
         </nav>
 
@@ -220,7 +220,7 @@ export default function Header({ solide = false }: { solide?: boolean }) {
             onClick={() => setOpen(false)}
             className="mt-3 rounded-full bg-jaune px-5 py-4.5 text-center text-base font-bold text-encre"
           >
-            Faire un cours d'essai
+            Faire un cours d&apos;essai
           </Link>
         </div>
       ) : null}

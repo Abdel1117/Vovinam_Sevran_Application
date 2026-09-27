@@ -78,6 +78,8 @@ export function AdherentDetailPanel({
           </span>
           <span className="text-[0.94rem] leading-relaxed text-encre-70">
             {sel.adresse}
+            <br />
+            {sel.code_postal}
           </span>
         </span>
         <div className="flex flex-wrap gap-2.5 border-t border-[#f1f4fb] pt-3">

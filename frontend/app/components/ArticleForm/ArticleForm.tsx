@@ -190,7 +190,7 @@ export default function ArticleForm({
           >
             <label className="flex flex-col gap-2">
               <span className="text-[0.88rem] font-semibold text-encre-70">
-                Titre de l'article
+                Titre de l&apos;article
               </span>
               <input
                 type="text"

@@ -1,7 +1,6 @@
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import ContactForm from "@/components/ContactForm/ContactForm";
-import Photo from "@/components/Photo/Photo";
 import Reveal from "@/components/Reveal/Reveal";
 import type { Metadata } from "next";
 import Button from "@/components/Button/Button";
@@ -51,7 +50,7 @@ export default function Page() {
               <span className="text-jaune">NOUS RENCONTRER.</span>
             </h1>
             <p className="max-w-[560px] text-lg leading-relaxed text-pretty text-white/85">
-              Une question sur les cours, les inscriptions ou un cours d'essai ?
+              Une question sur les cours, les inscriptions ou un cours d&apos;essai ?
               Écrivez-nous, nous répondons sous 48 heures.
             </p>
           </div>

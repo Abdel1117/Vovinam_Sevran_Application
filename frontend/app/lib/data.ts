@@ -44,7 +44,7 @@ export type Statistique = { valeur: number; suffixe: string; label: string };
 
 export type Enseignant = { nom: string; grade: string; role: string; texte: string };
 
-export type PhotoGalerie = { id: string; titre: string; categorie: string; date: string; url: string };
+export type PhotoGalerie = { id: string; titre: string; categorie: string; date: string; url: string; vignette: string };
 
 export type ContactUrgence = { nom: string; telephone: string; lien: string };
 
@@ -224,18 +224,18 @@ export const enseignants: Enseignant[] = [
 ];
 
 export const photos: PhotoGalerie[] = [
-  { id: "gal-01", titre: "Travail technique à deux", categorie: "Entraînement", date: "Juin 2026", url: "" },
-  { id: "gal-02", titre: "Stage régional de printemps", categorie: "Stage", date: "Avril 2026", url: "" },
-  { id: "gal-03", titre: "Open de Paris — finales", categorie: "Compétition", date: "Mars 2026", url: "" },
-  { id: "gal-04", titre: "Démonstration fête des associations", categorie: "Démonstration", date: "Septembre 2025", url: "" },
-  { id: "gal-05", titre: "Groupe enfants du mercredi", categorie: "Enfants", date: "Mai 2026", url: "" },
-  { id: "gal-06", titre: "Quyen — passage de grades", categorie: "Entraînement", date: "Décembre 2025", url: "" },
-  { id: "gal-07", titre: "Stage d'été à la mer", categorie: "Stage", date: "Août 2025", url: "" },
-  { id: "gal-08", titre: "Podium par équipes", categorie: "Compétition", date: "Février 2026", url: "" },
-  { id: "gal-09", titre: "Photo de groupe de fin de saison", categorie: "Démonstration", date: "Juin 2026", url: "" },
-  { id: "gal-10", titre: "Atelier armes traditionnelles", categorie: "Entraînement", date: "Janvier 2026", url: "" },
-  { id: "gal-11", titre: "Baby Vovinam — motricité", categorie: "Enfants", date: "Mars 2026", url: "" },
-  { id: "gal-12", titre: "Stage national à Lyon", categorie: "Stage", date: "Novembre 2025", url: "" },
+  { id: "gal-01", titre: "Travail technique à deux", categorie: "Entraînement", date: "Juin 2026", url: "", vignette: "" },
+  { id: "gal-02", titre: "Stage régional de printemps", categorie: "Stage", date: "Avril 2026", url: "", vignette: "" },
+  { id: "gal-03", titre: "Open de Paris — finales", categorie: "Compétition", date: "Mars 2026", url: "", vignette: "" },
+  { id: "gal-04", titre: "Démonstration fête des associations", categorie: "Démonstration", date: "Septembre 2025", url: "", vignette: "" },
+  { id: "gal-05", titre: "Groupe enfants du mercredi", categorie: "Enfants", date: "Mai 2026", url: "", vignette: "" },
+  { id: "gal-06", titre: "Quyen — passage de grades", categorie: "Entraînement", date: "Décembre 2025", url: "", vignette: "" },
+  { id: "gal-07", titre: "Stage d'été à la mer", categorie: "Stage", date: "Août 2025", url: "", vignette: "" },
+  { id: "gal-08", titre: "Podium par équipes", categorie: "Compétition", date: "Février 2026", url: "", vignette: "" },
+  { id: "gal-09", titre: "Photo de groupe de fin de saison", categorie: "Démonstration", date: "Juin 2026", url: "", vignette: "" },
+  { id: "gal-10", titre: "Atelier armes traditionnelles", categorie: "Entraînement", date: "Janvier 2026", url: "", vignette: "" },
+  { id: "gal-11", titre: "Baby Vovinam — motricité", categorie: "Enfants", date: "Mars 2026", url: "", vignette: "" },
+  { id: "gal-12", titre: "Stage national à Lyon", categorie: "Stage", date: "Novembre 2025", url: "", vignette: "" },
 ];
 
 export const categoriesGalerie: string[] = ["Tous", "Entraînement", "Stage", "Compétition", "Démonstration", "Enfants"];

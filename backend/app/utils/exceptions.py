@@ -12,3 +12,11 @@ class LicenceDejaUtiliseeError(Exception):
 
 class AdherentIntrouvableError(Exception):
     """Raised when an adherent id does not match any active record."""
+
+
+class PhotoIntrouvableError(Exception):
+    """Raised when a photo galerie id does not match any record."""
+
+
+class FichierInvalideError(Exception):
+    """Raised when an uploaded file fails content-type or size validation."""
