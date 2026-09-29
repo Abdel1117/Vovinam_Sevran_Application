@@ -1,10 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { deleteArticle, listArticles, type ArticleRecord } from "@/lib/api/articles";
+import { useAuth } from "@/context/AuthContext";
+import { deleteArticle, listArticles, type ArticlePublic } from "@/lib/api/articles";
 
 export function useArticles() {
-  const [articles, setArticles] = useState<ArticleRecord[]>([]);
+  const { authorizedFetch } = useAuth();
+  const [articles, setArticles] = useState<ArticlePublic[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,10 +26,13 @@ export function useArticles() {
     void refresh();
   }, [refresh]);
 
-  const removeArticle = useCallback(async (slug: string) => {
-    await deleteArticle(slug);
-    setArticles((prev) => prev.filter((a) => a.slug !== slug));
-  }, []);
+  const removeArticle = useCallback(
+    async (slug: string) => {
+      await deleteArticle(authorizedFetch, slug);
+      setArticles((prev) => prev.filter((a) => a.slug !== slug));
+    },
+    [authorizedFetch],
+  );
 
   return { articles, isLoading, error, refresh, removeArticle };
 }

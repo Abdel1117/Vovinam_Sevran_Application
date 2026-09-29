@@ -20,3 +20,11 @@ class PhotoIntrouvableError(Exception):
 
 class FichierInvalideError(Exception):
     """Raised when an uploaded file fails content-type or size validation."""
+
+
+class ArticleIntrouvableError(Exception):
+    """Raised when an article slug does not match any record."""
+
+
+class ArticleInvalideError(Exception):
+    """Raised when article fields fail business validation (length, format, links…)."""

@@ -7,6 +7,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.config import get_settings
 from app.db.session import get_session
 from app.interface.adherent_repository import IAdherentRepository
+from app.interface.article_repository import IArticleRepository
 from app.interface.contact_urgence_repository import IContactUrgenceRepository
 from app.interface.file_storage_repository import IFileStorageRepository
 from app.interface.photo_galerie_repository import IPhotoGalerieRepository
@@ -14,12 +15,14 @@ from app.interface.refresh_token_repository import IRefreshTokenRepository
 from app.interface.user_repository import IUserRepository
 from app.models.user import User, UserRole
 from app.repositories.adherent_repository import AdherentRepository
+from app.repositories.article_repository import ArticleRepository
 from app.repositories.contact_urgence_repository import ContactUrgenceRepository
 from app.repositories.local_file_storage_repository import LocalFileStorageRepository
 from app.repositories.photo_galerie_repository import PhotoGalerieRepository
 from app.repositories.refresh_token_repository import RefreshTokenRepository
 from app.repositories.user_repository import UserRepository
 from app.services.adherent_service import AdherentService
+from app.services.article_service import ArticleService
 from app.services.auth_service import AuthService
 from app.services.photo_galerie_service import PhotoGalerieService
 from app.utils.exceptions import InvalidSessionError
@@ -100,3 +103,14 @@ def get_photo_galerie_service(
     file_storage: IFileStorageRepository = Depends(get_file_storage_repository),
 ) -> PhotoGalerieService:
     return PhotoGalerieService(photo_repository, file_storage)
+
+
+def get_article_repository(session: AsyncSession = Depends(get_session)) -> IArticleRepository:
+    return ArticleRepository(session)
+
+
+def get_article_service(
+    article_repository: IArticleRepository = Depends(get_article_repository),
+    file_storage: IFileStorageRepository = Depends(get_file_storage_repository),
+) -> ArticleService:
+    return ArticleService(article_repository, file_storage)

@@ -14,22 +14,6 @@ export type Cours = {
   photo: string;
 };
 
-export type Bloc = { type: "p" | "h2" | "quote"; texte: string; auteur?: string };
-
-export type Article = {
-  slug: string;
-  titre: string;
-  categorie: string;
-  badge: BadgeVariant;
-  date: string;
-  auteur: string;
-  lecture: string;
-  chapo: string;
-  photo: string;
-  corps: Bloc[];
-  tags: string[];
-};
-
 export type Evenement = {
   jour: string;
   mois: string;
@@ -138,70 +122,15 @@ export const cours: Cours[] = [
   },
 ];
 
-export const actualites: Article[] = [
-  {
-    slug: "retour-stage-regional",
-    titre: "Retour sur notre dernier stage régional",
-    categorie: "Stage",
-    badge: "stage",
-    date: "21 août 2026",
-    auteur: "Claire Nguyen",
-    lecture: "4 min",
-    chapo:
-      "Trois jours de pratique intensive à Sevran : quyen, travail aux armes, applications et un examen blanc pour les candidats au passage de grades.",
-    photo: "stage régional",
-    corps: [
-      { type: "p", texte: "Le stage régional a réuni cette année soixante-douze pratiquants venus de six clubs. Trois jours structurés autour d'un fil conducteur simple : revenir aux fondamentaux avant d'aborder les enchaînements les plus techniques du programme." },
-      { type: "h2", texte: "Une première journée consacrée aux bases" },
-      { type: "p", texte: "Déplacements, gardes, frappes directes : la matinée a été menée par les enseignants du club sur un rythme volontairement lent, afin de corriger les postures individuellement." },
-      { type: "quote", texte: "Un stage n'est pas là pour ajouter des techniques, mais pour rendre celles que l'on connaît déjà plus justes.", auteur: "Minh Trân, directeur technique" },
-      { type: "h2", texte: "Armes traditionnelles et quyen" },
-      { type: "p", texte: "La deuxième journée a été consacrée au bâton long et au sabre, avec deux ateliers tournants. Les ceintures les plus avancées ont travaillé les quyen du programme de passage." },
-      { type: "h2", texte: "Examen blanc et bilan" },
-      { type: "p", texte: "La dernière matinée a pris la forme d'un examen blanc pour les dix-huit candidats inscrits à la session d'octobre, avec un retour individuel détaillé." },
-    ],
-    tags: ["stage", "technique", "passage de grades", "vie du club"],
-  },
-  {
-    slug: "resultats-open-de-paris",
-    titre: "Résultats de l'Open de Paris",
-    categorie: "Compétition",
-    badge: "competition",
-    date: "12 juillet 2026",
-    auteur: "Karim Belhadj",
-    lecture: "3 min",
-    chapo: "Six médailles pour nos compétiteurs sur les tableaux technique et combat.",
-    photo: "podium",
-    corps: [{ type: "p", texte: "Neuf compétiteurs engagés, six médailles rapportées. Le détail des résultats par catégorie." }],
-    tags: ["compétition", "résultats"],
-  },
-  {
-    slug: "passage-de-grades",
-    titre: "Passage de grades de fin de saison",
-    categorie: "Vie du club",
-    badge: "actualite",
-    date: "28 juin 2026",
-    auteur: "Minh Trân",
-    lecture: "2 min",
-    chapo: "Dix-huit pratiquants ont validé leur nouveau grade en fin de saison.",
-    photo: "passage de grades",
-    corps: [{ type: "p", texte: "Retour sur la session d'examens organisée au dojo 1." }],
-    tags: ["grades", "vie du club"],
-  },
-  {
-    slug: "nouvelle-saison",
-    titre: "Nouvelle saison, nouvelles inscriptions",
-    categorie: "Association",
-    badge: "association",
-    date: "02 septembre 2026",
-    auteur: "Claire Nguyen",
-    lecture: "2 min",
-    chapo: "Les inscriptions sont ouvertes pour tous les groupes, dans la limite des places disponibles.",
-    photo: "groupe rentrée",
-    corps: [{ type: "p", texte: "Créneaux, tarifs et documents à fournir pour la saison 2026 / 2027." }],
-    tags: ["inscriptions", "association"],
-  },
-];
+export const categorieBadge: Record<string, BadgeVariant> = {
+  Stage: "stage",
+  Compétition: "competition",
+  "Vie du club": "club",
+  "Passage de grades": "club",
+  Fédération: "association",
+};
+
+export const categoriesArticle: string[] = Object.keys(categorieBadge);
 
 export const evenements: Evenement[] = [
   { jour: "14", mois: "SEP", type: "Stage", badge: "stage", titre: "Stage régional", lieu: "Salle omnisports — Sevran", horaire: "09:00 — 17:00" },
@@ -224,7 +153,3 @@ export const enseignants: Enseignant[] = [
 ];
 
 export const categoriesGalerie: string[] = ["Tous", "Entraînement", "Stage", "Compétition", "Démonstration", "Enfants"];
-
-export function getArticle(slug: string): Article | undefined {
-  return actualites.find((a) => a.slug === slug);
-}

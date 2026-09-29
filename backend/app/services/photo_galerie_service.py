@@ -1,78 +1,25 @@
 import asyncio
-import io
 import uuid
 from dataclasses import dataclass
 
 from fastapi import UploadFile
-from PIL import Image, ImageOps, UnidentifiedImageError
 
 from app.interface.file_storage_repository import IFileStorageRepository
 from app.interface.photo_galerie_repository import IPhotoGalerieRepository
 from app.models.photo_galerie import PhotoGalerie
 from app.schemas.photo_galerie import PhotoGaleriePublic
-from app.utils.exceptions import FichierInvalideError, PhotoIntrouvableError
+from app.utils.exceptions import PhotoIntrouvableError
+from app.utils.images import traiter_image
 
 _SUBDIR = "galerie"
-_TAILLE_MAX_OCTETS = 5 * 1024 * 1024
 _DIMENSION_AFFICHAGE_PIXELS = 1920
 _DIMENSION_VIGNETTE_PIXELS = 400
-_FORMAT_VERS_EXTENSION = {"JPEG": ".jpg", "PNG": ".png", "WEBP": ".webp"}
 
 
 @dataclass
 class _CheminsFichiers:
     affichage: str
     vignette: str
-
-
-@dataclass
-class _ImagesTraitees:
-    format_original: str
-    bytes_affichage: bytes
-    bytes_vignette: bytes
-
-
-def _redimensionner(image: Image.Image, format_original: str, dimension_max: int) -> bytes:
-    image.thumbnail((dimension_max, dimension_max), Image.Resampling.LANCZOS)
-    tampon = io.BytesIO()
-    options_sauvegarde = {"quality": 85} if format_original in ("JPEG", "WEBP") else {}
-    image.save(tampon, format=format_original, **options_sauvegarde)
-    return tampon.getvalue()
-
-
-def _traiter_image(contenu: bytes) -> _ImagesTraitees:
-    """Décodage/validation/redimensionnement Pillow — CPU-bound, exécuté hors de la boucle asyncio via asyncio.to_thread."""
-    if len(contenu) > _TAILLE_MAX_OCTETS:
-        raise FichierInvalideError("L'image dépasse la taille maximale autorisée (5 Mo).")
-
-    # On ne fait confiance ni à l'extension ni au content-type déclarés par le client
-    # (falsifiables) : on ouvre réellement le fichier comme image pour le valider.
-    try:
-        Image.open(io.BytesIO(contenu)).verify()
-    except (UnidentifiedImageError, OSError) as exc:
-        raise FichierInvalideError("Le fichier n'est pas une image valide.") from exc
-
-    # verify() consomme l'objet ; on rouvre une image fraîche pour la traiter.
-    image = Image.open(io.BytesIO(contenu))
-    format_original = image.format
-    if format_original not in _FORMAT_VERS_EXTENSION:
-        formats = ", ".join(sorted(_FORMAT_VERS_EXTENSION))
-        raise FichierInvalideError(f"Format d'image non supporté (formats autorisés : {formats}).")
-
-    image = ImageOps.exif_transpose(image)
-    a_de_la_transparence = image.mode in ("RGBA", "LA") or (
-        image.mode == "P" and "transparency" in image.info
-    )
-    if format_original in ("PNG", "WEBP") and a_de_la_transparence:
-        image = image.convert("RGBA")
-    else:
-        image = image.convert("RGB")
-
-    return _ImagesTraitees(
-        format_original=format_original,
-        bytes_affichage=_redimensionner(image.copy(), format_original, _DIMENSION_AFFICHAGE_PIXELS),
-        bytes_vignette=_redimensionner(image.copy(), format_original, _DIMENSION_VIGNETTE_PIXELS),
-    )
 
 
 class PhotoGalerieService:
@@ -147,9 +94,11 @@ class PhotoGalerieService:
         contenu = await fichier.read()
         # Décodage/redimensionnement Pillow = CPU-bound et synchrone : on le sort de la
         # boucle asyncio pour ne pas bloquer le serveur pendant le traitement (multi-upload).
-        resultat = await asyncio.to_thread(_traiter_image, contenu)
+        resultat = await asyncio.to_thread(
+            traiter_image, contenu, _DIMENSION_AFFICHAGE_PIXELS, _DIMENSION_VIGNETTE_PIXELS
+        )
 
-        extension = _FORMAT_VERS_EXTENSION[resultat.format_original]
+        extension = resultat.extension
         chemin_affichage = await self._file_storage.save(
             _SUBDIR, f"{uuid.uuid4().hex}{extension}", resultat.bytes_affichage
         )

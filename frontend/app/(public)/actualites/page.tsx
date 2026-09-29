@@ -1,15 +1,51 @@
 import Link from "next/link";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
-import Badge from "@/components/Badge/Badge";
-import Photo from "@/components/Photo/Photo";
-import Reveal from "@/components/Reveal/Reveal";
+import ArticleCard from "@/components/ArticleCard/ArticleCard";
 import type { Metadata } from "next";
-import { actualites } from "@/lib/data";
+import { listArticles, type ArticlePublic } from "@/lib/api/articles";
 
 export const metadata: Metadata = { title: "Actualités — Vovinam Viet Vo Dao" };
 
-export default function Page() {
+type SearchParams = { tag?: string | string[] };
+
+/** Tags triés du plus utilisé au moins utilisé. */
+function tagsParFrequence(articles: ArticlePublic[]): string[] {
+  const compte = new Map<string, number>();
+  for (const a of articles)
+    for (const t of a.tags) compte.set(t, (compte.get(t) ?? 0) + 1);
+  return [...compte.entries()]
+    .sort((x, y) => y[1] - x[1] || x[0].localeCompare(y[0], "fr"))
+    .map(([t]) => t);
+}
+
+const puce =
+  "rounded-full border-[1.5px] px-4 py-2.5 text-[0.86rem] font-semibold transition-all duration-200";
+const puceActive = "border-vovinam bg-vovinam text-white";
+const puceInactive =
+  "border-[#e1e7f5] bg-white text-encre-70 hover:border-vovinam hover:text-vovinam";
+
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const params = await searchParams;
+  const tag =
+    typeof params.tag === "string" ? params.tag.toLowerCase() : undefined;
+
+  let articles: ArticlePublic[] = [];
+  let erreur = false;
+  try {
+    articles = await listArticles();
+  } catch {
+    erreur = true;
+  }
+  const tags = tagsParFrequence(articles);
+  const resultats = tag
+    ? articles.filter((a) => a.tags.includes(tag))
+    : articles;
+
   return (
     <>
       <Header />
@@ -28,40 +64,67 @@ export default function Page() {
           </div>
         </section>
 
+        {tags.length > 0 ? (
+          <div className="border-b border-trait bg-white">
+            <nav
+              aria-label="Filtrer par étiquette"
+              className="mx-auto flex max-w-[1360px] flex-wrap items-center gap-2 px-2 py-4 md:px-7"
+            >
+              <Link
+                href="/actualites"
+                className={[puce, tag ? puceInactive : puceActive].join(" ")}
+              >
+                Tous
+              </Link>
+              {tags.map((t) => (
+                <Link
+                  key={t}
+                  href={`/actualites?tag=${encodeURIComponent(t)}`}
+                  className={[puce, t === tag ? puceActive : puceInactive].join(
+                    " ",
+                  )}
+                >
+                  #{t}
+                </Link>
+              ))}
+              <span className="ml-auto pl-2 text-[0.88rem] font-semibold text-encre-30">
+                {resultats.length} article{resultats.length > 1 ? "s" : ""}
+              </span>
+            </nav>
+          </div>
+        ) : null}
+
         <section className="bg-white py-16 lg:py-24">
           <div className="mx-auto flex max-w-[1360px] flex-wrap gap-6 px-2 md:px-7">
-            {actualites.map((a, i) => (
-              <Reveal
-                key={a.slug}
-                delay={i * 70}
-                className="group flex min-w-[300px] flex-1 flex-col overflow-hidden rounded-card border border-trait bg-white shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card-hover"
-              >
-                <div className="relative">
-                  <Photo label={"photo — " + a.photo} className="h-52" zoom />
-                  <Badge variant={a.badge} className="absolute top-4 left-4">
-                    {a.categorie}
-                  </Badge>
-                </div>
-                <div className="flex flex-1 flex-col gap-2.5 px-6.5 pt-6 pb-7">
-                  <span className="text-xs font-semibold tracking-[0.12em] text-encre-30 uppercase">
-                    {a.date}
-                  </span>
-                  <h2 className="font-display text-xl leading-snug font-extrabold text-encre">
-                    {a.titre}
-                  </h2>
-                  <p className="text-[0.96rem] leading-relaxed text-encre-50">
-                    {a.chapo}
-                  </p>
-                  <Link
-                    href={"/actualites/" + a.slug}
-                    className="mt-auto pt-2.5 text-sm font-bold text-vovinam"
-                  >
-                    Lire l&apos;article →
-                  </Link>
-                </div>
-              </Reveal>
+            {resultats.map((a, i) => (
+              <ArticleCard key={a.slug} article={a} delay={(i % 6) * 70} />
             ))}
           </div>
+
+          {resultats.length === 0 ? (
+            <div className="flex flex-col items-center gap-2.5 px-6 py-10 text-center">
+              <span className="font-display text-xl font-extrabold text-encre">
+                {erreur
+                  ? "Les actualités sont indisponibles"
+                  : tag
+                    ? `Aucun article pour #${tag}`
+                    : "Aucune actualité pour le moment"}
+              </span>
+              <span className="text-encre-50">
+                {erreur
+                  ? "Réessayez dans quelques instants."
+                  : "Revenez bientôt pour suivre la vie du club."}
+              </span>
+              {tag ? (
+                <Link
+                  href="/actualites"
+                  className="mt-2 rounded-full bg-vovinam px-6 py-3.5 text-[0.92rem] font-bold text-white"
+                >
+                  Voir toutes les actualités
+                </Link>
+              ) : null}
+            </div>
+          ) : null}
         </section>
       </main>
       <Footer />

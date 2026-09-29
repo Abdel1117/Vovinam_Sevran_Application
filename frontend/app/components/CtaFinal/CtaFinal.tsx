@@ -16,8 +16,8 @@ export default function CtaFinal() {
               Envie d&apos;essayer ?
             </h2>
             <p className="max-w-[480px] text-lg leading-relaxed text-pretty text-white/85">
-              Venez découvrir le Vovinam lors d&apos;un premier cours et rencontrez
-              notre équipe.
+              Venez découvrir le Vovinam lors d&apos;un premier cours et
+              rencontrez notre équipe.
             </p>
             <div className="mt-2 flex flex-wrap gap-3.5">
               <Button href="/contact" variant="jaune">
@@ -27,12 +27,6 @@ export default function CtaFinal() {
                 Nous contacter
               </Button>
             </div>
-          </div>
-          <div className="relative min-h-75 flex-[1_1_320px]">
-            <Photo
-              label="photo — accueil des débutants"
-              className="absolute inset-0"
-            />
           </div>
         </Reveal>
       </div>

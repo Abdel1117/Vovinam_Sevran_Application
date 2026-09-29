@@ -1,54 +1,112 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import {
   ArticleApiError,
   blocsToCorpsText,
   corpsTextToBlocs,
   createArticle,
-  getArticleBySlug,
+  getArticle,
   updateArticle,
   type ArticleInput,
 } from "@/lib/api/articles";
-import type { BadgeVariant } from "@/lib/data";
-import { longueurMax, requis } from "@/lib/validation";
+import { ACCEPTED_IMAGE_TYPES } from "@/lib/api/images";
+import { categoriesArticle } from "@/lib/data";
+import { contientUneLettre, estTagValide, estUrlReseau, longueurEntre, requis } from "@/lib/validation";
+
+export const TITRE_MIN = 5;
+export const TITRE_MAX = 120;
+export const CHAPO_MIN = 30;
+export const CHAPO_MAX = 220;
+export const CORPS_MIN = 100;
+export const CORPS_MAX = 20_000;
+export const TAGS_MAX = 8;
+const IMAGE_TAILLE_MAX_OCTETS = 5 * 1024 * 1024;
 
 export type ArticleFormValues = {
   titre: string;
   categorie: string;
-  badge: BadgeVariant;
-  date: string;
-  auteur: string;
-  lecture: string;
   chapo: string;
-  photo: string;
   corpsText: string;
   tags: string;
+  facebook: string;
+  instagram: string;
+  youtube: string;
+  fichier: File | null;
+  /** Image affichée dans le formulaire : fichier choisi (blob:) ou image existante en modification. */
+  previewUrl: string;
 };
 
 const valeursVides: ArticleFormValues = {
   titre: "",
-  categorie: "Stage",
-  badge: "stage",
-  date: new Date().toISOString().slice(0, 10),
-  auteur: "",
-  lecture: "1 min",
+  categorie: categoriesArticle[0],
   chapo: "",
-  photo: "",
   corpsText: "",
   tags: "",
+  facebook: "",
+  instagram: "",
+  youtube: "",
+  fichier: null,
+  previewUrl: "",
 };
 
 type ArticleFieldErrors = Partial<Record<keyof ArticleFormValues, string>>;
 
-function validate(values: ArticleFormValues): ArticleFieldErrors {
-  const errors: ArticleFieldErrors = {};
-  errors.titre = requis(values.titre);
-  errors.date = requis(values.date);
-  errors.auteur = requis(values.auteur);
-  errors.chapo = requis(values.chapo) ?? longueurMax(values.chapo, 220);
-  errors.corpsText = requis(values.corpsText, "Le contenu de l'article est requis.");
+export function parseTags(texte: string): string[] {
+  const tags = texte
+    .split(",")
+    .map((t) => t.trim().toLowerCase().replace(/\s+/g, " "))
+    .filter(Boolean);
+  return [...new Set(tags)];
+}
+
+function validerCorps(corpsText: string): string | undefined {
+  const blocs = corpsTextToBlocs(corpsText);
+  const longueur = blocs.reduce((total, b) => total + b.texte.length, 0);
+  if (longueur === 0) return "Le contenu de l'article est requis.";
+  if (longueur < CORPS_MIN || longueur > CORPS_MAX) {
+    return `Le contenu doit faire entre ${CORPS_MIN} et ${CORPS_MAX} caractères (${longueur} actuellement).`;
+  }
+  if (!blocs.some((b) => b.type === "p")) return "Le contenu doit contenir au moins un paragraphe.";
+  return undefined;
+}
+
+function validerTags(texte: string): string | undefined {
+  const tags = parseTags(texte);
+  if (tags.length > TAGS_MAX) return `${TAGS_MAX} étiquettes maximum.`;
+  for (const tag of tags) {
+    const erreur = estTagValide(tag);
+    if (erreur) return erreur;
+  }
+  return undefined;
+}
+
+function validerImage(values: ArticleFormValues, estCreation: boolean): string | undefined {
+  if (!values.fichier) return estCreation ? "Une image de couverture est requise." : undefined;
+  if (!(ACCEPTED_IMAGE_TYPES as readonly string[]).includes(values.fichier.type)) {
+    return "Format non supporté (JPEG, PNG ou WebP).";
+  }
+  if (values.fichier.size > IMAGE_TAILLE_MAX_OCTETS) return "L'image dépasse 5 Mo.";
+  return undefined;
+}
+
+function validate(values: ArticleFormValues, estCreation: boolean): ArticleFieldErrors {
+  const titre = values.titre.trim().replace(/\s+/g, " ");
+  const errors: ArticleFieldErrors = {
+    titre:
+      requis(titre, "Le titre est requis.") ??
+      longueurEntre(titre, TITRE_MIN, TITRE_MAX) ??
+      contientUneLettre(titre, "Le titre doit contenir au moins une lettre."),
+    chapo: requis(values.chapo, "Le chapô est requis.") ?? longueurEntre(values.chapo, CHAPO_MIN, CHAPO_MAX),
+    corpsText: validerCorps(values.corpsText),
+    tags: validerTags(values.tags),
+    fichier: validerImage(values, estCreation),
+    facebook: estUrlReseau(values.facebook, "facebook"),
+    instagram: estUrlReseau(values.instagram, "instagram"),
+    youtube: estUrlReseau(values.youtube, "youtube"),
+  };
   Object.keys(errors).forEach((key) => {
     if (errors[key as keyof ArticleFieldErrors] === undefined) delete errors[key as keyof ArticleFieldErrors];
   });
@@ -57,40 +115,54 @@ function validate(values: ArticleFormValues): ArticleFieldErrors {
 
 export function useArticleForm(slug?: string) {
   const router = useRouter();
+  const { authorizedFetch } = useAuth();
   const [values, setValues] = useState<ArticleFormValues>(valeursVides);
   const [isLoadingInitial, setIsLoadingInitial] = useState(Boolean(slug));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<ArticleFieldErrors>({});
+  const blobUrl = useRef<string | null>(null);
 
   useEffect(() => {
     if (!slug) return;
     let cancelled = false;
     (async () => {
-      const article = await getArticleBySlug(slug);
-      if (cancelled) return;
-      if (article) {
-        setValues({
-          titre: article.titre,
-          categorie: article.categorie,
-          badge: article.badge,
-          date: article.date,
-          auteur: article.auteur,
-          lecture: article.lecture,
-          chapo: article.chapo,
-          photo: article.photo,
-          corpsText: blocsToCorpsText(article.corps),
-          tags: article.tags.join(", "),
-        });
-      } else {
-        setError("Article introuvable.");
+      try {
+        const article = await getArticle(slug);
+        if (cancelled) return;
+        if (article) {
+          setValues({
+            titre: article.titre,
+            categorie: article.categorie,
+            chapo: article.chapo,
+            corpsText: blocsToCorpsText(article.corps),
+            tags: article.tags.join(", "),
+            facebook: article.facebook_url ?? "",
+            instagram: article.instagram_url ?? "",
+            youtube: article.youtube_url ?? "",
+            fichier: null,
+            previewUrl: article.image,
+          });
+        } else {
+          setError("Article introuvable.");
+        }
+      } catch (err) {
+        if (!cancelled) setError(err instanceof ArticleApiError ? err.message : "Une erreur est survenue.");
+      } finally {
+        if (!cancelled) setIsLoadingInitial(false);
       }
-      setIsLoadingInitial(false);
     })();
     return () => {
       cancelled = true;
     };
   }, [slug]);
+
+  useEffect(
+    () => () => {
+      if (blobUrl.current) URL.revokeObjectURL(blobUrl.current);
+    },
+    [],
+  );
 
   const setField = useCallback(
     <K extends keyof ArticleFormValues>(field: K, value: ArticleFormValues[K]) => {
@@ -100,8 +172,18 @@ export function useArticleForm(slug?: string) {
     [],
   );
 
+  const setImage = useCallback(
+    (fichier: File) => {
+      if (blobUrl.current) URL.revokeObjectURL(blobUrl.current);
+      blobUrl.current = URL.createObjectURL(fichier);
+      setField("fichier", fichier);
+      setField("previewUrl", blobUrl.current);
+    },
+    [setField],
+  );
+
   const submit = useCallback(async () => {
-    const errors = validate(values);
+    const errors = validate(values, !slug);
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       return null;
@@ -111,21 +193,19 @@ export function useArticleForm(slug?: string) {
     setError(null);
     try {
       const input: ArticleInput = {
-        titre: values.titre,
+        titre: values.titre.trim().replace(/\s+/g, " "),
         categorie: values.categorie,
-        badge: values.badge,
-        date: values.date,
-        auteur: values.auteur,
-        lecture: values.lecture,
-        chapo: values.chapo,
-        photo: values.photo,
+        chapo: values.chapo.trim(),
         corps: corpsTextToBlocs(values.corpsText),
-        tags: values.tags
-          .split(",")
-          .map((t) => t.trim())
-          .filter(Boolean),
+        tags: parseTags(values.tags),
+        facebook_url: values.facebook.trim(),
+        instagram_url: values.instagram.trim(),
+        youtube_url: values.youtube.trim(),
+        fichier: values.fichier,
       };
-      const record = slug ? await updateArticle(slug, input) : await createArticle(input);
+      const record = slug
+        ? await updateArticle(authorizedFetch, slug, input)
+        : await createArticle(authorizedFetch, input);
       router.push("/admin/articles");
       return record;
     } catch (err) {
@@ -134,7 +214,7 @@ export function useArticleForm(slug?: string) {
     } finally {
       setIsSubmitting(false);
     }
-  }, [slug, values, router]);
+  }, [slug, values, router, authorizedFetch]);
 
-  return { values, setField, submit, isSubmitting, isLoadingInitial, error, fieldErrors };
+  return { values, setField, setImage, submit, isSubmitting, isLoadingInitial, error, fieldErrors };
 }

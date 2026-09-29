@@ -4,13 +4,14 @@ import ArticleForm from "@/components/ArticleForm/ArticleForm";
 import { useArticleForm } from "@/hooks/useArticleForm";
 
 export default function Page() {
-  const { values, setField, submit, isSubmitting, error, fieldErrors } = useArticleForm();
+  const { values, setField, setImage, submit, isSubmitting, error, fieldErrors } = useArticleForm();
 
   return (
     <ArticleForm
       mode="create"
       values={values}
       setField={setField}
+      setImage={setImage}
       onSubmit={submit}
       isSubmitting={isSubmitting}
       error={error}

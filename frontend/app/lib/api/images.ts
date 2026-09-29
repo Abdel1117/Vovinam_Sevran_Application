@@ -38,7 +38,7 @@ function toFormData(input: ImageInput): FormData {
   return formData;
 }
 
-function absolutise(url: string): string {
+export function absolutise(url: string): string {
   return url.startsWith("/") ? `${API_URL}${url}` : url;
 }
 

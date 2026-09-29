@@ -1,11 +1,18 @@
 import Link from "next/link";
-import Badge from "@/components/Badge/Badge";
-import Photo from "@/components/Photo/Photo";
+import ArticleCard from "@/components/ArticleCard/ArticleCard";
 import Reveal from "@/components/Reveal/Reveal";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
-import { actualites } from "@/lib/data";
+import { listArticles } from "@/lib/api/articles";
 
-export default function News() {
+const NOMBRE_ARTICLES = 3;
+
+export default async function News() {
+  const articles = (await listArticles().catch(() => [])).slice(
+    0,
+    NOMBRE_ARTICLES,
+  );
+  if (articles.length === 0) return null;
+
   return (
     <section id="articles" className="bg-white py-20 lg:py-30">
       <div className="mx-auto max-w-[1360px] px-2 md:px-7">
@@ -15,36 +22,8 @@ export default function News() {
           accent="bg-vovinam"
         />
         <div className="flex flex-wrap gap-6">
-          {actualites.map((a, i) => (
-            <Reveal
-              key={a.slug}
-              delay={i * 70}
-              className="group flex min-w-[300px] flex-1 flex-col overflow-hidden rounded-card border border-trait bg-white shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card-hover"
-            >
-              <div className="relative">
-                <Photo label={"photo — " + a.photo} className="h-52" zoom />
-                <Badge variant={a.badge} className="absolute top-4 left-4">
-                  {a.categorie}
-                </Badge>
-              </div>
-              <div className="flex flex-1 flex-col gap-2.5 px-6.5 pt-6 pb-7">
-                <span className="text-xs font-semibold tracking-[0.12em] text-encre-30 uppercase">
-                  {a.date}
-                </span>
-                <h3 className="font-display text-xl leading-snug font-extrabold text-encre">
-                  {a.titre}
-                </h3>
-                <p className="text-[0.96rem] leading-relaxed text-encre-50">
-                  {a.chapo}
-                </p>
-                <Link
-                  href={"/actualites/" + a.slug}
-                  className="mt-auto pt-2.5 text-sm font-bold text-vovinam"
-                >
-                  Lire l&apos;article →
-                </Link>
-              </div>
-            </Reveal>
+          {articles.map((a, i) => (
+            <ArticleCard key={a.slug} article={a} delay={i * 70} />
           ))}
         </div>
         <Reveal className="mt-11 flex justify-center">

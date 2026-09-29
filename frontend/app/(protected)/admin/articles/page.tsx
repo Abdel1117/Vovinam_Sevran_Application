@@ -6,6 +6,7 @@ import Topbar from "@/components/Topbar/Topbar";
 import { useMenu } from "@/components/AdminShell/menu-context";
 import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog";
 import { useArticles } from "@/hooks/useArticles";
+import { formatDateArticle } from "@/lib/api/articles";
 
 const carte = "rounded-card border border-trait bg-white shadow-card";
 
@@ -63,7 +64,7 @@ export default function Page() {
                     {a.titre}
                   </span>
                   <span className="text-[0.82rem] text-encre-30">
-                    {a.categorie} · {a.date}
+                    {a.categorie} · {formatDateArticle(a.date)} · {a.auteur}
                   </span>
                 </span>
                 <div className="flex flex-none gap-2.5">

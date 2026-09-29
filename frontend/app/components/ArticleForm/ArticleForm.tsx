@@ -1,15 +1,22 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import Topbar from "@/components/Topbar/Topbar";
+import Badge from "@/components/Badge/Badge";
+import { SocialIcon, type SocialName } from "@/components/Social/Social";
 import { useMenu } from "@/components/AdminShell/menu-context";
-import type { BadgeVariant } from "@/lib/data";
-import { fileToDataUrl } from "@/utils/File/File";
-import type { ArticleFormValues } from "@/hooks/useArticleForm";
+import { useAuth } from "@/context/AuthContext";
+import { categorieBadge, categoriesArticle } from "@/lib/data";
+import { ACCEPTED_IMAGE_TYPES } from "@/lib/api/images";
+import {
+  CHAPO_MAX,
+  TAGS_MAX,
+  TITRE_MAX,
+  parseTags,
+  type ArticleFormValues,
+} from "@/hooks/useArticleForm";
 
 const carte = "rounded-card border border-trait bg-white shadow-card";
-const champ =
-  "h-12.5 rounded-field border-[1.5px] border-[#e1e7f5] bg-[#fbfcff] px-4 text-[0.98rem] text-encre outline-none focus:border-vovinam focus:ring-4 focus:ring-vovinam/10";
 
 function withError(base: string, enError: boolean): string {
   return enError ? `${base} border-rouge` : base;
@@ -22,16 +29,6 @@ function Error({ message }: { message?: string }) {
   );
 }
 
-const categorieBadge: Record<string, BadgeVariant> = {
-  Stage: "stage",
-  Compétition: "competition",
-  "Vie du club": "club",
-  "Passage de grades": "club",
-  Fédération: "association",
-};
-
-const categories = Object.keys(categorieBadge);
-
 type Outil = {
   label: string;
   titre: string;
@@ -42,22 +39,6 @@ type Outil = {
 };
 
 const outils: Outil[] = [
-  {
-    label: "B",
-    titre: "Gras",
-    avant: "**",
-    apres: "**",
-    defaut: "texte en gras",
-    classe: "font-display font-extrabold",
-  },
-  {
-    label: "I",
-    titre: "Italique",
-    avant: "*",
-    apres: "*",
-    defaut: "texte en italique",
-    classe: "italic",
-  },
   {
     label: "H2",
     titre: "Titre de section",
@@ -74,13 +55,23 @@ const outils: Outil[] = [
     defaut: "Citation",
     classe: "",
   },
+];
+
+const reseaux: { name: SocialName; label: string; placeholder: string }[] = [
   {
-    label: "↗",
-    titre: "Lien",
-    avant: "[",
-    apres: "](https://)",
-    defaut: "texte du lien",
-    classe: "",
+    name: "facebook",
+    label: "Facebook",
+    placeholder: "https://www.facebook.com/…",
+  },
+  {
+    name: "instagram",
+    label: "Instagram",
+    placeholder: "https://www.instagram.com/p/…",
+  },
+  {
+    name: "youtube",
+    label: "YouTube",
+    placeholder: "https://www.youtube.com/watch?v=…",
   },
 ];
 
@@ -96,11 +87,14 @@ function slugify(s: string): string {
 
 type ArticleFormProps = {
   mode: "create" | "edit";
+  /** Slug existant en modification (il ne change pas quand on modifie le titre). */
+  slug?: string;
   values: ArticleFormValues;
   setField: <K extends keyof ArticleFormValues>(
     field: K,
     value: ArticleFormValues[K],
   ) => void;
+  setImage: (fichier: File) => void;
   onSubmit: () => void;
   isSubmitting: boolean;
   error: string | null;
@@ -109,24 +103,24 @@ type ArticleFormProps = {
 
 export default function ArticleForm({
   mode,
+  slug,
   values,
   setField,
+  setImage,
   onSubmit,
   isSubmitting,
   error,
   fieldErrors,
 }: ArticleFormProps) {
   const { open } = useMenu();
+  const { user } = useAuth();
   const editeur = useRef<HTMLTextAreaElement | null>(null);
 
   const mots = values.corpsText.trim()
     ? values.corpsText.trim().split(/\s+/).length
     : 0;
-
-  useEffect(() => {
-    setField("lecture", `${Math.max(1, Math.round(mots / 200))} min`);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mots]);
+  const nbTags = parseTags(values.tags).length;
+  const hasFieldErrors = Object.keys(fieldErrors).length > 0;
 
   function entoure(o: Outil) {
     const ta = editeur.current;
@@ -148,10 +142,10 @@ export default function ArticleForm({
     });
   }
 
-  async function surCouverture(e: React.ChangeEvent<HTMLInputElement>) {
+  function surCouverture(e: React.ChangeEvent<HTMLInputElement>) {
     const fichier = e.target.files?.[0];
-    if (!fichier) return;
-    setField("photo", await fileToDataUrl(fichier));
+    if (fichier) setImage(fichier);
+    e.target.value = "";
   }
 
   return (
@@ -162,9 +156,9 @@ export default function ArticleForm({
         onMenu={open}
         actions={
           <>
-            {error ? (
+            {error || hasFieldErrors ? (
               <span className="hidden text-[0.84rem] font-semibold text-rouge sm:inline">
-                {error}
+                {error ?? "Certains champs sont à corriger."}
               </span>
             ) : null}
             <button
@@ -195,6 +189,7 @@ export default function ArticleForm({
               <input
                 type="text"
                 value={values.titre}
+                maxLength={TITRE_MAX}
                 onChange={(e) => setField("titre", e.target.value)}
                 placeholder="Retour sur notre dernier stage régional"
                 className={withError(
@@ -202,11 +197,14 @@ export default function ArticleForm({
                   Boolean(fieldErrors.titre),
                 )}
               />
+              <span className="text-[0.82rem] text-encre-30">
+                {values.titre.trim().length} / {TITRE_MAX} caractères
+              </span>
               <Error message={fieldErrors.titre} />
             </label>
 
             <div className="flex flex-wrap gap-4">
-              <label className="flex min-w-[260px] flex-1 flex-col gap-2">
+              <div className="flex min-w-[260px] flex-1 flex-col gap-2">
                 <span className="text-[0.88rem] font-semibold text-encre-70">
                   Lien (slug)
                 </span>
@@ -215,37 +213,21 @@ export default function ArticleForm({
                     /actualites/
                   </span>
                   <span className="truncate font-mono text-[0.88rem] text-encre-70">
-                    {slugify(values.titre) || "nouvel-article"}
+                    {slug ?? (slugify(values.titre) || "nouvel-article")}
                   </span>
                 </span>
-              </label>
-              <label className="flex min-w-[160px] flex-1 flex-col gap-2">
+              </div>
+              <div className="flex min-w-[200px] flex-1 flex-col gap-2">
                 <span className="text-[0.88rem] font-semibold text-encre-70">
-                  Date de publication
+                  Publication
                 </span>
-                <input
-                  type="date"
-                  value={values.date}
-                  onChange={(e) => setField("date", e.target.value)}
-                  className={withError(champ, Boolean(fieldErrors.date))}
-                />
-                <Error message={fieldErrors.date} />
-              </label>
+                <span className="flex h-12.5 items-center rounded-field border-[1.5px] border-[#e1e7f5] bg-[#f6f8fe] px-3.5 text-[0.92rem] text-encre-70">
+                  {mode === "create"
+                    ? `Par ${user ? `${user.prenom} ${user.nom}` : "vous"} · date automatique`
+                    : "Auteur et date d'origine conservés"}
+                </span>
+              </div>
             </div>
-
-            <label className="flex flex-col gap-2">
-              <span className="text-[0.88rem] font-semibold text-encre-70">
-                Auteur
-              </span>
-              <input
-                type="text"
-                value={values.auteur}
-                onChange={(e) => setField("auteur", e.target.value)}
-                placeholder="Claire Nguyen"
-                className={withError(champ, Boolean(fieldErrors.auteur))}
-              />
-              <Error message={fieldErrors.auteur} />
-            </label>
 
             <label className="flex flex-col gap-2">
               <span className="text-[0.88rem] font-semibold text-encre-70">
@@ -254,6 +236,7 @@ export default function ArticleForm({
               <textarea
                 rows={3}
                 value={values.chapo}
+                maxLength={CHAPO_MAX}
                 onChange={(e) => setField("chapo", e.target.value)}
                 placeholder="Deux ou trois phrases qui résument l'article…"
                 className={withError(
@@ -262,7 +245,7 @@ export default function ArticleForm({
                 )}
               />
               <span className="text-[0.82rem] text-encre-30">
-                {values.chapo.length} / 220 caractères
+                {values.chapo.trim().length} / {CHAPO_MAX} caractères
               </span>
               <Error message={fieldErrors.chapo} />
             </label>
@@ -276,37 +259,48 @@ export default function ArticleForm({
                 Image de couverture
               </h2>
               <span className="text-[0.84rem] text-encre-30">
-                Format conseillé : 1600 × 900 px
+                JPEG, PNG ou WebP · 5 Mo max · conseillé 1600 × 900 px
               </span>
             </div>
-            <label className="relative flex h-60 cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-2xl border-[1.5px] border-dashed border-[#c9d6f5] bg-[#fbfcff] text-center transition-colors hover:border-vovinam hover:bg-vovinam-050 lg:h-80">
+            <label
+              className={withError(
+                "relative flex h-60 cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-2xl border-[1.5px] border-dashed border-[#c9d6f5] bg-[#fbfcff] text-center transition-colors hover:border-vovinam hover:bg-vovinam-050 lg:h-80",
+                Boolean(fieldErrors.fichier),
+              )}
+            >
               <input
                 type="file"
-                accept="image/*"
+                accept={ACCEPTED_IMAGE_TYPES.join(",")}
                 className="hidden"
                 onChange={surCouverture}
               />
-              {values.photo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={values.photo}
-                  alt="Couverture"
-                  className="absolute inset-0 size-full object-cover"
-                />
+              {values.previewUrl ? (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={values.previewUrl}
+                    alt="Couverture"
+                    className="absolute inset-0 size-full object-cover"
+                  />
+                  <span className="absolute right-3 bottom-3 rounded-lg bg-white/95 px-3 py-2 text-[0.8rem] font-bold text-encre shadow-[0_4px_12px_rgb(16_24_40/0.14)]">
+                    Changer l&apos;image
+                  </span>
+                </>
               ) : (
                 <>
                   <span className="flex size-12 items-center justify-center rounded-xl bg-vovinam-100 text-xl font-bold text-vovinam">
                     +
                   </span>
                   <span className="font-semibold text-encre">
-                    Glissez la photo de couverture ici
+                    Ajoutez la photo de couverture
                   </span>
                   <span className="text-[0.86rem] text-encre-30">
-                    ou cliquez pour parcourir vos fichiers
+                    cliquez pour parcourir vos fichiers
                   </span>
                 </>
               )}
             </label>
+            <Error message={fieldErrors.fichier} />
           </section>
 
           <section
@@ -315,7 +309,7 @@ export default function ArticleForm({
             <h2 className="font-display text-lg font-extrabold text-encre">
               Contenu
             </h2>
-            <div className="flex flex-wrap gap-2 rounded-field border border-[#e7ecf7] bg-[#f6f8fe] p-2.5">
+            <div className="flex flex-wrap items-center gap-2 rounded-field border border-[#e7ecf7] bg-[#f6f8fe] p-2.5">
               {outils.map((o) => (
                 <button
                   key={o.label}
@@ -330,13 +324,18 @@ export default function ArticleForm({
                   {o.label}
                 </button>
               ))}
+              <span className="ml-1 text-[0.82rem] text-encre-30">
+                Une ligne vide = nouveau paragraphe
+              </span>
             </div>
             <textarea
               ref={editeur}
               rows={16}
               value={values.corpsText}
               onChange={(e) => setField("corpsText", e.target.value)}
-              placeholder="Rédigez l'article… Les boutons ci-dessus insèrent la mise en forme (**gras**, ## titre, > citation)."
+              placeholder={
+                "Rédigez l'article…\n\nSéparez les paragraphes par une ligne vide.\n## Pour un titre de section\n> Pour une citation"
+              }
               className={withError(
                 "resize-y rounded-2xl border-[1.5px] border-[#e1e7f5] bg-[#fbfcff] p-4.5 text-[1.02rem] leading-[1.75] text-[#28324d] outline-none focus:border-vovinam focus:ring-4 focus:ring-vovinam/10",
                 Boolean(fieldErrors.corpsText),
@@ -355,7 +354,7 @@ export default function ArticleForm({
             className={["flex flex-col gap-4 p-3 lg:p-8", carte].join(" ")}
           >
             <h2 className="font-display text-lg font-extrabold text-encre">
-              Publication
+              Classement
             </h2>
 
             <div className="flex flex-col gap-2.5">
@@ -363,14 +362,11 @@ export default function ArticleForm({
                 Catégorie
               </span>
               <div className="flex flex-wrap gap-2">
-                {categories.map((c) => (
+                {categoriesArticle.map((c) => (
                   <button
                     key={c}
                     type="button"
-                    onClick={() => {
-                      setField("categorie", c);
-                      setField("badge", categorieBadge[c]);
-                    }}
+                    onClick={() => setField("categorie", c)}
                     className={[
                       "cursor-pointer rounded-full border-[1.5px] px-3.5 py-2.5 text-[0.84rem] font-semibold transition-all",
                       values.categorie === c
@@ -393,9 +389,49 @@ export default function ArticleForm({
                 value={values.tags}
                 onChange={(e) => setField("tags", e.target.value)}
                 placeholder="stage, technique, grades"
-                className="h-11.5 rounded-xl border-[1.5px] border-[#e1e7f5] bg-[#fbfcff] px-3.5 text-[0.94rem] text-encre outline-none focus:border-vovinam"
+                className={withError(
+                  "h-11.5 rounded-xl border-[1.5px] border-[#e1e7f5] bg-[#fbfcff] px-3.5 text-[0.94rem] text-encre outline-none focus:border-vovinam",
+                  Boolean(fieldErrors.tags),
+                )}
               />
+              <span className="text-[0.82rem] text-encre-30">
+                {nbTags} / {TAGS_MAX} · servent à trier les actualités
+              </span>
+              <Error message={fieldErrors.tags} />
             </label>
+          </section>
+
+          <section
+            className={["flex flex-col gap-4 p-3 lg:p-8", carte].join(" ")}
+          >
+            <div className="flex flex-col gap-1">
+              <h2 className="font-display text-lg font-extrabold text-encre">
+                Réseaux sociaux
+              </h2>
+              <span className="text-[0.84rem] text-encre-30">
+                Optionnel · affichés en bas de l&apos;article
+              </span>
+            </div>
+            {reseaux.map((r) => (
+              <label key={r.name} className="flex flex-col gap-2">
+                <span className="flex items-center gap-2 text-[0.88rem] font-semibold text-encre-70">
+                  <SocialIcon name={r.name} className="text-vovinam" />
+                  {r.label}
+                </span>
+                <input
+                  type="url"
+                  inputMode="url"
+                  value={values[r.name]}
+                  onChange={(e) => setField(r.name, e.target.value)}
+                  placeholder={r.placeholder}
+                  className={withError(
+                    "h-11.5 rounded-xl border-[1.5px] border-[#e1e7f5] bg-[#fbfcff] px-3.5 text-[0.9rem] text-encre outline-none focus:border-vovinam",
+                    Boolean(fieldErrors[r.name]),
+                  )}
+                />
+                <Error message={fieldErrors[r.name]} />
+              </label>
+            ))}
           </section>
 
           <section className={["overflow-hidden", carte].join(" ")}>
@@ -407,10 +443,10 @@ export default function ArticleForm({
             <div className="px-2 md:px-5.5 pt-2 md:pt-5 pb-2 md:pb-6">
               <div className="overflow-hidden rounded-2xl border border-trait shadow-card">
                 <div className="relative flex h-35 items-center justify-center bg-[repeating-linear-gradient(135deg,#e9eeff_0_12px,#dce5ff_12px_24px)]">
-                  {values.photo ? (
+                  {values.previewUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      src={values.photo}
+                      src={values.previewUrl}
                       alt=""
                       className="absolute inset-0 size-full object-cover"
                     />
@@ -419,14 +455,14 @@ export default function ArticleForm({
                       couverture
                     </span>
                   )}
-                  <span className="absolute top-3 left-3 rounded-md bg-jaune px-3 py-1.5 text-[10px] font-bold tracking-[0.14em] text-encre uppercase">
+                  <Badge
+                    variant={categorieBadge[values.categorie]}
+                    className="absolute top-3 left-3"
+                  >
                     {values.categorie}
-                  </span>
+                  </Badge>
                 </div>
                 <div className="flex flex-col gap-2 px-4.5 pt-4 pb-5">
-                  <span className="text-[11px] font-semibold tracking-[0.12em] text-encre-30 uppercase">
-                    {values.date}
-                  </span>
                   <span className="font-display text-base leading-snug font-extrabold text-encre">
                     {values.titre || "Titre de votre article"}
                   </span>
