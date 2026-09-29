@@ -1,6 +1,6 @@
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
-import ContactForm from "@/components/ContactForm/ContactForm";
+import ContactForm, { MOTIF_ESSAI } from "@/components/ContactForm/ContactForm";
 import Reveal from "@/components/Reveal/Reveal";
 import type { Metadata } from "next";
 import Button from "@/components/Button/Button";
@@ -33,7 +33,16 @@ const infos: Info[] = [
   },
 ];
 
-export default function Page() {
+type SearchParams = { motif?: string | string[] };
+
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const { motif } = await searchParams;
+  const motifInitial = motif === "essai" ? MOTIF_ESSAI : undefined;
+
   return (
     <>
       <Header />
@@ -50,8 +59,8 @@ export default function Page() {
               <span className="text-jaune">NOUS RENCONTRER.</span>
             </h1>
             <p className="max-w-[560px] text-lg leading-relaxed text-pretty text-white/85">
-              Une question sur les cours, les inscriptions ou un cours d&apos;essai ?
-              Écrivez-nous, nous répondons sous 48 heures.
+              Une question sur les cours, les inscriptions ou un cours
+              d&apos;essai ? Écrivez-nous, nous répondons sous 48 heures.
             </p>
           </div>
         </section>
@@ -92,7 +101,7 @@ export default function Page() {
           className="bg-vovinam-050 px-2 md:px-7 py-16 lg:py-28"
         >
           <div className="mx-auto flex max-w-[1360px] flex-wrap items-start gap-8 lg:gap-14">
-            <ContactForm />
+            <ContactForm motifInitial={motifInitial} />
             <div className="flex min-w-[300px] flex-1 flex-col gap-5">
               <Reveal className="relative min-h-75 overflow-hidden rounded-3xl border border-[#e1e7f5]">
                 <iframe

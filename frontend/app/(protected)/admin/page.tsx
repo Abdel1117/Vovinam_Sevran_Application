@@ -1,123 +1,113 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import Topbar from "@/components/Topbar/Topbar";
+import Badge from "@/components/Badge/Badge";
 import { useMenu } from "@/components/AdminShell/menu-context";
-import { evenements } from "@/lib/data";
+import { useAuth } from "@/context/AuthContext";
+import { categorieBadge, coursEssai } from "@/lib/data";
+import {
+  horaire,
+  listEvenementsAVenir,
+  parseDateIso,
+  pastilleDate,
+  type EvenementPublic,
+} from "@/lib/api/evenements";
+import {
+  formatDateArticle,
+  listArticles,
+  type ArticlePublic,
+} from "@/lib/api/articles";
+import { listDemandes, type DemandeEssai } from "@/lib/api/demandesEssai";
+import {
+  getDashboardStats,
+  type DashboardStats,
+  type TypeAdherentStat,
+} from "@/lib/api/dashboard";
 
 type Kpi = {
   label: string;
   valeur: string;
+  href: string;
   note?: string;
   badge?: string;
   ton?: "vert";
-  bleu?: boolean;
 };
 
-type Publication = {
-  titre: string;
-  meta: string;
-  cat: string;
-  catClass: string;
-  statut: string;
-  point: string;
-  statutClass: string;
+const libellesRepartition: Record<TypeAdherentStat, string> = {
+  enfant: "Enfants",
+  adolescent: "Adolescents",
+  adulte: "Adultes",
+  encadrant: "Encadrants",
 };
-
-const kpis: Kpi[] = [
-  {
-    label: "Adhérents actifs",
-    valeur: "128",
-    note: "+ 12 depuis la rentrée",
-    ton: "vert",
-  },
-  { label: "Cours d'essai à traiter", valeur: "7", badge: "À rappeler" },
-  {
-    label: "Événements à venir",
-    valeur: "4",
-    note: "Prochain : stage régional, 14 sep.",
-  },
-  {
-    label: "Brouillons",
-    valeur: "3",
-    note: "Articles en attente de publication.",
-    bleu: true,
-  },
-];
-
-const publications: Publication[] = [
-  {
-    titre: "Nouvelle saison, nouvelles inscriptions",
-    meta: "Publié le 02 sep. 2026 — Minh Trân",
-    cat: "Association",
-    catClass: "bg-vovinam text-white",
-    statut: "En ligne",
-    point: "bg-[#0e7a3c]",
-    statutClass: "text-[#0e7a3c]",
-  },
-  {
-    titre: "Retour sur notre dernier stage",
-    meta: "Publié le 21 août 2026 — Claire Nguyen",
-    cat: "Stage",
-    catClass: "bg-jaune text-encre",
-    statut: "En ligne",
-    point: "bg-[#0e7a3c]",
-    statutClass: "text-[#0e7a3c]",
-  },
-  {
-    titre: "Résultats de l'Open de Paris",
-    meta: "Brouillon — Karim Belhadj",
-    cat: "Compétition",
-    catClass: "bg-rouge text-white",
-    statut: "Brouillon",
-    point: "bg-[#e0b400]",
-    statutClass: "text-[#8a6a00]",
-  },
-  {
-    titre: "Passage de grades — session d'octobre",
-    meta: "Programmé pour le 05 oct. 2026",
-    cat: "Vie du club",
-    catClass: "bg-vovinam-100 text-vovinam",
-    statut: "Planifié",
-    point: "bg-encre-30",
-    statutClass: "text-encre-70",
-  },
-];
-
-const repartition: {
-  label: string;
-  n: number;
-  pct: number;
-  couleur: string;
-}[] = [
-  { label: "Enfants", n: 42, pct: 33, couleur: "bg-vovinam" },
-  { label: "Adolescents", n: 31, pct: 24, couleur: "bg-vovinam" },
-  { label: "Adultes", n: 48, pct: 38, couleur: "bg-vovinam" },
-  { label: "Encadrants", n: 7, pct: 6, couleur: "bg-jaune" },
-];
-
-const demandes: { nom: string; meta: string; tel: string }[] = [
-  {
-    nom: "Lucas Mercier",
-    meta: "Adultes · reçu le 27 août",
-    tel: "06 12 00 00 00",
-  },
-  {
-    nom: "Sarah Benali",
-    meta: "Enfants (8 ans) · reçu le 26 août",
-    tel: "06 34 00 00 00",
-  },
-  {
-    nom: "Thomas Nguyen",
-    meta: "Adolescents · reçu le 24 août",
-    tel: "07 55 00 00 00",
-  },
-];
 
 const carte = "rounded-card border border-trait bg-white shadow-card";
 
+function kpisDepuis(stats: DashboardStats | null): Kpi[] {
+  const valeur = (n: number | undefined) => (n === undefined ? "…" : String(n));
+  const prochain = stats?.prochain_evenement;
+  return [
+    {
+      label: "Adhérents actifs",
+      valeur: valeur(stats?.adherents_actifs),
+      href: "/admin/adherents",
+      note: stats
+        ? `+ ${stats.adherents_nouveaux_saison} depuis la rentrée`
+        : undefined,
+      ton: "vert",
+    },
+    {
+      label: "Cours d'essai à traiter",
+      valeur: valeur(stats?.demandes_a_traiter),
+      href: "/admin/cours-essai",
+      badge: stats && stats.demandes_a_traiter > 0 ? "À rappeler" : undefined,
+      note:
+        stats && stats.demandes_a_traiter === 0
+          ? "Tout est à jour."
+          : undefined,
+    },
+    {
+      label: "Événements à venir",
+      valeur: valeur(stats?.evenements_a_venir),
+      href: "/admin/agenda",
+      note: prochain
+        ? `Prochain : ${prochain.titre}, ${format(parseDateIso(prochain.date_debut), "d MMM", { locale: fr })}`
+        : stats
+          ? "Aucun événement prévu."
+          : undefined,
+    },
+  ];
+}
+
 export default function Page() {
   const { open } = useMenu();
+  const { authorizedFetch } = useAuth();
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [erreurStats, setErreurStats] = useState(false);
+  const [evenements, setEvenements] = useState<EvenementPublic[] | null>(null);
+  const [articles, setArticles] = useState<ArticlePublic[] | null>(null);
+  const [demandes, setDemandes] = useState<DemandeEssai[] | null>(null);
+
+  useEffect(() => {
+    getDashboardStats(authorizedFetch)
+      .then(setStats)
+      .catch(() => setErreurStats(true));
+    listEvenementsAVenir(3)
+      .then(setEvenements)
+      .catch(() => setEvenements([]));
+    listArticles()
+      .then((a) => setArticles(a.slice(0, 4)))
+      .catch(() => setArticles([]));
+    listDemandes(authorizedFetch, { statut: "a_traiter", limit: 5 })
+      .then(setDemandes)
+      .catch(() => setDemandes([]));
+  }, [authorizedFetch]);
+
+  const kpis = kpisDepuis(stats);
+  const totalActifs = stats?.adherents_actifs ?? 0;
 
   return (
     <>
@@ -136,24 +126,25 @@ export default function Page() {
       />
 
       <div className="flex flex-col gap-5.5 p-2 lg:p-8">
+        {erreurStats ? (
+          <div className="rounded-xl border border-[#f3d9d9] bg-white px-5 py-3.5 text-[0.9rem] font-semibold text-rouge">
+            Impossible de charger les statistiques.
+          </div>
+        ) : null}
         <div className="flex flex-wrap gap-4.5">
           {kpis.map((k) => (
-            <div
+            <Link
               key={k.label}
+              href={k.href}
               className={[
-                "flex min-w-[210px] flex-1 flex-col gap-2.5 rounded-3xl p-6",
-                k.bleu ? "bg-vovinam text-white" : carte,
+                "flex min-w-[210px] flex-1 flex-col gap-2.5 rounded-3xl p-6 transition-all hover:-translate-y-0.5 hover:shadow-card-hover",
+                carte,
               ].join(" ")}
             >
-              <span
-                className={[
-                  "text-[11px] font-semibold tracking-[0.14em] uppercase",
-                  k.bleu ? "text-jaune" : "text-encre-30",
-                ].join(" ")}
-              >
+              <span className="text-[11px] font-semibold tracking-[0.14em] text-encre-30 uppercase">
                 {k.label}
               </span>
-              <span className="font-display text-4xl leading-none font-extrabold tracking-tight">
+              <span className="font-display text-4xl leading-none font-extrabold tracking-tight text-encre">
                 {k.valeur}
               </span>
               {k.badge ? (
@@ -167,15 +158,13 @@ export default function Page() {
                     "text-[0.86rem] leading-snug",
                     k.ton === "vert"
                       ? "font-semibold text-[#0e7a3c]"
-                      : k.bleu
-                        ? "text-white/80"
-                        : "text-[#6a7392]",
+                      : "text-[#6a7392]",
                   ].join(" ")}
                 >
                   {k.note}
                 </span>
               ) : null}
-            </div>
+            </Link>
           ))}
         </div>
 
@@ -191,70 +180,94 @@ export default function Page() {
                 Publications récentes
               </h2>
               <Link
-                href="/admin/articles/nouveau"
+                href="/admin/articles"
                 className="text-[0.86rem] font-bold text-vovinam"
               >
                 Tout gérer →
               </Link>
             </div>
-            {publications.map((p) => (
-              <div
-                key={p.titre}
-                className="flex flex-wrap items-center gap-3.5 border-b border-[#f5f7fc] px-6 py-4.5 last:border-0"
-              >
-                <span className="flex min-w-[220px] flex-1 flex-col gap-1.5">
-                  <span className="text-[0.98rem] leading-snug font-bold text-encre">
-                    {p.titre}
-                  </span>
-                  <span className="text-[0.84rem] text-encre-30">{p.meta}</span>
-                </span>
-                <span
-                  className={[
-                    "rounded-md px-3 py-1.5 text-[10px] font-bold tracking-[0.14em] uppercase",
-                    p.catClass,
-                  ].join(" ")}
-                >
-                  {p.cat}
-                </span>
-                <span
-                  className={[
-                    "inline-flex items-center gap-2 text-[0.84rem] font-semibold",
-                    p.statutClass,
-                  ].join(" ")}
-                >
-                  <span
-                    className={["size-1.5 rounded-full", p.point].join(" ")}
-                  />
-                  {p.statut}
-                </span>
-                <button
-                  type="button"
-                  className="cursor-pointer rounded-lg border border-[#e7ecf7] bg-[#f6f8fe] px-3.5 py-2.5 text-[0.84rem] font-semibold text-encre-70 hover:bg-vovinam-100"
-                >
-                  Modifier
-                </button>
+            {articles === null ? (
+              <div className="px-6 py-5 text-[0.9rem] text-encre-30">
+                Chargement…
               </div>
-            ))}
+            ) : articles.length === 0 ? (
+              <div className="px-6 py-5 text-[0.9rem] text-encre-30">
+                Aucun article publié.{" "}
+                <Link
+                  href="/admin/articles/nouveau"
+                  className="font-bold text-vovinam"
+                >
+                  Écrire le premier →
+                </Link>
+              </div>
+            ) : (
+              articles.map((a) => (
+                <div
+                  key={a.slug}
+                  className="flex flex-wrap items-center gap-3.5 border-b border-[#f5f7fc] px-6 py-4.5 last:border-0"
+                >
+                  <span className="flex min-w-[220px] flex-1 flex-col gap-1.5">
+                    <span className="text-[0.98rem] leading-snug font-bold text-encre">
+                      {a.titre}
+                    </span>
+                    <span className="text-[0.84rem] text-encre-30">
+                      Publié le {formatDateArticle(a.date)} — {a.auteur}
+                    </span>
+                  </span>
+                  <Badge variant={categorieBadge[a.categorie]}>
+                    {a.categorie}
+                  </Badge>
+                  <Link
+                    href={`/admin/articles/${a.slug}/modifier`}
+                    className="rounded-lg border border-[#e7ecf7] bg-[#f6f8fe] px-3.5 py-2.5 text-[0.84rem] font-semibold text-encre-70 hover:bg-vovinam-100"
+                  >
+                    Modifier
+                  </Link>
+                </div>
+              ))
+            )}
           </section>
 
           <div className="flex min-w-[300px] flex-1 flex-col gap-5">
             <section className={["overflow-hidden", carte].join(" ")}>
-              <div className="border-b border-[#f1f4fb] px-5.5 py-5">
+              <div className="flex items-center justify-between gap-3 border-b border-[#f1f4fb] px-5.5 py-5">
                 <h2 className="font-display text-lg font-extrabold text-encre">
                   Prochains événements
                 </h2>
+                <Link
+                  href="/admin/agenda"
+                  className="text-[0.86rem] font-bold text-vovinam"
+                >
+                  Gérer →
+                </Link>
               </div>
-              {evenements.slice(0, 3).map((e) => (
+              {evenements === null ? (
+                <div className="px-5.5 py-5 text-[0.9rem] text-encre-30">
+                  Chargement…
+                </div>
+              ) : evenements.length === 0 ? (
+                <div className="px-5.5 py-5 text-[0.9rem] text-encre-30">
+                  Aucun événement à venir.
+                </div>
+              ) : null}
+              {(evenements ?? []).map((e) => (
                 <div
-                  key={e.titre}
+                  key={e.id}
                   className="flex items-center gap-3.5 border-b border-[#f5f7fc] px-5.5 py-4 last:border-0"
                 >
                   <span className="flex size-13 flex-none flex-col items-center justify-center rounded-xl bg-vovinam text-white">
-                    <span className="font-display text-lg leading-none font-extrabold">
-                      {e.jour}
+                    <span
+                      className={[
+                        "font-display leading-none font-extrabold",
+                        pastilleDate(e).jour.length > 2
+                          ? "text-[0.8rem]"
+                          : "text-lg",
+                      ].join(" ")}
+                    >
+                      {pastilleDate(e).jour}
                     </span>
                     <span className="text-[9px] font-bold tracking-[0.16em]">
-                      {e.mois}
+                      {pastilleDate(e).mois}
                     </span>
                   </span>
                   <span className="flex min-w-0 flex-1 flex-col gap-1">
@@ -262,7 +275,7 @@ export default function Page() {
                       {e.titre}
                     </span>
                     <span className="text-[0.83rem] text-encre-30">
-                      {e.horaire}
+                      {horaire(e)}
                     </span>
                   </span>
                 </div>
@@ -273,25 +286,46 @@ export default function Page() {
               <h2 className="mb-4 font-display text-lg font-extrabold text-encre">
                 Répartition des adhérents
               </h2>
-              <div className="flex flex-col gap-4">
-                {repartition.map((r) => (
-                  <div key={r.label} className="flex flex-col gap-2">
-                    <span className="flex justify-between text-[0.88rem] font-semibold text-encre-70">
-                      <span>{r.label}</span>
-                      <span>{r.n}</span>
-                    </span>
-                    <span className="block h-2.5 overflow-hidden rounded-full bg-vovinam-100">
-                      <span
-                        className={[
-                          "block h-full rounded-full",
-                          r.couleur,
-                        ].join(" ")}
-                        style={{ width: r.pct + "%" }}
-                      />
-                    </span>
-                  </div>
-                ))}
-              </div>
+              {stats === null ? (
+                <div className="text-[0.9rem] text-encre-30">Chargement…</div>
+              ) : totalActifs === 0 ? (
+                <div className="text-[0.9rem] text-encre-30">
+                  Aucun adhérent actif.
+                </div>
+              ) : (
+                <div className="flex flex-col gap-4">
+                  {(Object.keys(libellesRepartition) as TypeAdherentStat[]).map(
+                    (type) => {
+                      const n = stats.repartition_adherents[type] ?? 0;
+                      const pct = Math.round((n / totalActifs) * 100);
+                      return (
+                        <div key={type} className="flex flex-col gap-2">
+                          <span className="flex justify-between text-[0.88rem] font-semibold text-encre-70">
+                            <span>{libellesRepartition[type]}</span>
+                            <span>
+                              {n}{" "}
+                              <span className="font-normal text-encre-30">
+                                ({pct} %)
+                              </span>
+                            </span>
+                          </span>
+                          <span className="block h-2.5 overflow-hidden rounded-full bg-vovinam-100">
+                            <span
+                              className={[
+                                "block h-full rounded-full",
+                                type === "encadrant"
+                                  ? "bg-jaune"
+                                  : "bg-vovinam",
+                              ].join(" ")}
+                              style={{ width: pct + "%" }}
+                            />
+                          </span>
+                        </div>
+                      );
+                    },
+                  )}
+                </div>
+              )}
             </section>
           </div>
         </div>
@@ -301,36 +335,65 @@ export default function Page() {
             <h2 className="mr-auto font-display text-lg font-extrabold text-encre">
               Demandes de cours d&apos;essai
             </h2>
-            <span className="rounded-md bg-jaune px-3 py-1.5 text-[10px] font-bold tracking-[0.14em] text-encre uppercase">
-              7 en attente
-            </span>
-          </div>
-          {demandes.map((d) => (
-            <div
-              key={d.nom}
-              className="flex flex-wrap items-center gap-3.5 border-b border-[#f5f7fc] px-6 py-4.5 last:border-0"
+            {stats && stats.demandes_a_traiter > 0 ? (
+              <span className="rounded-md bg-jaune px-3 py-1.5 text-[10px] font-bold tracking-[0.14em] text-encre uppercase">
+                {stats.demandes_a_traiter} en attente
+              </span>
+            ) : null}
+            <Link
+              href="/admin/cours-essai"
+              className="text-[0.86rem] font-bold text-vovinam"
             >
-              <span className="flex size-10 flex-none items-center justify-center rounded-xl bg-[#e9eeff] font-display text-[0.82rem] font-extrabold text-vovinam">
-                {d.nom
-                  .split(" ")
-                  .map((m) => m[0])
-                  .join("")}
-              </span>
-              <span className="flex min-w-[200px] flex-1 flex-col gap-1">
-                <span className="text-[0.96rem] leading-snug font-bold text-encre">
-                  {d.nom}
-                </span>
-                <span className="text-[0.84rem] text-encre-30">{d.meta}</span>
-              </span>
-              <span className="text-[0.88rem] text-encre-70">{d.tel}</span>
-              <button
-                type="button"
-                className="cursor-pointer rounded-lg bg-vovinam px-4 py-2.5 text-[0.84rem] font-bold text-white transition-transform hover:-translate-y-0.5"
-              >
-                Contacter
-              </button>
+              Tout voir →
+            </Link>
+          </div>
+          {demandes === null ? (
+            <div className="px-6 py-5 text-[0.9rem] text-encre-30">
+              Chargement…
             </div>
-          ))}
+          ) : demandes.length === 0 ? (
+            <div className="px-6 py-5 text-[0.9rem] text-encre-30">
+              Aucune demande à traiter. Tout est à jour !
+            </div>
+          ) : (
+            demandes.map((d) => (
+              <div
+                key={d.id}
+                className="flex flex-wrap items-center gap-3.5 border-b border-[#f5f7fc] px-6 py-4.5 last:border-0"
+              >
+                <span className="flex size-10 flex-none items-center justify-center rounded-xl bg-[#e9eeff] font-display text-[0.82rem] font-extrabold text-vovinam">
+                  {(d.prenom[0] ?? "") + (d.nom[0] ?? "")}
+                </span>
+                <span className="flex min-w-[200px] flex-1 flex-col gap-1">
+                  <span className="text-[0.96rem] leading-snug font-bold text-encre">
+                    {d.prenom} {d.nom}
+                  </span>
+                  <span className="text-[0.84rem] text-encre-30">
+                    {coursEssai[d.cours]} · reçue le{" "}
+                    {format(new Date(d.created_at), "d MMM", { locale: fr })}
+                  </span>
+                </span>
+                {d.telephone ? (
+                  <a
+                    href={`tel:${d.telephone.replace(/[\s.-]/g, "")}`}
+                    className="text-[0.88rem] text-encre-70 hover:text-vovinam"
+                  >
+                    {d.telephone}
+                  </a>
+                ) : (
+                  <span className="text-[0.88rem] text-encre-30">
+                    {d.email}
+                  </span>
+                )}
+                <Link
+                  href={`/admin/cours-essai/${d.id}`}
+                  className="rounded-lg bg-vovinam px-4 py-2.5 text-[0.84rem] font-bold text-white transition-transform hover:-translate-y-0.5"
+                >
+                  Traiter
+                </Link>
+              </div>
+            ))
+          )}
         </section>
       </div>
     </>

@@ -28,3 +28,27 @@ class ArticleIntrouvableError(Exception):
 
 class ArticleInvalideError(Exception):
     """Raised when article fields fail business validation (length, format, links…)."""
+
+
+class EvenementIntrouvableError(Exception):
+    """Raised when an evenement id does not match any record."""
+
+
+class EvenementInvalideError(Exception):
+    """Raised when evenement fields fail business validation (dates, lengths…)."""
+
+
+class EnseignantIntrouvableError(Exception):
+    """Raised when an enseignant id does not match any record."""
+
+
+class EnseignantInvalideError(Exception):
+    """Raised when enseignant fields fail business validation."""
+
+
+class DemandeIntrouvableError(Exception):
+    """Raised when a demande d'essai id does not match any record."""
+
+
+class DemandeInvalideError(Exception):
+    """Raised when a demande d'essai fails business validation."""

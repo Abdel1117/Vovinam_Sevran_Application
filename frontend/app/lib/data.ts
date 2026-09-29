@@ -14,19 +14,8 @@ export type Cours = {
   photo: string;
 };
 
-export type Evenement = {
-  jour: string;
-  mois: string;
-  type: string;
-  badge: BadgeVariant;
-  titre: string;
-  lieu: string;
-  horaire: string;
-};
-
 export type Statistique = { valeur: number; suffixe: string; label: string };
 
-export type Enseignant = { nom: string; grade: string; role: string; texte: string };
 
 export type PhotoGalerie = { id: string; titre: string; categorie: string; date: string; url: string; vignette: string };
 
@@ -73,6 +62,7 @@ export const navigation: NavItem[] = [
     ],
   },
   { label: "Actualités", href: "/actualites" },
+  { label: "Agenda", href: "/agenda" },
   { label: "Galerie", href: "/galerie" },
   { label: "Contact", href: "/contact" },
 ];
@@ -132,12 +122,14 @@ export const categorieBadge: Record<string, BadgeVariant> = {
 
 export const categoriesArticle: string[] = Object.keys(categorieBadge);
 
-export const evenements: Evenement[] = [
-  { jour: "14", mois: "SEP", type: "Stage", badge: "stage", titre: "Stage régional", lieu: "Salle omnisports — Sevran", horaire: "09:00 — 17:00" },
-  { jour: "28", mois: "SEP", type: "Compétition", badge: "competition", titre: "Open de Paris", lieu: "Halle Georges-Carpentier — Paris 13e", horaire: "08:30 — 18:00" },
-  { jour: "12", mois: "OCT", type: "Passage de grades", badge: "club", titre: "Examens de ceintures", lieu: "Gymnase Jean-Moulin — Dojo 1", horaire: "14:00 — 18:00" },
-  { jour: "09", mois: "NOV", type: "Démonstration", badge: "club", titre: "Fête des associations", lieu: "Place de la Mairie", horaire: "11:00 — 12:00" },
-];
+export type TypeEvenement = "stage" | "competition" | "passage_de_grades" | "demonstration";
+
+export const typesEvenement: Record<TypeEvenement, { label: string; badge: BadgeVariant }> = {
+  stage: { label: "Stage", badge: "stage" },
+  competition: { label: "Compétition", badge: "competition" },
+  passage_de_grades: { label: "Passage de grades", badge: "club" },
+  demonstration: { label: "Démonstration", badge: "club" },
+};
 
 export const statistiques: Statistique[] = [
   { valeur: 30, suffixe: "", label: "Années d'expérience" },
@@ -145,11 +137,21 @@ export const statistiques: Statistique[] = [
   { valeur: 6, suffixe: "+", label: "Événements par an" },
 ];
 
-export const enseignants: Enseignant[] = [
-  { nom: "Julien Saffou", grade: "Ceinture Noir 2e dan", role: "Enseignant Principal", texte: "Pratique depuis 20 ans." },
-  { nom: "Claire Nguyen", grade: "Ceinture Noir 1e dan", role: "Enseignant", texte: "Elle construit une pédagogie ludique autour de la motricité et du respect." },
-  { nom: "Karim Belhadj", grade: "Ceinture Noir 1e dan", role: "Enseignant", texte: "Il prépare les compétiteurs sur les épreuves techniques et de combat." },
-  { nom: "Léa Fontaine",  grade: "Ceinture Noir 1e dan", role: "Enseignant", texte: "Elle accompagne les adolescents dans la technique et la confiance en soi." },
-];
+export type CoursEssai = "enfants" | "adolescents" | "adultes";
 
+export const coursEssai: Record<CoursEssai, string> = {
+  enfants: "Enfants (7 – 11 ans)",
+  adolescents: "Adolescents (12 – 17 ans)",
+  adultes: "Adultes",
+};
+
+export type StatutDemande = "a_traiter" | "contacte" | "essai_planifie" | "inscrit" | "sans_suite";
+
+export const statutsDemande: Record<StatutDemande, { label: string; classe: string }> = {
+  a_traiter: { label: "À traiter", classe: "bg-jaune text-encre" },
+  contacte: { label: "Contacté", classe: "bg-vovinam-100 text-vovinam" },
+  essai_planifie: { label: "Essai planifié", classe: "bg-vovinam text-white" },
+  inscrit: { label: "Inscrit", classe: "bg-[#e9f8ee] text-[#0e7a3c]" },
+  sans_suite: { label: "Sans suite", classe: "bg-[#f1f3f8] text-encre-50" },
+};
 export const categoriesGalerie: string[] = ["Tous", "Entraînement", "Stage", "Compétition", "Démonstration", "Enfants"];

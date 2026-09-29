@@ -60,7 +60,7 @@ export default function Hero() {
             </p>
           </Reveal>
           <Reveal delay={200} className="mt-1.5 flex flex-wrap gap-3.5">
-            <Button href="/contact" variant="jaune">
+            <Button href="/contact?motif=essai#formulaire" variant="jaune">
               Faire un cours d&apos;essai
             </Button>
             <Button href="#vovinam" variant="contourClair">

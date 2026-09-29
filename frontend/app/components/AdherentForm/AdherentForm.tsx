@@ -41,15 +41,15 @@ type GradeInfo = {
 };
 
 // Ajoutez / modifiez les grades ici : clé technique -> { nom affiché, icône }.
-const grades: Record<string, GradeInfo> = {
-  bleu1erCap: { nom: "Bleu 1er Cap", icone: "🔵" },
-  bleu2emeCap: { nom: "Bleu 2eme Cap", icone: "🔵" },
-  bleu3emeCap: { nom: "Bleu 3eme Cap", icone: "🔵" },
+export const grades: Record<string, GradeInfo> = {
+  bleu1erCap: { nom: "Ceinture Bleu 1er Cap", icone: "🔵" },
+  bleu2emeCap: { nom: "Ceinture Bleu 2eme Cap", icone: "🔵" },
+  bleu3emeCap: { nom: "Ceinture Bleu 3eme Cap", icone: "🔵" },
   jaune1erDang: { nom: "Ceinture Jaune 1er Dang", icone: "🟡" },
-  deuxiemeDang: { nom: "Deuxieme Dang", icone: "🟡" },
-  troisiemeDang: { nom: "Troisieme Dang", icone: "🟡" },
-  quatriemeDang: { nom: "Quatrieme Dang", icone: "🔴" },
-  cinquiemeDang: { nom: "Cinquieme Dang", icone: "🔴" },
+  deuxiemeDang: { nom: "Ceinture Jaune Deuxieme Dang", icone: "🟡" },
+  troisiemeDang: { nom: "Ceinture Jaune Troisieme Dang", icone: "🟡" },
+  quatriemeDang: { nom: "Ceinture Rouge Quatrieme Dang", icone: "🔴" },
+  cinquiemeDang: { nom: "Ceinture Rouge Cinquieme Dang", icone: "🔴" },
 };
 
 function withError(base: string, enError: boolean): string {

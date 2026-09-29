@@ -20,6 +20,7 @@ class Evenement(SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     titre: str = Field(nullable=False)
     date_evenement: date = Field(nullable=False)
+    date_fin: date | None = Field(default=None)
     heure_debut: time = Field(nullable=False)
     heure_fin: time | None = Field(default=None)
     type_evenement: TypeEvenement = Field(
@@ -30,7 +31,15 @@ class Evenement(SQLModel, table=True):
         ),
     )
     lieu: str | None = Field(default=None)
+    adresse: str | None = Field(default=None)
+    latitude: float | None = Field(default=None)
+    longitude: float | None = Field(default=None)
+    description: str | None = Field(default=None)
     created_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc),
+        sa_column=Column(DateTime(timezone=True), nullable=False),
+    )
+    updated_at: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc),
         sa_column=Column(DateTime(timezone=True), nullable=False),
     )

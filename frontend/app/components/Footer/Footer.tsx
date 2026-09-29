@@ -6,6 +6,7 @@ import { getCurrentYear } from "../../utils/Date/Date";
 const liens: NavItem[] = [
   { label: "Accueil", href: "/" },
   { label: "Actualités", href: "/actualites" },
+  { label: "Agenda", href: "/agenda" },
   { label: "Galerie", href: "/galerie" },
   { label: "Contact", href: "/contact" },
   { label: "Connexion", href: "/connexion" },

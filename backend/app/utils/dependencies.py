@@ -9,6 +9,10 @@ from app.db.session import get_session
 from app.interface.adherent_repository import IAdherentRepository
 from app.interface.article_repository import IArticleRepository
 from app.interface.contact_urgence_repository import IContactUrgenceRepository
+from app.interface.dashboard_repository import IDashboardRepository
+from app.interface.demande_essai_repository import IDemandeEssaiRepository
+from app.interface.enseignant_repository import IEnseignantRepository
+from app.interface.evenement_repository import IEvenementRepository
 from app.interface.file_storage_repository import IFileStorageRepository
 from app.interface.photo_galerie_repository import IPhotoGalerieRepository
 from app.interface.refresh_token_repository import IRefreshTokenRepository
@@ -17,6 +21,10 @@ from app.models.user import User, UserRole
 from app.repositories.adherent_repository import AdherentRepository
 from app.repositories.article_repository import ArticleRepository
 from app.repositories.contact_urgence_repository import ContactUrgenceRepository
+from app.repositories.dashboard_repository import DashboardRepository
+from app.repositories.demande_essai_repository import DemandeEssaiRepository
+from app.repositories.enseignant_repository import EnseignantRepository
+from app.repositories.evenement_repository import EvenementRepository
 from app.repositories.local_file_storage_repository import LocalFileStorageRepository
 from app.repositories.photo_galerie_repository import PhotoGalerieRepository
 from app.repositories.refresh_token_repository import RefreshTokenRepository
@@ -24,6 +32,10 @@ from app.repositories.user_repository import UserRepository
 from app.services.adherent_service import AdherentService
 from app.services.article_service import ArticleService
 from app.services.auth_service import AuthService
+from app.services.dashboard_service import DashboardService
+from app.services.demande_essai_service import DemandeEssaiService
+from app.services.enseignant_service import EnseignantService
+from app.services.evenement_service import EvenementService
 from app.services.photo_galerie_service import PhotoGalerieService
 from app.utils.exceptions import InvalidSessionError
 from app.utils.security import decode_access_token
@@ -114,3 +126,44 @@ def get_article_service(
     file_storage: IFileStorageRepository = Depends(get_file_storage_repository),
 ) -> ArticleService:
     return ArticleService(article_repository, file_storage)
+
+
+def get_evenement_repository(session: AsyncSession = Depends(get_session)) -> IEvenementRepository:
+    return EvenementRepository(session)
+
+
+def get_evenement_service(
+    evenement_repository: IEvenementRepository = Depends(get_evenement_repository),
+) -> EvenementService:
+    return EvenementService(evenement_repository)
+
+
+def get_enseignant_repository(session: AsyncSession = Depends(get_session)) -> IEnseignantRepository:
+    return EnseignantRepository(session)
+
+
+def get_enseignant_service(
+    enseignant_repository: IEnseignantRepository = Depends(get_enseignant_repository),
+    file_storage: IFileStorageRepository = Depends(get_file_storage_repository),
+) -> EnseignantService:
+    return EnseignantService(enseignant_repository, file_storage)
+
+
+def get_demande_essai_repository(session: AsyncSession = Depends(get_session)) -> IDemandeEssaiRepository:
+    return DemandeEssaiRepository(session)
+
+
+def get_demande_essai_service(
+    demande_repository: IDemandeEssaiRepository = Depends(get_demande_essai_repository),
+) -> DemandeEssaiService:
+    return DemandeEssaiService(demande_repository)
+
+
+def get_dashboard_repository(session: AsyncSession = Depends(get_session)) -> IDashboardRepository:
+    return DashboardRepository(session)
+
+
+def get_dashboard_service(
+    dashboard_repository: IDashboardRepository = Depends(get_dashboard_repository),
+) -> DashboardService:
+    return DashboardService(dashboard_repository)

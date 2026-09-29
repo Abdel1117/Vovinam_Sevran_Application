@@ -20,7 +20,7 @@ export default function CtaFinal() {
               rencontrez notre équipe.
             </p>
             <div className="mt-2 flex flex-wrap gap-3.5">
-              <Button href="/contact" variant="jaune">
+              <Button href="/contact?motif=essai#formulaire" variant="jaune">
                 Réserver mon cours d&apos;essai
               </Button>
               <Button href="/contact" variant="blanc">

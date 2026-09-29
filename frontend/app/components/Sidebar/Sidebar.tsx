@@ -11,14 +11,15 @@ const groupes: Groupe[] = [
     liens: [
       { label: "Tableau de bord", href: "/admin" },
       { label: "Actualités", href: "/admin/articles" },
-      { label: "Agenda", href: "/admin" },
+      { label: "Agenda", href: "/admin/agenda" },
     ],
   },
   {
     titre: "Communauté",
     liens: [
       { label: "Adhérents", href: "/admin/adherents" },
-      { label: "Enseignants", href: "/admin" },
+      { label: "Cours d'essai", href: "/admin/cours-essai" },
+      { label: "Enseignants", href: "/admin/enseignants" },
       { label: "Galerie", href: "/admin/galerie" },
     ],
   },

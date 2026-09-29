@@ -3,6 +3,13 @@ from app.controllers.adherent_controller import router as adherent_router
 from app.controllers.article_controller import public_router as article_public_router
 from app.controllers.article_controller import router as article_router
 from app.controllers.auth_controller import router as auth_router
+from app.controllers.dashboard_controller import router as dashboard_router
+from app.controllers.demande_essai_controller import public_router as demande_essai_public_router
+from app.controllers.demande_essai_controller import router as demande_essai_router
+from app.controllers.enseignant_controller import public_router as enseignant_public_router
+from app.controllers.enseignant_controller import router as enseignant_router
+from app.controllers.evenement_controller import public_router as evenement_public_router
+from app.controllers.evenement_controller import router as evenement_router
 from app.controllers.health_controller import router as health_check_router
 from app.controllers.photo_galerie_controller import public_router as photo_galerie_public_router
 from app.controllers.photo_galerie_controller import router as photo_galerie_router
@@ -17,3 +24,10 @@ api_router.include_router(photo_galerie_public_router)
 api_router.include_router(photo_galerie_router)
 api_router.include_router(article_public_router)
 api_router.include_router(article_router)
+api_router.include_router(evenement_public_router)
+api_router.include_router(evenement_router)
+api_router.include_router(enseignant_public_router)
+api_router.include_router(enseignant_router)
+api_router.include_router(demande_essai_public_router)
+api_router.include_router(demande_essai_router)
+api_router.include_router(dashboard_router)
