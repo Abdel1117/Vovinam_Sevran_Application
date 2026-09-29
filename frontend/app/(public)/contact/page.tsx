@@ -12,7 +12,8 @@ type Info = { label: string; valeur: string; note?: string; fond: string };
 const infos: Info[] = [
   {
     label: "Adresse",
-    valeur: "Gymnase Jean-Moulin\n12 rue des Sports\n94400 Sevran",
+    valeur:
+      "Gymnase Gaston bussière \n134 Rue Gabriel Péri\n93270 Sevran \n Salle Verte\n",
     fond: "bg-vovinam-100",
   },
   {
@@ -23,7 +24,7 @@ const infos: Info[] = [
   },
   {
     label: "Téléphone",
-    valeur: "01 00 00 00 00",
+    valeur: "XX XX XX XX XX",
     fond: "bg-[#ffecec]",
   },
   {

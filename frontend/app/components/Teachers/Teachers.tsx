@@ -21,7 +21,7 @@ export default async function Teachers() {
             <Reveal
               key={e.id}
               delay={i * 70}
-              className="group flex min-w-[260px] flex-1 flex-col overflow-hidden rounded-card border border-trait bg-white shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card-hover"
+              className="group flex min-w-[260px] flex-1 flex-col overflow-hidden rounded-b-3xl border border-trait bg-white shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card-hover"
             >
               {e.photo ? (
                 <div className="h-100 overflow-hidden bg-[repeating-linear-gradient(135deg,#e9eeff_0_12px,#dce5ff_12px_24px)]">
