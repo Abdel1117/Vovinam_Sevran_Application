@@ -2,7 +2,12 @@
 const nextConfig = {
   images: {
     // Ajoutez ici les domaines des photos du club si vous les servez depuis un CDN.
-    remotePatterns: [],
+    
+    remotePatterns: [{ 
+      protocol : "http", 
+      hostname : "localhost",
+      pathname: "/uploads/galerie/**"
+    }],
   },
 };
 

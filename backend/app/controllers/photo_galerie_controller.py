@@ -7,10 +7,11 @@ from app.services.photo_galerie_service import PhotoGalerieService
 from app.utils.dependencies import get_photo_galerie_service, require_admin
 from app.utils.exceptions import FichierInvalideError, PhotoIntrouvableError
 
+public_router = APIRouter(prefix="/galerie", tags=["galerie"])
 router = APIRouter(prefix="/galerie", tags=["galerie"], dependencies=[Depends(require_admin)])
 
 
-@router.get("", response_model=list[PhotoGaleriePublic])
+@public_router.get("", response_model=list[PhotoGaleriePublic])
 async def list_photos(service: PhotoGalerieService = Depends(get_photo_galerie_service)) -> list[PhotoGaleriePublic]:
     return await service.list_photos()
 

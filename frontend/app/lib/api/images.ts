@@ -55,6 +55,10 @@ export async function listImages(fetcher: AuthorizedFetch): Promise<PhotoGalerie
   return photos.map(withAbsoluteUrl);
 }
 
+export async function listPublicImages(): Promise<PhotoGalerie[]> {
+  return listImages((path, init) => fetch(`${API_URL}${path}`, init));
+}
+
 export async function getImage(fetcher: AuthorizedFetch, id: string): Promise<PhotoGalerie | undefined> {
   const response = await fetcher(`/galerie/${id}`);
   if (response.status === 404) return undefined;

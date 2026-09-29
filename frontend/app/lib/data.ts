@@ -223,21 +223,6 @@ export const enseignants: Enseignant[] = [
   { nom: "Léa Fontaine",  grade: "Ceinture Noir 1e dan", role: "Enseignant", texte: "Elle accompagne les adolescents dans la technique et la confiance en soi." },
 ];
 
-export const photos: PhotoGalerie[] = [
-  { id: "gal-01", titre: "Travail technique à deux", categorie: "Entraînement", date: "Juin 2026", url: "", vignette: "" },
-  { id: "gal-02", titre: "Stage régional de printemps", categorie: "Stage", date: "Avril 2026", url: "", vignette: "" },
-  { id: "gal-03", titre: "Open de Paris — finales", categorie: "Compétition", date: "Mars 2026", url: "", vignette: "" },
-  { id: "gal-04", titre: "Démonstration fête des associations", categorie: "Démonstration", date: "Septembre 2025", url: "", vignette: "" },
-  { id: "gal-05", titre: "Groupe enfants du mercredi", categorie: "Enfants", date: "Mai 2026", url: "", vignette: "" },
-  { id: "gal-06", titre: "Quyen — passage de grades", categorie: "Entraînement", date: "Décembre 2025", url: "", vignette: "" },
-  { id: "gal-07", titre: "Stage d'été à la mer", categorie: "Stage", date: "Août 2025", url: "", vignette: "" },
-  { id: "gal-08", titre: "Podium par équipes", categorie: "Compétition", date: "Février 2026", url: "", vignette: "" },
-  { id: "gal-09", titre: "Photo de groupe de fin de saison", categorie: "Démonstration", date: "Juin 2026", url: "", vignette: "" },
-  { id: "gal-10", titre: "Atelier armes traditionnelles", categorie: "Entraînement", date: "Janvier 2026", url: "", vignette: "" },
-  { id: "gal-11", titre: "Baby Vovinam — motricité", categorie: "Enfants", date: "Mars 2026", url: "", vignette: "" },
-  { id: "gal-12", titre: "Stage national à Lyon", categorie: "Stage", date: "Novembre 2025", url: "", vignette: "" },
-];
-
 export const categoriesGalerie: string[] = ["Tous", "Entraînement", "Stage", "Compétition", "Démonstration", "Enfants"];
 
 export function getArticle(slug: string): Article | undefined {

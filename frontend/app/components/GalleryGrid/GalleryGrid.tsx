@@ -1,13 +1,28 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import Photo from "@/components/Photo/Photo";
+import { useEffect, useMemo, useState } from "react";
 import Reveal from "@/components/Reveal/Reveal";
-import { categoriesGalerie, photos } from "@/lib/data";
+import { categoriesGalerie, type PhotoGalerie } from "@/lib/data";
+import { listPublicImages } from "@/lib/api/images";
+import Image from "next/image";
 
 export default function GalleryGrid() {
   const [query, setQuery] = useState("");
   const [filtre, setFiltre] = useState("Tous");
+  const [photos, setPhotos] = useState<PhotoGalerie[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    listPublicImages()
+      .then(setPhotos)
+      .catch((e: unknown) =>
+        setError(
+          e instanceof Error ? e.message : "Impossible de charger les images.",
+        ),
+      )
+      .finally(() => setLoading(false));
+  }, []);
 
   const resultats = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -20,7 +35,7 @@ export default function GalleryGrid() {
             .toLowerCase()
             .includes(q),
       );
-  }, [query, filtre]);
+  }, [photos, query, filtre]);
 
   return (
     <>
@@ -90,11 +105,17 @@ export default function GalleryGrid() {
                 delay={(i % 6) * 70}
                 className="group relative h-75 min-w-[300px] flex-1 overflow-hidden rounded-card border border-trait shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card-hover"
               >
-                <Photo
-                  label={"photo — " + p.titre}
-                  className="absolute inset-0"
-                  zoom
-                />
+                <div className="absolute inset-0 bg-[repeating-linear-gradient(135deg,#e9eeff_0_12px,#dce5ff_12px_24px)]">
+                  <Image
+                    fill
+                    unoptimized
+                    src={p?.url}
+                    alt={p?.titre}
+                    loading="lazy"
+                    decoding="async"
+                    className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
                 <span className="pointer-events-none absolute top-3.5 left-3.5 rounded-lg bg-white/95 px-3 py-2.5 text-[10px] font-bold tracking-[0.14em] text-encre uppercase shadow-[0_4px_12px_rgb(16_24_40/0.14)]">
                   {p.categorie}
                 </span>
@@ -110,7 +131,27 @@ export default function GalleryGrid() {
             ))}
           </div>
 
-          {resultats.length === 0 ? (
+          {loading ? (
+            <div className="flex justify-center px-6 py-16 text-encre-50">
+              Chargement des photos…
+            </div>
+          ) : error ? (
+            <div className="flex flex-col items-center gap-2.5 px-6 py-16 text-center">
+              <span className="font-display text-xl font-extrabold text-encre">
+                La galerie est indisponible
+              </span>
+              <span className="text-encre-50">{error}</span>
+            </div>
+          ) : photos.length === 0 ? (
+            <div className="flex flex-col items-center gap-2.5 px-6 py-16 text-center">
+              <span className="font-display text-xl font-extrabold text-encre">
+                Aucune photo pour le moment
+              </span>
+              <span className="text-encre-50">
+                Revenez bientôt pour découvrir la vie du club.
+              </span>
+            </div>
+          ) : resultats.length === 0 ? (
             <div className="flex flex-col items-center gap-2.5 px-6 py-16 text-center">
               <span className="font-display text-xl font-extrabold text-encre">
                 Aucune photo ne correspond
