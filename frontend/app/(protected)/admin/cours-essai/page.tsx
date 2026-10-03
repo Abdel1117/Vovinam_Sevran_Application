@@ -7,6 +7,7 @@ import { fr } from "date-fns/locale";
 import Topbar from "@/components/Topbar/Topbar";
 import { useMenu } from "@/components/AdminShell/menu-context";
 import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog";
+import Loader from "@/components/Loader/Loader";
 import { useDemandes } from "@/hooks/useDemandes";
 import { coursEssai, statutsDemande, type StatutDemande } from "@/lib/data";
 import { parseDateIso } from "@/lib/api/evenements";
@@ -88,7 +89,7 @@ export default function Page() {
 
         <section className={["overflow-hidden", carte].join(" ")}>
           {isLoading ? (
-            <div className="p-8 text-encre-30">Chargement…</div>
+            <Loader className="p-12" />
           ) : error ? (
             <div className="p-8 text-rouge">{error}</div>
           ) : affichees.length === 0 ? (

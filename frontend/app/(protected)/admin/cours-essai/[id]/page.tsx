@@ -2,6 +2,7 @@
 
 import { use } from "react";
 import DemandeForm from "@/components/DemandeForm/DemandeForm";
+import Loader from "@/components/Loader/Loader";
 import { useDemandeForm } from "@/hooks/useDemandeForm";
 
 type Params = { id: string };
@@ -20,7 +21,7 @@ export default function Page({ params }: { params: Promise<Params> }) {
   } = useDemandeForm(id);
 
   if (isLoadingInitial) {
-    return <div className="p-8 text-encre-30">Chargement…</div>;
+    return <Loader className="min-h-[60vh] p-8" />;
   }
 
   return (

@@ -28,7 +28,8 @@
       "PowerShell(docker compose logs *)",
       "PowerShell(docker logs *)",
       "PowerShell(docker exec *)",
-      "PowerShell(docker ps --format \"{{.Names}} {{.Status}}\"; try { $r = Invoke-WebRequest -Uri http://localhost:4000/galerie -UseBasicParsing; $r.Content.Substring\\(0, [Math]::Min\\(400, $r.Content.Length\\)\\) } catch { \"ERR: $\\($_.Exception.Message\\)\" })"
+      "PowerShell(docker ps --format \"{{.Names}} {{.Status}}\"; try { $r = Invoke-WebRequest -Uri http://localhost:4000/galerie -UseBasicParsing; $r.Content.Substring\\(0, [Math]::Min\\(400, $r.Content.Length\\)\\) } catch { \"ERR: $\\($_.Exception.Message\\)\" })",
+      "Bash(grep -v -E '\\\\.\\(png|jpg|jpeg|webp|svg|ico|gif\\)$')"
     ]
   }
 }

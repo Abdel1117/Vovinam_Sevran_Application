@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import Topbar from "@/components/Topbar/Topbar";
 import Badge from "@/components/Badge/Badge";
+import Loader from "@/components/Loader/Loader";
 import { useMenu } from "@/components/AdminShell/menu-context";
 import { useAuth } from "@/context/AuthContext";
 import { categorieBadge, coursEssai } from "@/lib/data";
@@ -187,9 +188,7 @@ export default function Page() {
               </Link>
             </div>
             {articles === null ? (
-              <div className="px-6 py-5 text-[0.9rem] text-encre-30">
-                Chargement…
-              </div>
+              <Loader size="sm" className="px-6 py-8" />
             ) : articles.length === 0 ? (
               <div className="px-6 py-5 text-[0.9rem] text-encre-30">
                 Aucun article publié.{" "}
@@ -242,9 +241,7 @@ export default function Page() {
                 </Link>
               </div>
               {evenements === null ? (
-                <div className="px-5.5 py-5 text-[0.9rem] text-encre-30">
-                  Chargement…
-                </div>
+                <Loader size="sm" className="px-5.5 py-8" />
               ) : evenements.length === 0 ? (
                 <div className="px-5.5 py-5 text-[0.9rem] text-encre-30">
                   Aucun événement à venir.
@@ -287,7 +284,7 @@ export default function Page() {
                 Répartition des adhérents
               </h2>
               {stats === null ? (
-                <div className="text-[0.9rem] text-encre-30">Chargement…</div>
+                <Loader size="sm" className="py-4" />
               ) : totalActifs === 0 ? (
                 <div className="text-[0.9rem] text-encre-30">
                   Aucun adhérent actif.
@@ -348,9 +345,7 @@ export default function Page() {
             </Link>
           </div>
           {demandes === null ? (
-            <div className="px-6 py-5 text-[0.9rem] text-encre-30">
-              Chargement…
-            </div>
+            <Loader size="sm" className="px-6 py-8" />
           ) : demandes.length === 0 ? (
             <div className="px-6 py-5 text-[0.9rem] text-encre-30">
               Aucune demande à traiter. Tout est à jour !

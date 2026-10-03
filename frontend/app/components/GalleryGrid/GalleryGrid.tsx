@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Reveal from "@/components/Reveal/Reveal";
+import Loader from "@/components/Loader/Loader";
 import { categoriesGalerie, type PhotoGalerie } from "@/lib/data";
 import { listPublicImages } from "@/lib/api/images";
 import Image from "next/image";
@@ -132,9 +133,7 @@ export default function GalleryGrid() {
           </div>
 
           {loading ? (
-            <div className="flex justify-center px-6 py-16 text-encre-50">
-              Chargement des photos…
-            </div>
+            <Loader label="Chargement des photos…" className="px-6 py-16" />
           ) : error ? (
             <div className="flex flex-col items-center gap-2.5 px-6 py-16 text-center">
               <span className="font-display text-xl font-extrabold text-encre">

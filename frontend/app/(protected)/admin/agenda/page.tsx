@@ -6,6 +6,7 @@ import Topbar from "@/components/Topbar/Topbar";
 import Badge from "@/components/Badge/Badge";
 import { useMenu } from "@/components/AdminShell/menu-context";
 import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog";
+import Loader from "@/components/Loader/Loader";
 import { useEvenements } from "@/hooks/useEvenements";
 import { aujourdHuiIso } from "@/hooks/useEvenementForm";
 import { typesEvenement } from "@/lib/data";
@@ -132,8 +133,8 @@ export default function Page() {
 
       <div className="flex flex-col gap-5 p-2 lg:p-8">
         {isLoading ? (
-          <section className={["p-8 text-encre-30", carte].join(" ")}>
-            Chargement…
+          <section className={["p-12", carte].join(" ")}>
+            <Loader />
           </section>
         ) : error ? (
           <section className={["p-8 text-rouge", carte].join(" ")}>

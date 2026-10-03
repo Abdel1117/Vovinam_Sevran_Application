@@ -18,7 +18,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
         />
       ) : null}
       <MenuContext.Provider value={{ open: () => setOuvert(true) }}>
-        <main className="flex min-w-0 flex-1 flex-col page-transition">
+        <main className="flex min-w-0 flex-1 flex-col">
           {children}
         </main>
       </MenuContext.Provider>

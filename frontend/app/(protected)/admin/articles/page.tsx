@@ -5,6 +5,7 @@ import Link from "next/link";
 import Topbar from "@/components/Topbar/Topbar";
 import { useMenu } from "@/components/AdminShell/menu-context";
 import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog";
+import Loader from "@/components/Loader/Loader";
 import { useArticles } from "@/hooks/useArticles";
 import { formatDateArticle } from "@/lib/api/articles";
 
@@ -46,7 +47,7 @@ export default function Page() {
       <div className="flex flex-col gap-5 p-2 lg:p-8">
         <section className={["overflow-hidden", carte].join(" ")}>
           {isLoading ? (
-            <div className="p-8 text-encre-30">Chargement…</div>
+            <Loader className="p-12" />
           ) : error ? (
             <div className="p-8 text-rouge">{error}</div>
           ) : articles.length === 0 ? (

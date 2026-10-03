@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { Archivo, Source_Sans_3 } from "next/font/google";
 import { AuthProvider } from "@/context/AuthContext";
+import NavigationOverlay from "@/components/NavigationOverlay/NavigationOverlay";
 import "react-datepicker/dist/react-datepicker.css";
 import "./globals.css";
 
@@ -29,7 +30,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fr" className={archivo.variable + " " + sourceSans.variable}>
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          {children}
+          <Suspense fallback={null}>
+            <NavigationOverlay />
+          </Suspense>
+        </AuthProvider>
       </body>
     </html>
   );

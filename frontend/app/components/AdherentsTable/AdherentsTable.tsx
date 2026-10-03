@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { AdherentsFilterBar } from "@/components/AdherentsFilterBar/AdherentsFilterBar";
 import { AdherentsTableHeader } from "@/components/AdherentsTableHeader/AdherentsTableHeader";
 import { AdherentRow } from "@/components/AdherentRow/AdherentRow";
+import Loader from "@/components/Loader/Loader";
 import type { Adherent } from "@/lib/data";
 
 const carte = "rounded-card border border-trait bg-white shadow-card";
@@ -43,9 +44,7 @@ export function AdherentsTable({ adherents, isLoading, selection, onSelect }: Ad
       <AdherentsTableHeader />
 
       {isLoading ? (
-        <div className="min-h-[816px] p-8 text-encre-30 animate-pulse ">
-          Chargement…
-        </div>
+        <Loader label="Chargement des adhérents…" className="min-h-[816px] items-start p-12" />
       ) : lignes.length === 0 ? (
         <div className="p-8 text-encre-30">Aucun adhérent ne correspond.</div>
       ) : (

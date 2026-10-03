@@ -2,6 +2,7 @@
 
 import { use } from "react";
 import EvenementForm from "@/components/EvenementForm/EvenementForm";
+import Loader from "@/components/Loader/Loader";
 import { useEvenementForm } from "@/hooks/useEvenementForm";
 
 type Params = { id: string };
@@ -21,7 +22,7 @@ export default function Page({ params }: { params: Promise<Params> }) {
   } = useEvenementForm(id);
 
   if (isLoadingInitial) {
-    return <div className="p-8 text-encre-30">Chargement…</div>;
+    return <Loader className="min-h-[60vh] p-8" />;
   }
 
   return (

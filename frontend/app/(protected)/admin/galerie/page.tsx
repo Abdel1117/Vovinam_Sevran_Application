@@ -5,6 +5,7 @@ import Link from "next/link";
 import Topbar from "@/components/Topbar/Topbar";
 import { useMenu } from "@/components/AdminShell/menu-context";
 import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog";
+import Loader from "@/components/Loader/Loader";
 import { useImages } from "@/hooks/useImages";
 import type { PhotoGalerie } from "@/lib/data";
 
@@ -50,8 +51,8 @@ export default function Page() {
           </div>
         ) : null}
         {isLoading ? (
-          <div className={["p-8 text-encre-30", carte].join(" ")}>
-            Chargement…
+          <div className={["p-12", carte].join(" ")}>
+            <Loader label="Chargement des images…" />
           </div>
         ) : images.length === 0 ? (
           <div className={["p-8 text-encre-30", carte].join(" ")}>

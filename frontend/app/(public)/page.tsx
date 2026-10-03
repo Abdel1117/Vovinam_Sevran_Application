@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import Hero from "@/components/Hero/Hero";
@@ -11,6 +12,9 @@ import GalleryTeaser from "@/components/GalleryTeaser/GalleryTeaser";
 import Stats from "@/components/Stats/Stats";
 import Teachers from "@/components/Teachers/Teachers";
 import CtaFinal from "@/components/CtaFinal/CtaFinal";
+import Loader from "@/components/Loader/Loader";
+
+const sectionLoader = <Loader className="bg-white py-20" />;
 
 export default function Page() {
   return (
@@ -22,11 +26,17 @@ export default function Page() {
         <Featured />
         <Values />
         <Courses />
-        <News />
-        <Agenda />
+        <Suspense fallback={sectionLoader}>
+          <News />
+        </Suspense>
+        <Suspense fallback={sectionLoader}>
+          <Agenda />
+        </Suspense>
         <GalleryTeaser />
         <Stats />
-        <Teachers />
+        <Suspense fallback={sectionLoader}>
+          <Teachers />
+        </Suspense>
         <CtaFinal />
       </main>
       <Footer />
