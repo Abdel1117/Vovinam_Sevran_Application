@@ -1,13 +1,7 @@
+import Image from "next/image";
 import Reveal from "@/components/Reveal/Reveal";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import { valeurs } from "@/lib/data";
-
-const formes: string[] = [
-  "size-4.5 rounded-full border-[2.5px] border-vovinam",
-  "size-4.5 rounded bg-vovinam",
-  "size-4.5 rotate-45 bg-vovinam",
-  "size-0 border-x-[9px] border-x-transparent border-b-[16px] border-b-vovinam",
-];
 
 export default function Values() {
   return (
@@ -27,7 +21,7 @@ export default function Values() {
               className="flex min-w-[240px] flex-1 flex-col gap-3.5 rounded-3xl border border-trait bg-white px-7 pt-8 pb-9 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card-hover"
             >
               <span className="flex size-11.5 items-center justify-center rounded-2xl bg-vovinam-100">
-                <span className={formes[i]} />
+                <Image src={v.icone} alt="" width={28} height={28} />
               </span>
               <h3 className="font-display text-xl font-extrabold text-encre">
                 {v.titre}

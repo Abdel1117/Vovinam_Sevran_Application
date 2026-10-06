@@ -1,24 +1,25 @@
+import Image from "next/image";
 import Button from "@/components/Button/Button";
 import Photo from "@/components/Photo/Photo";
 import Reveal from "@/components/Reveal/Reveal";
 
-type Mini = { titre: string; texte: string; couleur: string };
+type Mini = { titre: string; texte: string; icone: string };
 
 const minis: Mini[] = [
   {
     titre: "Technique",
     texte: "Mains nues, armes, quyen et combat.",
-    couleur: "bg-vovinam",
+    icone: "/icons/technique.svg",
   },
   {
     titre: "Discipline",
     texte: "Régularité, rigueur et progression.",
-    couleur: "bg-jaune",
+    icone: "/icons/discipline.svg",
   },
   {
     titre: "Philosophie",
     texte: "Respect, humilité, transmission.",
-    couleur: "bg-rouge",
+    icone: "/icons/philosophie.svg",
   },
 ];
 
@@ -62,11 +63,12 @@ export default function About() {
                 key={m.titre}
                 className="min-w-[150px] flex-1 rounded-2xl border border-[#e5ebf8] bg-white p-5 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_14px_30px_rgb(16_24_40/0.1)]"
               >
-                <span
-                  className={[
-                    "mb-3.5 block size-6.5 rounded-lg",
-                    m.couleur,
-                  ].join(" ")}
+                <Image
+                  src={m.icone}
+                  alt=""
+                  width={36}
+                  height={36}
+                  className="mb-3.5"
                 />
                 <h4 className="mb-1.5 font-display text-base font-bold text-encre">
                   {m.titre}

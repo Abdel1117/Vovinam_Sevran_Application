@@ -2,7 +2,7 @@ export type NavItem = { label: string; href: string; children?: NavItem[] };
 
 export type BadgeVariant = "actualite" | "association" | "stage" | "competition" | "club";
 
-export type Valeur = { titre: string; texte: string };
+export type Valeur = { titre: string; texte: string; icone: string };
 
 export type Cours = {
   titre: string;
@@ -50,7 +50,7 @@ export const navigation: NavItem[] = [
     href: "/",
     children: [
       { label: "Le Vovinam", href: "/#vovinam" },
-      { label: "Actualitées", href: "/#actu" },
+      { label: "Les 10 principes", href: "/#principes" },
       { label: "L'association", href: "/#valeurs" },
       { label: "Cours", href: "/#cours" },
       { label: "Articles", href: "/#articles" },
@@ -76,10 +76,24 @@ export const badgeStyles: Record<BadgeVariant, string> = {
 };
 
 export const valeurs: Valeur[] = [
-  { titre: "Respect", texte: "Respecter ses partenaires, ses enseignants et soi-même." },
-  { titre: "Discipline", texte: "Progresser grâce au travail, à la régularité et à la persévérance." },
-  { titre: "Maîtrise", texte: "Développer sa technique, son corps et son contrôle." },
-  { titre: "Dépassement", texte: "Apprendre à repousser progressivement ses propres limites." },
+  { titre: "Respect", texte: "Respecter ses partenaires, ses enseignants et soi-même.", icone: "/icons/dojo.svg" },
+  { titre: "Discipline", texte: "Progresser grâce au travail, à la régularité et à la persévérance.", icone: "/icons/discipline.svg" },
+  { titre: "Maîtrise", texte: "Développer sa technique, son corps et son contrôle.", icone: "/icons/tree.svg" },
+  { titre: "Dépassement", texte: "Apprendre à repousser progressivement ses propres limites.", icone: "/icons/infinity.svg" },
+];
+
+/** Thập Điều Tâm Niệm — à valider avec le texte officiel de la fédération. */
+export const principes: string[] = [
+  "Atteindre le plus haut niveau de l'art martial pour servir l'humanité.",
+  "Être fidèle à l'esprit du Vovinam et former la jeune génération.",
+  "Être uni, respecter ses aînés, aimer ses pairs.",
+  "Respecter la discipline et préserver l'honneur des arts martiaux.",
+  "Respecter les autres styles, n'utiliser l'art martial que pour se défendre et défendre la justice.",
+  "Étudier assidûment, cultiver l'esprit et la morale.",
+  "Mener une vie simple, honnête et noble.",
+  "Forger une volonté d'acier pour vaincre la violence.",
+  "Faire preuve de lucidité, de persévérance et d'habileté.",
+  "Être maître de soi, modeste et tolérant, et savoir se remettre en question pour progresser.",
 ];
 
 export const cours: Cours[] = [

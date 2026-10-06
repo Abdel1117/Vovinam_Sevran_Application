@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import Hero from "@/components/Hero/Hero";
-import Featured from "@/components/Featured/Featured";
+import Principles from "@/components/Principles/Principles";
 import About from "@/components/About/About";
 import Values from "@/components/Values/Values";
 import Courses from "@/components/Courses/Courses";
@@ -23,7 +23,7 @@ export default function Page() {
       <main>
         <Hero />
         <About />
-        <Featured />
+        <Principles />
         <Values />
         <Courses />
         <Suspense fallback={sectionLoader}>

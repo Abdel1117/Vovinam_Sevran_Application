@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import ContactForm, { MOTIF_ESSAI } from "@/components/ContactForm/ContactForm";
@@ -7,7 +8,13 @@ import Button from "@/components/Button/Button";
 
 export const metadata: Metadata = { title: "Contact — Vovinam Viet Vo Dao" };
 
-type Info = { label: string; valeur: string; note?: string; fond: string };
+type Info = {
+  label: string;
+  valeur: string;
+  note?: string;
+  fond: string;
+  icone: string;
+};
 
 const infos: Info[] = [
   {
@@ -15,22 +22,26 @@ const infos: Info[] = [
     valeur:
       "Gymnase Gaston bussière \n134 Rue Gabriel Péri\n93270 Sevran \n Salle Verte\n",
     fond: "bg-vovinam-100",
+    icone: "/icons/location.svg",
   },
   {
     label: "Email",
     valeur: "contact@vovinam-association.fr",
     note: "Réponse sous 48 h ouvrées.",
     fond: "bg-[#fffde0]",
+    icone: "/icons/email.svg",
   },
   {
     label: "Téléphone",
     valeur: "XX XX XX XX XX",
     fond: "bg-[#ffecec]",
+    icone: "/icons/phone.svg",
   },
   {
     label: "Horaires des cours",
     valeur: "Lun. & ven. 19:00 — 22:25\nSam. 14:30 — 16:00\n",
     fond: "bg-vovinam-100",
+    icone: "/icons/clock.svg",
   },
 ];
 
@@ -79,7 +90,7 @@ export default async function Page({
                     i.fond,
                   ].join(" ")}
                 >
-                  <span className="size-4 rounded bg-vovinam" />
+                  <Image src={i.icone} alt="" width={24} height={24} />
                 </span>
                 <span className="text-[11px] font-bold tracking-[0.16em] text-encre-30 uppercase">
                   {i.label}
