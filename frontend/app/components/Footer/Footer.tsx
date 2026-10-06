@@ -92,20 +92,6 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-4 border-t border-white/10 py-6">
-          <span className="text-[11px] font-semibold tracking-[0.16em] text-white/50 uppercase">
-            Partenaires &amp; fédération
-          </span>
-          {[0, 1, 2].map((i) => (
-            <span
-              key={i}
-              className="flex h-10 max-w-[150px] flex-1 items-center justify-center rounded-lg border border-dashed border-white/20 font-mono text-[9px] tracking-[0.1em] text-white/45 uppercase"
-            >
-              logo
-            </span>
-          ))}
-        </div>
-
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/10 py-6">
           <span className="text-sm text-white/50">
             © {getCurrentYear()} Association Vovinam Viet Vo Dao. Tous droits
