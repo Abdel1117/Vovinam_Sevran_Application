@@ -5,8 +5,11 @@ import ContactForm, { MOTIF_ESSAI } from "@/components/ContactForm/ContactForm";
 import Reveal from "@/components/Reveal/Reveal";
 import type { Metadata } from "next";
 import Button from "@/components/Button/Button";
+import { carteEmbedUrl, carteUrl } from "@/lib/api/adresses";
 
 export const metadata: Metadata = { title: "Contact — Vovinam Viet Vo Dao" };
+
+const GYMNASE = { lat: 48.9399852, lon: 2.5338027 };
 
 type Info = {
   label: string;
@@ -117,14 +120,19 @@ export default async function Page({
             <div className="flex min-w-[300px] flex-1 flex-col gap-5">
               <Reveal className="relative min-h-75 overflow-hidden rounded-3xl border border-[#e1e7f5]">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2494.4508342291647!2d2.5338027000000003!3d48.9399852!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e6156db8eb1bc9%3A0xaa5208c6dbc5c8a2!2sGymnase%20Gaston%20bussi%C3%A8re!5e1!3m2!1sfr!2sfr!4v1789073646477!5m2!1sfr!2sfr"
-                  width="600"
-                  height="450"
-                  style={{ border: 0 }}
-                  allowFullScreen={true}
+                  src={carteEmbedUrl(GYMNASE.lat, GYMNASE.lon)}
+                  title="Plan d'accès au gymnase Gaston Bussière"
                   loading="lazy"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                ></iframe>
+                  className="absolute inset-0 size-full border-0"
+                />
+                <a
+                  href={carteUrl(GYMNASE.lat, GYMNASE.lon)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="absolute right-3 bottom-3 rounded-full bg-white px-4 py-2 text-sm font-bold text-vovinam shadow-card hover:bg-vovinam-050"
+                >
+                  Agrandir la carte ↗
+                </a>
               </Reveal>
               <Reveal className="flex flex-col gap-3.5 rounded-3xl bg-vovinam p-8 text-white">
                 <span className="inline-flex items-center gap-2.5 text-[11px] font-bold tracking-[0.2em] text-jaune uppercase">

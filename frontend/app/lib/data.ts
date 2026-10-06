@@ -169,3 +169,23 @@ export const statutsDemande: Record<StatutDemande, { label: string; classe: stri
   sans_suite: { label: "Sans suite", classe: "bg-[#f1f3f8] text-encre-50" },
 };
 export const categoriesGalerie: string[] = ["Tous", "Entraînement", "Stage", "Compétition", "Démonstration", "Enfants"];
+
+/** Informations des pages Mentions légales et Politique de confidentialité. */
+export const infosLegales = {
+  association: "[À COMPLÉTER — nom exact déclaré en préfecture]",
+  rna: "[À COMPLÉTER — W93…]",
+  siret: "[À COMPLÉTER ou supprimer]",
+  siege: "[À COMPLÉTER — adresse du siège social]",
+  directeurPublication: "[À COMPLÉTER — prénom nom, président·e]",
+  email: "contact@vovinam-association.fr",
+  hebergeur: {
+    nom: "[À COMPLÉTER — nom de l'hébergeur]",
+    adresse: "[À COMPLÉTER — adresse de l'hébergeur]",
+    telephone: "[À COMPLÉTER — téléphone de l'hébergeur]",
+  },
+  conservation: {
+    demandes: "[À COMPLÉTER — proposé : 1 an après le dernier échange]",
+    adherents: "[À COMPLÉTER — proposé : durée de l'adhésion + 3 ans]",
+  },
+  dateMiseAJour: "6 octobre 2026",
+};

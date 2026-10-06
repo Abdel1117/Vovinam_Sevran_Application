@@ -105,7 +105,7 @@ export default function Footer() {
               Mentions légales
             </Link>
             <Link
-              href="/politique-de-confidentialité"
+              href="/politique-de-confidentialite"
               className="text-sm text-white/50 hover:text-white"
             >
               Politique de confidentialité
